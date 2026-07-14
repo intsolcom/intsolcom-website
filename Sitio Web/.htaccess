@@ -1,0 +1,91 @@
+Options -Indexes
+ServerSignature Off
+
+RewriteEngine On
+RewriteBase /
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Skip real files and folders
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# ---- Primary Routes ----
+RewriteRule ^holding/?$              holding.php [L]
+RewriteRule ^business-units/?$       business-units.php [L]
+RewriteRule ^technology/?$           technology.php [L]
+RewriteRule ^industries/?$           industries.php [L]
+RewriteRule ^resources/?$            resources.php [L]
+RewriteRule ^contact/?$              contact.php [L]
+RewriteRule ^admin/?$                admin/index.php [L]
+
+# ---- Dynamic Routes ----
+RewriteRule ^business-units/([^/]+)/?$  business-unit.php?slug=$1 [L,QSA]
+RewriteRule ^technology/([^/]+)/?$      product.php?slug=$1 [L,QSA]
+RewriteRule ^industries/([^/]+)/?$      industry.php?slug=$1 [L,QSA]
+RewriteRule ^resources/([^/]+)/?$       resource-post.php?slug=$1 [L,QSA]
+
+# ---- Blog Routes ----
+RewriteRule ^blog/?$                    blog.php [L]
+RewriteRule ^blog/([^/]+)/?$            blog-post.php?slug=$1 [L,QSA]
+
+# ---- Sitemap ----
+RewriteRule ^sitemap\.xml$              sitemap.php [L]
+
+# ---- Home ----
+RewriteRule ^$                          index.php [L]
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header unset X-Powered-By
+  Header always unset X-Powered-By
+</IfModule>
+
+# Block sensitive files
+<FilesMatch "\.(env|sql|log|sh|htpasswd)$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# ---- CACHE CONTROL ----
+# HTML y PHP: nunca cachear — siempre fresco
+<FilesMatch "\.(php|html)$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-store, no-cache, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </IfModule>
+</FilesMatch>
+
+# CSS y JS: cache corto (1 hora) — el ?v=timestamp en la URL fuerza recarga cuando cambian
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                "access plus 1 hour"
+  ExpiresByType application/javascript  "access plus 1 hour"
+  ExpiresByType image/png               "access plus 6 months"
+  ExpiresByType image/jpeg              "access plus 6 months"
+  ExpiresByType image/webp              "access plus 6 months"
+  ExpiresByType image/svg+xml           "access plus 1 month"
+  ExpiresByType font/woff2              "access plus 1 year"
+</IfModule>
+
+# Header adicional para CSS/JS
+<FilesMatch "\.(css|js)$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
+  </IfModule>
+</FilesMatch>
+
+# Gzip
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>
+
+ErrorDocument 404 /index.php

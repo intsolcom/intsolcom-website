@@ -1,0 +1,21 @@
+# Config with credentials
+Sitio Web/includes/config.php
+
+# System
+Thumbs.db
+.DS_Store
+*.bak
+*.zip
+*.log
+
+# Dependencies (none - pure Node.js)
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
