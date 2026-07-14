@@ -6,7 +6,7 @@ const path = require('path');
 const zlib = require('zlib');
 const crypto = require('crypto');
 
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 const TOKEN = crypto.randomBytes(8).toString('hex');
 
