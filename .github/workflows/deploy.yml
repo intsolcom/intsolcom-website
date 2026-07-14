@@ -1,0 +1,29 @@
+name: Deploy to Dokploy
+
+on:
+  push:
+    branches: [master, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+      - run: node --check "Sitio Web/server.js"
+      - run: echo "Syntax OK"
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trigger Dokploy deploy
+        run: |
+          curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"repository":"intsolcom/intsolcom-website","branch":"${{ github.ref_name }}"}'
