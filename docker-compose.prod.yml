@@ -1,0 +1,25 @@
+# Production deployment with Traefik (Dokploy-compatible)
+version: '3.8'
+
+services:
+  intsolcom:
+    build: .
+    container_name: intsolcom-website
+    restart: unless-stopped
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.intsolcom.rule=Host(`intsolcom.com`) || Host(`www.intsolcom.com`)"
+      - "traefik.http.routers.intsolcom.entrypoints=websecure"
+      - "traefik.http.routers.intsolcom.tls.certresolver=letsencrypt"
+      - "traefik.http.middlewares.intsolcom-redirect.redirectregex.regex=^https?://www\\.intsolcom\\.com/(.*)"
+      - "traefik.http.middlewares.intsolcom-redirect.redirectregex.replacement=https://intsolcom.com/$${1}"
+      - "traefik.http.routers.intsolcom.middlewares=intsolcom-redirect"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+
+networks:
+  dokploy-network:
+    external: true

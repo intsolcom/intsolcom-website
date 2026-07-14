@@ -1,0 +1,18 @@
+# Local development with Node.js (fast, no DB needed)
+version: '3.8'
+
+services:
+  intsolcom:
+    build: .
+    container_name: intsolcom-website
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3

@@ -1,0 +1,24 @@
+{
+  "name": "intsolcom-website",
+  "description": "INTSOLCOM LLC corporate website — Technology Holding",
+  "type": "node",
+  "version": "1.0.0",
+  "framework": "vanilla",
+  "entry": "server.js",
+  "port": 3000,
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3000"
+  },
+  "build": {
+    "command": "echo 'No build step needed'",
+    "output": "."
+  },
+  "domains": [
+    "intsolcom.com",
+    "www.intsolcom.com"
+  ],
+  "healthCheck": "/",
+  "ssl": true,
+  "redirectWww": true
+}
