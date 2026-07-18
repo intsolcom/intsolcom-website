@@ -71,6 +71,7 @@ const UNITS = [
 
 const NAV = [
   {text:'Technology',url:'/technology',cta:false},
+  {text:'Nearshore Dev',url:'/nearshore-development',cta:false},
   {text:'Business Units',url:'/business-units',cta:false},
   {text:'Industries',url:'/industries',cta:false},
   {text:'Resources',url:'/resources',cta:false},
