@@ -447,6 +447,39 @@ function renderHome() {
   </div>
 </section>
 
+<section class="section section-dark" id="neardev">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+      <div>
+        <div class="section-label" style="color:#00C896;">Nearshore Development</div>
+        <h2 class="section-title" style="color:#fff;font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.3;">Equipos de desarrollo. <em style="font-style:normal;color:#00C896;">Metodologia profesional.</em></h2>
+        <p style="color:rgba(255,255,255,.55);font-size:.95rem;line-height:1.7;margin:1rem 0 1.5rem;">Equipos bilingues desde Barranquilla, Colombia. Misma zona horaria que USA. Spec Driven Development. No freelancers. Ingenieria de producto real con <strong style="color:#00C896;">Marcas BPO</strong>, nuestra marca operativa en Colombia.</p>
+        <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+          <a href="/nearshore-development" class="btn btn-accent btn-lg" style="text-decoration:none;">How it Works &#x2192;</a>
+          <a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg" style="text-decoration:none;">Build Your Team &#x2197;</a>
+        </div>
+        <div style="display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);"><span style="color:#00C896;">&#x2713;</span> EST Timezone</div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);"><span style="color:#00C896;">&#x2713;</span> C1-C2 English</div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);"><span style="color:#00C896;">&#x2713;</span> 14 Days Deploy</div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);"><span style="color:#00C896;">&#x2713;</span> NDA Protected</div>
+        </div>
+      </div>
+      <div>
+        <div style="background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:20px;padding:2rem;">
+          <div style="display:flex;flex-direction:column;gap:.75rem;">
+            <div style="display:flex;align-items:center;gap:.75rem;"><div style="width:36px;height:36px;background:rgba(0,200,150,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#00C896;">&#x1F1E8;&#x1F1F4;</div><div><div style="font-size:.85rem;font-weight:600;color:#fff;">Frontend Developers</div><div style="font-size:.7rem;color:rgba(255,255,255,.4);">React &middot; Next.js &middot; Vue &middot; Angular</div></div></div>
+            <div style="display:flex;align-items:center;gap:.75rem;"><div style="width:36px;height:36px;background:rgba(139,92,246,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#8B5CF6;">&#x2699;</div><div><div style="font-size:.85rem;font-weight:600;color:#fff;">Backend Engineers</div><div style="font-size:.7rem;color:rgba(255,255,255,.4);">Node.js &middot; Python &middot; PHP &middot; Go &middot; Java</div></div></div>
+            <div style="display:flex;align-items:center;gap:.75rem;"><div style="width:36px;height:36px;background:rgba(37,99,235,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#2563EB;">&#x1F916;</div><div><div style="font-size:.85rem;font-weight:600;color:#fff;">AI/ML Specialists</div><div style="font-size:.7rem;color:rgba(255,255,255,.4);">TensorFlow &middot; PyTorch &middot; LLMs &middot; CV</div></div></div>
+            <div style="display:flex;align-items:center;gap:.75rem;"><div style="width:36px;height:36px;background:rgba(0,200,150,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#00C896;">&#x1F4F1;</div><div><div style="font-size:.85rem;font-weight:600;color:#fff;">Mobile Developers</div><div style="font-size:.7rem;color:rgba(255,255,255,.4);">React Native &middot; Flutter &middot; Swift</div></div></div>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);text-align:center;"><span style="font-size:.75rem;color:rgba(255,255,255,.35);">Powered by </span><a href="https://marcasbpo.com" target="_blank" rel="noopener" style="color:#00C896;font-weight:600;font-size:.75rem;text-decoration:none;">Marcas BPO</a><span style="font-size:.75rem;color:rgba(255,255,255,.35);"> &mdash; Barranquilla, Colombia</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section section-dark" id="stats">
   <div class="container">
     <div class="stats-band">
@@ -627,6 +660,94 @@ function renderContact() {
 ` + pageEnd('/contact');
 }
 
+function renderNearshore() {
+  var html = '';
+  html += pageHead('Nearshore Software Development \u2014 INTSOLCOM','Dedicated development teams from Barranquilla, Colombia. Same timezone as US. Bilingual engineers. Spec Driven Development methodology.','https://intsolcom.com/nearshore-development') + navBar('/nearshore-development');
+  
+  // HERO
+  html += '<section class="page-hero"><div class="container"><h1 style="font-size:clamp(2rem,4.5vw,3rem);font-weight:800;position:relative;z-index:1;">Build software with <em style="font-style:normal;color:#00C896;">professional methodology.</em></h1><p style="font-size:1.1rem;color:rgba(255,255,255,.55);max-width:650px;margin:1rem auto 0;position:relative;z-index:1;">Dedicated development teams operating from Barranquilla, Colombia. Same timezone as the US. Bilingual engineers. Spec Driven Development. No freelancers. No generic agencies. Real product engineering.</p><div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:1.25rem 0;position:relative;z-index:1;"><span style="background:rgba(0,200,150,.12);color:#00C896;padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:600;">SDD Methodology</span><span style="background:rgba(0,200,150,.08);color:rgba(255,255,255,.5);padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:600;">Dedicated Teams</span><span style="background:rgba(0,200,150,.08);color:rgba(255,255,255,.5);padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:600;">EST Timezone</span><span style="background:rgba(0,200,150,.08);color:rgba(255,255,255,.5);padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:600;">C1-C2 English</span></div><div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:.5rem;position:relative;z-index:1;"><a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Build Your Team \u2197</a><a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg">Talk to Us</a></div></div></section>';
+
+  // SDD STEPS
+  html += '<section class="section"><div class="container"><div class="section-header reveal"><span class="section-label">Methodology</span><h2 class="section-title">Spec Driven Development. <em>Explained simply.</em></h2><p class="section-subtitle">Before a single line of code is written, we define exactly what you need. You validate. We build. No surprises.</p></div><div class="grid-3">';
+  var steps = [
+    {n:1,t:'SPEC',d:'We define together EXACTLY what you need. Zero ambiguity. You approve before any code is written.'},
+    {n:2,t:'DESIGN',d:'Architecture, UX, UI \u2014 everything designed first. You see mockups, not promises.'},
+    {n:3,t:'DEVELOP',d:'The team builds against the specification. No scope creep. No surprises.'},
+    {n:4,t:'TEST',d:'Every feature validated against what you approved. Nothing ships without testing.'},
+    {n:5,t:'DEPLOY',d:'Published on your infrastructure or ours. You decide.'},
+    {n:6,t:'OPTIMIZE',d:'Continuous improvement based on real usage data. We do not disappear after launch.'},
+  ];
+  for (var i=0; i<steps.length; i++) {
+    html += '<div class="card"><div style="font-size:2rem;font-weight:800;color:#00C896;margin-bottom:.5rem;">0'+steps[i].n+'</div><h3>'+esc(steps[i].t)+'</h3><p style="color:#475569;font-size:.9rem;line-height:1.6;">'+esc(steps[i].d)+'</p></div>';
+  }
+  html += '</div><p style="text-align:center;margin-top:2rem;font-size:1rem;color:#0F172A;font-weight:600;">We build what <em style="color:#00C896;font-style:normal;">YOU</em> need, not what <em style="color:#475569;font-style:normal;">WE</em> think you need.</p></div></section>';
+
+  // WHY COLOMBIA
+  html += '<section class="section section-surface"><div class="container"><div class="section-header reveal"><span class="section-label">Nearshore Hub</span><h2 class="section-title">Colombia. <em>The development hub for the Americas.</em></h2></div><div class="grid-3">';
+  var why = [
+    {icon:'\u{1F1E8}\u{1F1F4}',t:'EST Timezone',d:'Your team works when you work. Daily standups at 9 AM your time. No 5 AM calls. No midnight handoffs.'},
+    {icon:'\u{1F5E3}',t:'Truly Bilingual',d:'C1-C2 English. Not \"technical English\". Real communication with your stakeholders.'},
+    {icon:'\u2705',t:'Pre-Vetted Talent',d:'We do not forward resumes. We present engineers who passed our technical assessment.'},
+    {icon:'\u{1F91D}',t:'Cultural Fit',d:'Colombia shares a work culture with the US. Zero cultural friction. Just results.'},
+    {icon:'\u{1F4B0}',t:'Cost Efficient',d:'60-70% less than equivalent US-based teams. Same quality, better economics.'},
+    {icon:'\u2708',t:'3 Hours from Miami',d:'Direct flights. Visit your team whenever you want. They are not on the other side of the world.'},
+  ];
+  for (var i=0; i<why.length; i++) {
+    html += '<div class="card"><div style="font-size:1.8rem;margin-bottom:.5rem;">'+why[i].icon+'</div><h3>'+esc(why[i].t)+'</h3><p style="color:#475569;font-size:.9rem;">'+esc(why[i].d)+'</p></div>';
+  }
+  html += '</div></div></section>';
+
+  // TECH STACK
+  html += '<section class="section"><div class="container"><div class="section-header reveal"><span class="section-label">Technology</span><h2 class="section-title">The stack your <em>project needs.</em></h2></div><div class="grid-2" style="gap:1rem;">';
+  var stacks = [
+    {cat:'Frontend',items:'React \u00b7 Next.js \u00b7 Vue \u00b7 Angular \u00b7 TypeScript \u00b7 Tailwind'},
+    {cat:'Backend',items:'Node.js \u00b7 Python \u00b7 PHP/Laravel \u00b7 Go \u00b7 Java \u00b7 Express'},
+    {cat:'Cloud & DevOps',items:'AWS \u00b7 Azure \u00b7 GCP \u00b7 Docker \u00b7 Kubernetes \u00b7 Terraform'},
+    {cat:'AI/ML',items:'TensorFlow \u00b7 PyTorch \u00b7 OpenAI \u00b7 Claude \u00b7 LangChain \u00b7 HuggingFace'},
+    {cat:'Data',items:'PostgreSQL \u00b7 MongoDB \u00b7 Redis \u00b7 Elasticsearch \u00b7 MySQL \u00b7 MariaDB'},
+    {cat:'Mobile',items:'React Native \u00b7 Flutter \u00b7 Swift \u00b7 Kotlin'},
+    {cat:'DevOps',items:'CI/CD \u00b7 GitHub Actions \u00b7 PM2 \u00b7 Traefik \u00b7 Nginx'},
+  ];
+  for (var i=0; i<stacks.length; i++) {
+    html += '<div class="card" style="padding:1.25rem;"><span style="color:#00C896;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;">'+esc(stacks[i].cat)+'</span><p style="margin-top:.35rem;font-size:.85rem;color:#475569;">'+esc(stacks[i].items)+'</p></div>';
+  }
+  html += '</div></div></section>';
+
+  // HOW IT WORKS
+  html += '<section class="section section-dark"><div class="container"><div class="section-header reveal"><span class="section-label">Process</span><h2 class="section-title" style="color:#fff;">Start building <em>in 2 weeks.</em></h2></div><div style="display:flex;justify-content:center;flex-wrap:wrap;gap:.75rem;">';
+  var process = ['Discovery Call\n2 days','Free Spec Review\n3-5 days','Team Proposal\n1 week','SDD Sprint 1\n2 weeks','First Demo\nContinuous'];
+  for (var i=0; i<process.length; i++) {
+    var parts = process[i].split('\n');
+    html += '<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1.25rem 1.5rem;text-align:center;min-width:150px;"><div style="font-size:1.5rem;font-weight:800;color:#00C896;">'+(i+1)+'</div><div style="color:#fff;font-weight:600;font-size:.85rem;margin:.3rem 0;">'+esc(parts[0])+'</div><div style="color:rgba(255,255,255,.4);font-size:.72rem;">'+esc(parts[1])+'</div></div>';
+    if (i<4) html += '<div style="display:flex;align-items:center;color:#00C896;font-size:1.2rem;">\u2192</div>';
+  }
+  html += '</div><div style="text-align:center;margin-top:2rem;"><a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Start with a Free Spec Review \u2197</a></div></div></section>';
+
+  // MARCAS BPO
+  html += '<section class="section section-surface"><div class="container"><div class="grid-2" style="align-items:center;gap:3rem;"><div class="reveal-left"><div class="section-label">Our Operations</div><h2 class="section-title">Powered by <em>Marcas BPO</em></h2><p style="color:#475569;font-size:.95rem;line-height:1.8;margin:1rem 0;">Marcas BPO is our operational brand. While INTSOLCOM handles strategy, partnerships, and technology products from the United States, Marcas BPO executes all development and BPO operations from Barranquilla, Colombia.</p><p style="color:#475569;font-size:.95rem;line-height:1.8;">When you hire a development team through us, your commercial relationship is with <strong>INTSOLCOM LLC</strong> (USA). Your team works from our offices in Colombia, managed by <strong>Marcas BPO</strong>.</p><p style="color:#0F172A;font-weight:700;font-size:1rem;margin-top:1rem;">The best of both worlds: American contract. Colombian talent.</p><div style="margin-top:1.5rem;"><a href="https://marcasbpo.com" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Visit Marcas BPO \u2197</a></div></div><div class="reveal-right" data-delay="150"><div class="card" style="text-align:center;padding:2.5rem;"><div style="font-size:3rem;font-weight:800;color:#0F172A;">Marcas<span style="color:#00C896;">BPO</span></div><div style="color:#475569;font-size:.85rem;margin-top:.5rem;">Operational Delivery \u00b7 Barranquilla, Colombia</div><div style="display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin-top:1rem;">'+['Development Teams','AI Data Ops','BPO Services','QA & Testing','Admin Support'].map(function(t){return '<span style="background:rgba(0,200,150,.08);color:#00C896;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600;">'+esc(t)+'</span>';}).join('')+'</div></div></div></div></div></section>';
+
+  // TRUST + FAQ
+  html += '<section class="section"><div class="container"><div class="section-header reveal"><span class="section-label">Trust</span><h2 class="section-title">Questions <em>you probably have.</em></h2></div><div class="faq">';
+  var faqs = [
+    ['How do you protect my code and IP?','We sign NDAs as standard. Your IP is yours. Always. We can work within your VPN, your repos, your infrastructure.'],
+    ['What if I need to scale the team?','Add developers in days, not months. We maintain a pre-vetted talent pool ready to join your project.'],
+    ['Can I visit the offices in Colombia?','Absolutely. Barranquilla is a 3-hour flight from Miami. We encourage visits to meet your team.'],
+    ['What guarantees on code quality?','Spec Driven Development means every deliverable is tested against the spec YOU approved. If it does not match, we fix it.'],
+    ['How do you handle timezone?','We do not. Colombia is EST. We work when you work. No timezone gymnastics.'],
+    ['What is the minimum engagement?','We recommend starting with a 3-month team to prove value. No long-term lock-in. You can scale up or down anytime.'],
+  ];
+  for (var i=0; i<faqs.length; i++) {
+    html += '<div class="faq__item reveal" data-delay="'+(i*60)+'"><button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false"><span>'+esc(faqs[i][0])+'</span><span class="faq__icon">+</span></button><div class="faq__answer" style="display:none;"><div class="faq__answer-inner">'+esc(faqs[i][1])+'</div></div></div>';
+  }
+  html += '</div><div style="display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:2rem;">'+['NDA Protected','IP Protection','Dedicated Teams','No Lock-in','SDD Methodology','Bilingual Guaranteed'].map(function(t){return '<span style="background:rgba(0,200,150,.08);color:#00C896;padding:6px 16px;border-radius:20px;font-size:.75rem;font-weight:600;">\u2713 '+esc(t)+'</span>';}).join('')+'</div></div></section>';
+
+  // FINAL CTA
+  html += '<section class="cta-section"><div class="cta-section__glow"></div><div class="container-sm reveal"><h2>Ready to build with a professional nearshore team?</h2><p>Schedule a 15-minute call. We will review your project, answer your questions, and prepare a free spec review. No commitment.</p><div class="cta-section__actions"><a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Schedule a Call \u2197</a><a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg">Build Your Team \u2197</a></div><p style="margin-top:1.5rem;font-size:.8125rem;color:rgba(255,255,255,.35);">Or email us directly: <a href="mailto:info@marcasbpo.com" style="color:#00C896;">info@marcasbpo.com</a></p></div></section>';
+
+  html += pageEnd('/nearshore-development');
+  return html;
+}
+
 function render404(pathname) {
   return pageHead('404 \u2014 INTSOLCOM','Page not found','https://intsolcom.com'+pathname) + navBar(pathname) + `
 <section class="section" style="min-height:60vh;display:flex;align-items:center;text-align:center;">
@@ -644,6 +765,7 @@ const ROUTES = {
   '/holding':           renderHolding,
   '/technology':        renderTechnology,
   '/contact':           renderContact,
+  '/nearshore-development': renderNearshore,
 };
 
 // ============================================================
@@ -691,7 +813,7 @@ const server = http.createServer((req, res) => {
 
   // Sitemap
   if (pathname === '/sitemap.xml') {
-    const urls = ['','/holding','/technology','/business-units','/industries','/resources','/contact','/technology/wontia-crm','/technology/macroponder','/technology/ia-annotation-manager'];
+    const urls = ['','/holding','/technology','/nearshore-development','/business-units','/industries','/resources','/contact','/technology/wontia-crm','/technology/macroponder','/technology/ia-annotation-manager'];
     const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls.map(u => `  <url><loc>https://intsolcom.com${u}</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>${u===''?'1.0':'0.8'}</priority></url>`).join('\n') + '\n</urlset>';
     res.writeHead(200, {'Content-Type':'application/xml; charset=utf-8','Cache-Control':'public, max-age=3600'});
     return res.end(xml);

@@ -40,6 +40,7 @@ $ogImage   = $s('og_image', SITE_URL . '/assets/uploads/og-default.jpg');
 $hardSections = [
     ['type' => 'hero',            'sort' => 10],
     ['type' => 'ecosystem',       'sort' => 20],
+    ['type' => 'neardev_cta',    'sort' => 25],
     ['type' => 'stats',           'sort' => 30],
     ['type' => 'products_grid',   'sort' => 40],
     ['type' => 'capabilities',    'sort' => 50],
@@ -395,6 +396,83 @@ body.no-scroll { overflow: hidden; }
               <span class="eco-card-cap"><?= t('Product Management') ?></span>
               <span class="eco-card-cap"><?= t('Innovation') ?></span>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<?php elseif ($type === 'neardev_cta'): ?>
+<!-- NEARSHORE DEV PROMO -->
+<section class="section section-dark" id="neardev" data-nav-section="neardev">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+      <div class="reveal-left">
+        <div class="section-label" style="color:#00C896;">Nearshore Development</div>
+        <h2 class="section-title" style="color:#fff;font-size:clamp(1.5rem,3vw,2.2rem);">Equipos de desarrollo. <em>Metodologia profesional.</em></h2>
+        <p style="color:rgba(255,255,255,.55);font-size:.95rem;line-height:1.7;margin:1rem 0 1.5rem;">
+          Equipos bilingues desde Barranquilla, Colombia. Misma zona horaria que USA. Spec Driven Development. No freelancers. Ingenieria de producto real con <strong style="color:#00C896;">Marcas BPO</strong>, nuestra marca operativa en Colombia.
+        </p>
+        <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+          <a href="/nearshore-development" class="btn btn-accent btn-lg" style="text-decoration:none;">
+            <?= t('How it Works') ?> →
+          </a>
+          <a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg" style="text-decoration:none;">
+            <?= t('Build Your Team') ?> ↗
+          </a>
+        </div>
+        <div style="display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);">
+            <span style="color:#00C896;">✓</span> EST Timezone
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);">
+            <span style="color:#00C896;">✓</span> C1-C2 English
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);">
+            <span style="color:#00C896;">✓</span> 14 Days Deploy
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.45);">
+            <span style="color:#00C896;">✓</span> NDA Protected
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right" data-delay="150">
+        <div style="background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:20px;padding:2rem;">
+          <div style="display:flex;flex-direction:column;gap:.75rem;">
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div style="width:36px;height:36px;background:rgba(0,200,150,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#00C896;">🇨🇴</div>
+              <div>
+                <div style="font-size:.85rem;font-weight:600;color:#fff;">Frontend Developers</div>
+                <div style="font-size:.7rem;color:rgba(255,255,255,.4);">React · Next.js · Vue · Angular</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div style="width:36px;height:36px;background:rgba(139,92,246,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#8B5CF6;">⚙️</div>
+              <div>
+                <div style="font-size:.85rem;font-weight:600;color:#fff;">Backend Engineers</div>
+                <div style="font-size:.7rem;color:rgba(255,255,255,.4);">Node.js · Python · PHP · Go · Java</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div style="width:36px;height:36px;background:rgba(37,99,235,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#2563EB;">🤖</div>
+              <div>
+                <div style="font-size:.85rem;font-weight:600;color:#fff;">AI/ML Specialists</div>
+                <div style="font-size:.7rem;color:rgba(255,255,255,.4);">TensorFlow · PyTorch · LLMs · Computer Vision</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div style="width:36px;height:36px;background:rgba(0,200,150,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#00C896;">📱</div>
+              <div>
+                <div style="font-size:.85rem;font-weight:600;color:#fff;">Mobile Developers</div>
+                <div style="font-size:.7rem;color:rgba(255,255,255,.4);">React Native · Flutter · Swift · Kotlin</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);text-align:center;">
+            <span style="font-size:.75rem;color:rgba(255,255,255,.35);">Powered by </span>
+            <a href="https://marcasbpo.com" target="_blank" rel="noopener" style="color:#00C896;font-weight:600;font-size:.75rem;text-decoration:none;">Marcas BPO</a>
+            <span style="font-size:.75rem;color:rgba(255,255,255,.35);"> — Barranquilla, Colombia</span>
           </div>
         </div>
       </div>
