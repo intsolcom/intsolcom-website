@@ -31,8 +31,8 @@ $themeVars = implode(';', [
 ]);
 
 $metaTitle = $s('site_tagline')
-    ? h($s('site_name','INTSOLCOM')) . ' — ' . h($s('site_tagline','Technology Holding'))
-    : 'INTSOLCOM LLC — Technology Holding | AI | Business Operations | Software Products';
+    ? h($s('site_name','INTSOLCOM')) . ' — ' . h($s('site_tagline','Technology & Operations Ecosystem'))
+    : 'INTSOLCOM LLC — Technology & Operations Ecosystem | AI | Business Operations | Software Products';
 $metaDesc  = h($s('site_desc', 'INTSOLCOM LLC is a technology holding company that owns and operates specialized business units, software platforms and AI products.'));
 $ogImage   = $s('og_image', SITE_URL . '/assets/uploads/og-default.jpg');
 
@@ -272,13 +272,13 @@ body.no-scroll { overflow: hidden; }
     <div class="hero__content">
       <div class="hero__badge reveal">
         <span class="hero__badge-dot"></span>
-        <?= ht($fields['eyebrow'] ?? 'Technology Holding') ?>
+        <?= ht($fields['eyebrow'] ?? 'Technology & Operations Ecosystem') ?>
       </div>
       <h1 class="reveal" data-delay="100">
         <?= ht($fields['headline'] ?? 'We build and operate') ?> <em><?= ht($fields['headline_em'] ?? 'technology companies.') ?></em>
       </h1>
       <p class="hero__description reveal" data-delay="200">
-        <?= ht($fields['description'] ?? 'INTSOLCOM LLC owns and operates specialized business units, software platforms, and AI products that transform how enterprises work.') ?>
+        <?= ht($fields['description'] ?? 'The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia. We build technology products and operate business services at scale.') ?>
       </p>
       <div class="hero__actions reveal" data-delay="300">
         <a href="/holding" class="btn btn-accent btn-lg">
@@ -333,16 +333,16 @@ body.no-scroll { overflow: hidden; }
 <section class="section section-surface" id="ecosystem" data-nav-section="ecosystem">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label"><?= t('Corporate Ecosystem') ?></span>
+      <span class="section-label"><?= t('The Intsolcom Business Ecosystem') ?></span>
       <h2 class="section-title"><?= t('A technology holding designed for the future.') ?></h2>
-      <p class="section-subtitle"><?= t('INTSOLCOM LLC operates as a unified technology ecosystem with entities spanning operations, software products, and R&D.') ?></p>
+      <p class="section-subtitle"><?= t('Two entities working together. Strategic business development in the United States. Operational delivery in Colombia.') ?></p>
     </div>
     <div class="eco-diagram">
       <!-- Root -->
       <div class="eco-top reveal">
         <div class="eco-top-card">
-          <span style="color:#fff; font-weight:600;">INTSOL</span><span style="color:#00C896;">COM</span> LLC
-          <div style="font-size:.72rem; font-weight:400; color:rgba(255,255,255,.6); margin-top:.2rem;">United States — Holding Company</div>
+          <span style="color:#fff; font-weight:600;">The Intsolcom Ecosystem</span>
+          <div style="font-size:.72rem; font-weight:400; color:rgba(255,255,255,.6); margin-top:.2rem;">United States &amp; Colombia</div>
         </div>
       </div>
       <!-- Vertical connectors -->
@@ -356,15 +356,15 @@ body.no-scroll { overflow: hidden; }
         <div class="eco-branch">
           <div class="eco-branch-line"></div>
           <div class="eco-card reveal" data-delay="200">
-            <div class="eco-card-tag"><?= t('Colombia') ?></div>
+            <div class="eco-card-tag"><?= t('Operational Delivery Center') ?></div>
             <div class="card__icon" style="font-size:1.5rem;margin:0 auto .75rem;">&#127464;&#127476;</div>
-            <h3>INTSOLCOM SAS</h3>
-            <p style="font-size:.875rem;color:#475569;"><?= t('Operations & Delivery hub in Barranquilla, Colombia. Nearshore technology services for global clients.') ?></p>
+            <h3>INTSOLCOM SAS &mdash; Colombia</h3>
+            <p style="font-size:.875rem;color:#475569;"><?= t('Part of the Intsolcom ecosystem. Nearshore operations and delivery hub in Barranquilla, Colombia.') ?></p>
             <div class="eco-card-capabilities">
-              <span class="eco-card-cap"><?= t('Software Dev') ?></span>
-              <span class="eco-card-cap"><?= t('AI Ops') ?></span>
-              <span class="eco-card-cap"><?= t('QA Testing') ?></span>
-              <span class="eco-card-cap"><?= t('IT Support') ?></span>
+              <span class="eco-card-cap"><?= t('BPO Operations') ?></span>
+              <span class="eco-card-cap"><?= t('AI Data Annotation') ?></span>
+              <span class="eco-card-cap"><?= t('QA & Training') ?></span>
+              <span class="eco-card-cap"><?= t('Talent Management') ?></span>
             </div>
           </div>
         </div>
@@ -373,26 +373,27 @@ body.no-scroll { overflow: hidden; }
           <div class="eco-card reveal" data-delay="300">
             <div class="eco-card-tag"><?= t('Product Division') ?></div>
             <div class="card__icon" style="font-size:1.5rem;margin:0 auto .75rem;">&#9881;</div>
-            <h3><?= t('Technology Division') ?></h3>
-            <p style="font-size:.875rem;color:#475569;"><?= t('WONTIA CRM, MACROPONDER, and IA Annotation Manager — owned and operated software platforms.') ?></p>
+            <h3><?= t('Technology & Products') ?></h3>
+            <p style="font-size:.875rem;color:#475569;"><?= t('WONTIA CRM, MACROPONDER, and IA Annotation Manager — software products developed and operated within the ecosystem.') ?></p>
             <div class="eco-card-capabilities">
               <span class="eco-card-cap">WONTIA CRM</span>
               <span class="eco-card-cap">MACROPONDER</span>
-              <span class="eco-card-cap"><?= t('Annotation Manager') ?></span>
+              <span class="eco-card-cap"><?= t('IA Annotation Manager') ?></span>
             </div>
           </div>
         </div>
         <div class="eco-branch">
           <div class="eco-branch-line"></div>
           <div class="eco-card reveal" data-delay="400">
-            <div class="eco-card-tag"><?= t('R&D Lab') ?></div>
+            <div class="eco-card-tag"><?= t('Commercial') ?></div>
             <div class="card__icon" style="font-size:1.5rem;margin:0 auto .75rem;">&#128300;</div>
-            <h3><?= t('Innovation Lab') ?></h3>
-            <p style="font-size:.875rem;color:#475569;"><?= t('Research, development, and venture incubation. Exploring AI frontiers, automation, and emerging technologies.') ?></p>
+            <h3><?= t('Business Development — USA') ?></h3>
+            <p style="font-size:.875rem;color:#475569;"><?= t('Strategic business development in the United States. Partnerships, international sales, and innovation management.') ?></p>
             <div class="eco-card-capabilities">
-              <span class="eco-card-cap"><?= t('AI Research') ?></span>
-              <span class="eco-card-cap"><?= t('Prototyping') ?></span>
-              <span class="eco-card-cap"><?= t('Ventures') ?></span>
+              <span class="eco-card-cap"><?= t('Strategic Partnerships') ?></span>
+              <span class="eco-card-cap"><?= t('International Sales') ?></span>
+              <span class="eco-card-cap"><?= t('Product Management') ?></span>
+              <span class="eco-card-cap"><?= t('Innovation') ?></span>
             </div>
           </div>
         </div>
@@ -449,8 +450,8 @@ body.no-scroll { overflow: hidden; }
 <section class="section" id="products" data-nav-section="products">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label"><?= t('Software Products') ?></span>
-      <h2 class="section-title"><?= t('Platforms we own and operate') ?></h2>
+      <span class="section-label"><?= t('Technology & Products') ?></span>
+      <h2 class="section-title"><?= t('Technology products built for business impact') ?></h2>
       <p class="section-subtitle"><?= t('Purpose-built software products developed in-house, continuously improved, and deployed at enterprise scale.') ?></p>
     </div>
     <div class="grid-3">
@@ -561,14 +562,14 @@ body.no-scroll { overflow: hidden; }
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label"><?= t('Why INTSOLCOM') ?></span>
-      <h2 class="section-title"><?= t('The holding company difference') ?></h2>
-      <p class="section-subtitle"><?= t('Technology holding companies deliver fundamentally different outcomes than traditional outsourcing providers.') ?></p>
+      <h2 class="section-title"><?= t('The ecosystem difference') ?></h2>
+      <p class="section-subtitle"><?= t('The Intsolcom ecosystem delivers fundamentally different outcomes than traditional service providers.') ?></p>
     </div>
     <div class="comparison">
       <div class="comparison__col comparison__col--traditional reveal-left">
         <div class="comparison__header">
           <div class="comparison__header-icon">&#10060;</div>
-          <h3><?= t('Traditional Outsourcing') ?></h3>
+          <h3><?= t('Traditional Service Providers') ?></h3>
         </div>
         <div class="comparison__list">
           <?php foreach ([
@@ -586,16 +587,16 @@ body.no-scroll { overflow: hidden; }
       <div class="comparison__col comparison__col--intsol reveal-right">
         <div class="comparison__header">
           <div class="comparison__header-icon">&#10003;</div>
-          <h3><?= t('INTSOLCOM Technology Holding') ?></h3>
+          <h3><?= t('The Intsolcom Ecosystem') ?></h3>
         </div>
         <div class="comparison__list">
           <?php foreach ([
-            t('Strategic partnership model'),
-            t('Integrated ecosystem approach'),
+            t('Collaborative ecosystem partnership'),
+            t('Integrated technology & operations'),
             t('AI-enabled, automated workflows'),
-            t('Tailored solutions per client'),
+            t('Solutions tailored to your business'),
             t('Transparent, real-time dashboards'),
-            t('Proprietary technology stack'),
+            t('Unified technology & ops delivery'),
           ] as $item): ?>
             <div class="comparison__item"><?= $item ?></div>
           <?php endforeach; ?>
@@ -614,7 +615,7 @@ body.no-scroll { overflow: hidden; }
   <div class="cta-section__glow"></div>
   <div class="cta-section__glow cta-section__glow--right"></div>
   <div class="container-sm reveal">
-    <h2><?= t('Ready to partner with a technology holding?') ?></h2>
+    <h2><?= t('Ready to work with the Intsolcom ecosystem?') ?></h2>
     <p><?= t("Let's discuss how INTSOLCOM can accelerate your growth through technology and operational excellence.") ?></p>
     <div class="cta-section__actions">
       <a href="/contact" class="btn btn-accent btn-lg"><?= t('Start a Conversation') ?> →</a>
@@ -684,7 +685,7 @@ body.no-scroll { overflow: hidden; }
     <div class="faq">
       <?php
       $faqs = [
-        [t('What is INTSOLCOM?'), t('INTSOLCOM LLC is a technology holding company headquartered in Wilmington, Delaware. We own and operate specialized business units, software platforms, and AI products. Unlike traditional outsourcing firms, we build proprietary technology and integrate it with operational excellence to deliver superior outcomes for our clients.')],
+        [t('What is INTSOLCOM?'), t('The Intsolcom business ecosystem combines two entities working together: Intsolcom, LLC in the United States (strategic and commercial hub) and INTSOLCOM SAS in Colombia (operational delivery center). We build proprietary technology products and operate business services at scale. Unlike traditional outsourcing firms, the Intsolcom ecosystem integrates proprietary technology with operational excellence to deliver superior outcomes.')],
         [t('Where are you located?'), t('Our holding company is registered in Delaware, USA. Our primary operations hub — INTSOLCOM SAS — is located in Barranquilla, Colombia with a satellite office in Bogotá. This dual presence gives us U.S. corporate governance with nearshore delivery capabilities in the EST time zone.')],
         [t('What makes you different from BPO companies?'), t('We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From WONTIA CRM to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage. Our integrated ecosystem — technology + operations + R&D — creates compounding value over time.')],
         [t('What industries do you serve?'), t('We serve clients across Healthcare, Technology, Financial Services, AI & Data, Retail, Logistics, Real Estate, Professional Services, Manufacturing, and Hospitality. Our solutions are industry-agnostic by design, with customization layers for sector-specific requirements.')],
@@ -751,10 +752,10 @@ body.no-scroll { overflow: hidden; }
       <div>
         <h4 class="footer__heading"><?= t('Contact') ?></h4>
         <div class="footer__links">
-          <a style="color:#fff;font-weight:600;font-size:.8125rem;"><?= t('USA') ?></a>
-          <span style="font-size:.8125rem;color:#94A3B8;line-height:1.5;"><?= h($s('contact_usa_address','1209 Orange Street, Wilmington, DE 19801')) ?></span>
+          <a style="color:#fff;font-weight:600;font-size:.8125rem;">Intsolcom, LLC — United States (Strategic &amp; Commercial)</a>
+          <span style="font-size:.8125rem;color:#94A3B8;line-height:1.5;"><?= h($s('contact_usa_address','390 NE 191st St, STE 17284, Miami, FL 33179')) ?></span>
           <span style="font-size:.8125rem;color:#94A3B8;"><?= h($s('contact_usa_phone','+1 (302) 555-0199')) ?></span>
-          <a style="color:#fff;font-weight:600;font-size:.8125rem;margin-top:.5rem;"><?= t('Colombia') ?></a>
+          <a style="color:#fff;font-weight:600;font-size:.8125rem;margin-top:.5rem;">Intsolcom SAS — Colombia (Operational Delivery)</a>
           <span style="font-size:.8125rem;color:#94A3B8;line-height:1.5;"><?= h($s('contact_col_address','Carrera 53 #79-01, Barranquilla, Colombia')) ?></span>
           <a href="<?= h('mailto:' . $s('contact_col_email','info@intsolcom.com')) ?>" style="font-size:.8125rem;color:#00C896;"><?= h($s('contact_col_email','info@intsolcom.com')) ?></a>
           <a href="<?= h('https://wa.me/' . str_replace(['+',' ','-','(',')'],'',$s('contact_whatsapp','+573005550199'))) ?>" style="font-size:.8125rem;color:#00C896;">WhatsApp</a>

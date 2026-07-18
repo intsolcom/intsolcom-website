@@ -6,12 +6,12 @@ $sections = $page ? getSections($page['id']) : [];
 $navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 ORDER BY sort_order ASC")->fetchAll();
 
 $siteName    = setting('site_name', 'INTSOLCOM');
-$siteTagline = setting('site_tagline', 'Technology Holding');
+$siteTagline = setting('site_tagline', 'Technology & Operations Ecosystem');
 $logoText    = setting('logo_text', 'INTSOL');
 $logoAccent  = setting('logo_accent', 'COM');
 
-$metaTitle       = $page['meta_title']       ?? 'Holding — INTSOLCOM';
-$metaDescription = $page['meta_desc']         ?? 'INTSOLCOM LLC is a technology holding company that builds, owns, and operates specialized business units, software platforms, and AI products.';
+$metaTitle       = $page['meta_title']       ?? 'Ecosystem — INTSOLCOM';
+$metaDescription = $page['meta_desc']         ?? 'The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia.';
 $currentUrl      = SITE_URL . '/holding';
 
 $lang    = currentLang();
@@ -96,10 +96,10 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
       <div class="hero__content">
         <div class="hero__badge">
           <span class="hero__badge-dot"></span>
-          <?= ht($heroFields['badge'] ?? 'Technology Holding') ?>
+          <?= ht($heroFields['badge'] ?? 'Technology & Operations Ecosystem') ?>
         </div>
-        <h1><?= ht($heroFields['title'] ?? 'The <em>INTSOLCOM</em> Ecosystem') ?></h1>
-        <p class="hero__description"><?= ht($heroFields['subtitle'] ?? 'A technology holding company that builds, owns, and operates specialized business units, software platforms, and AI products.') ?></p>
+        <h1><?= ht($heroFields['title'] ?? 'The <em>Intsolcom</em> Business Ecosystem') ?></h1>
+        <p class="hero__description"><?= ht($heroFields['subtitle'] ?? 'Two entities, one ecosystem. Strategic business development in the United States. Operational delivery in Colombia.') ?></p>
         <div class="hero__actions">
           <a href="/contact" class="btn btn-accent btn-lg"><?= ht('Partner with us') ?></a>
           <a href="/business-units" class="btn btn-outline-white btn-lg"><?= ht('Explore Business Units') ?></a>
@@ -160,9 +160,9 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
   <?php elseif ($sec['type'] === 'ecosystem'): ?>
     <section class="section <?= $bgClass ?>">
       <div class="container" style="text-align:center;">
-        <span class="section-label reveal"><?= ht($f['label'] ?? 'Corporate Structure') ?></span>
-        <h2 class="section-title reveal"><?= ht($f['title'] ?? 'The INTSOLCOM Ecosystem') ?></h2>
-        <p class="section-subtitle reveal" style="margin:0 auto var(--space-12);"><?= ht($f['text'] ?? 'A family of specialized business units and technology products operating under one holding structure.') ?></p>
+        <span class="section-label reveal"><?= ht($f['label'] ?? 'Business Ecosystem') ?></span>
+        <h2 class="section-title reveal"><?= ht($f['title'] ?? 'The Intsolcom Business Ecosystem') ?></h2>
+        <p class="section-subtitle reveal" style="margin:0 auto var(--space-12);"><?= ht($f['text'] ?? 'Two entities, one ecosystem. Strategic business development in the United States. Operational delivery in Colombia.') ?></p>
 
         <div class="ecosystem reveal">
           <div class="ecosystem__root">
@@ -224,7 +224,7 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
       <div class="cta-section__glow cta-section__glow--right"></div>
       <div class="container">
         <h2><?= ht($f['title'] ?? "Let's Build Together") ?></h2>
-        <p><?= ht($f['text'] ?? 'Partner with a technology holding company that brings Silicon Valley innovation and global operational excellence to every engagement.') ?></p>
+        <p><?= ht($f['text'] ?? 'Partner with the Intsolcom business ecosystem for strategic business development in the United States and operational excellence in Colombia.') ?></p>
         <div class="cta-section__actions">
           <a href="/contact" class="btn btn-accent btn-lg"><?= ht($f['btn_text'] ?? 'Partner with us') ?></a>
           <?php if (!empty($f['btn2_text'])): ?>
@@ -243,7 +243,7 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
     <div class="footer__grid">
       <div class="footer__brand">
         <a href="/" class="footer__logo"><?= h($logoText) ?><span style="color:<?= h(setting('logo_accent_color','#00C896')) ?>"><?= h($logoAccent) ?></span></a>
-        <p class="footer__desc"><?= ht(setting('footer_desc', 'INTSOLCOM LLC is a technology holding company. We build and operate software platforms, AI products, and intelligent business services.')) ?></p>
+        <p class="footer__desc"><?= ht(setting('footer_desc', 'The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia.')) ?></p>
         <div class="footer__social">
           <a href="<?= h(setting('social_linkedin','#')) ?>" class="footer__social-icon" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
         </div>
@@ -251,7 +251,7 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
       <div>
         <div class="footer__heading"><?= ht('Company') ?></div>
         <div class="footer__links">
-          <a href="/holding"><?= ht('Holding') ?></a>
+          <a href="/holding"><?= ht('Ecosystem') ?></a>
           <a href="/business-units"><?= ht('Business Units') ?></a>
           <a href="/contact"><?= ht('Contact') ?></a>
         </div>

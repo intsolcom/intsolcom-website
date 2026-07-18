@@ -43,16 +43,16 @@ const MIME = {
 // SETTINGS / CONTENT DATA (from DB seed)
 // ============================================================
 const S = {
-  site_name:'INTSOLCOM',site_tagline:'Technology Holding',
-  site_desc:'INTSOLCOM LLC is a technology holding company that owns and operates specialized business units, software platforms and AI products.',
+  site_name:'INTSOLCOM',site_tagline:'Technology & Operations Ecosystem',
+  site_desc:'The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia.',
   logo_text:'INTSOL',logo_accent:'COM',
   color_accent:'#00C896',color_accent_dk:'#00A67D',color_dark:'#0F172A',
   contact_usa_phone:'+1 (302) 555-0199',
-  contact_usa_address:'1209 Orange Street, Wilmington, DE 19801',
+  contact_usa_address:'390 NE 191st St, STE 17284, Miami, FL 33179',
   contact_col_email:'info@intsolcom.com',
   contact_col_address:'Carrera 53 #79-01, Barranquilla, Colombia',
   contact_whatsapp:'+573005550199',
-  footer_desc:'INTSOLCOM LLC is a technology holding company. We build and operate software platforms, AI products, and intelligent business services.',
+  footer_desc:'The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia.',
   footer_copyright:'\u00a9 2026 INTSOLCOM LLC',
   social_linkedin:'https://linkedin.com/company/intsolcom',
 };
@@ -309,9 +309,9 @@ function buildCapabilities() {
 
 function buildUnitsDiagram() {
   const units = [
-    {name:'INTSOLCOM SAS',desc:'Operations & Delivery hub in Barranquilla, Colombia. Nearshore technology services for global clients.',icon:'\u{1F1E8}\u{1F1F4}',tag:'Colombia',caps:'Software Dev,AI Ops,QA Testing,IT Support'},
-    {name:'Technology Division',desc:'WONTIA CRM, MACROPONDER, and IA Annotation Manager \u2014 owned and operated software platforms.',icon:'\u2699\uFE0F',tag:'Product Division',caps:'WONTIA CRM,MACROPONDER,Annotation Manager'},
-    {name:'Innovation Lab',desc:'Research, development, and venture incubation. Exploring AI frontiers, automation, and emerging technologies.',icon:'\u{1F9EA}',tag:'R&D Lab',caps:'AI Research,Prototyping,Ventures'},
+    {name:'INTSOLCOM SAS',desc:'Operational delivery hub in Barranquilla, Colombia. Nearshore BPO, AI annotation, QA, and talent solutions.',icon:'\u{1F1E8}\u{1F1F4}',tag:'Operational Delivery',caps:'BPO,AI Annotation,QA,Talent'},
+    {name:'Technology & Products',desc:'WONTIA CRM, MACROPONDER, and IA Annotation Manager \u2014 owned and operated software platforms.',icon:'\u2699\uFE0F',tag:'Product Division',caps:'WONTIA CRM,MACROPONDER,Annotation Manager'},
+    {name:'Business Development \u2014 USA',desc:'Strategic commercial presence in the United States \u2014 client relationships, partnerships, and market expansion.',icon:'\u{1F1FA}\u{1F1F8}',tag:'Commercial & Strategy',caps:'Sales,Partnerships,Strategy'},
   ];
   let html = '';
   for (let i = 0; i < units.length; i++) {
@@ -374,9 +374,9 @@ function buildTestimonials() {
 
 function buildFAQs() {
   const faqs = [
-    ['What is INTSOLCOM?','INTSOLCOM LLC is a technology holding company headquartered in Wilmington, Delaware. We own and operate specialized business units, software platforms, and AI products. Unlike traditional outsourcing firms, we build proprietary technology and integrate it with operational excellence to deliver superior outcomes for our clients.'],
-    ['Where are you located?','Our holding company is registered in Delaware, USA. Our primary operations hub \u2014 INTSOLCOM SAS \u2014 is located in Barranquilla, Colombia. This dual presence gives us U.S. corporate governance with nearshore delivery capabilities in the EST time zone.'],
-    ['What makes you different from BPO companies?','We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From WONTIA CRM to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage.'],
+    ['What is INTSOLCOM?','The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia. We own and operate software platforms and business services. Unlike traditional outsourcing firms, we build proprietary technology and integrate it with operational excellence to deliver superior outcomes for our clients.'],
+    ['Where are you located?','Our strategic operations are managed from the United States, and our primary delivery hub \u2014 INTSOLCOM SAS \u2014 is located in Barranquilla, Colombia. This dual presence gives us U.S. business development and governance with nearshore delivery capabilities in the EST time zone.'],
+    ['What makes you different from BPO companies?','We are a business ecosystem, not a BPO. The key difference: we own the technology we deploy. From WONTIA CRM to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage.'],
     ['What industries do you serve?','We serve clients across Healthcare, Technology, Financial Services, AI & Data, Retail, Logistics, Real Estate, Professional Services, Manufacturing, and Hospitality.'],
     ['How do I partner with INTSOLCOM?','Fill out our contact form or reach out via WhatsApp. We will schedule a 30-minute discovery call to understand your needs and prepare a tailored proposal.'],
   ];
@@ -403,9 +403,9 @@ function renderHome() {
   <div class="video-overlay"></div>
   <div class="container relative">
     <div class="hero__content">
-      <div class="hero__badge reveal"><span class="hero__badge-dot"></span>Technology Holding</div>
+      <div class="hero__badge reveal"><span class="hero__badge-dot"></span>Technology & Operations Ecosystem</div>
       <h1 class="reveal" data-delay="100">We build and operate <em>technology companies.</em></h1>
-      <p class="hero__description reveal" data-delay="200">INTSOLCOM LLC owns and operates specialized business units, software platforms, and AI products that transform how enterprises work.</p>
+      <p class="hero__description reveal" data-delay="200">The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia. We build technology products and operate business services.</p>
       <div class="hero__actions reveal" data-delay="300">
         <a href="/holding" class="btn btn-accent btn-lg">Explore Our Ecosystem \u2192</a>
         <a href="/technology" class="btn btn-outline-white btn-lg">Meet Our Products</a>
@@ -431,13 +431,13 @@ function renderHome() {
 <section class="section section-surface" id="ecosystem">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Corporate Ecosystem</span>
-      <h2 class="section-title">A technology holding designed for the future.</h2>
-      <p class="section-subtitle">INTSOLCOM LLC operates as a unified technology ecosystem with entities spanning operations, software products, and R&D.</p>
+      <span class="section-label">Business Ecosystem</span>
+      <h2 class="section-title">The Intsolcom Ecosystem</h2>
+      <p class="section-subtitle">Two entities, one ecosystem \u2014 combining U.S. strategic presence with Colombian operational delivery.</p>
     </div>
     <div class="eco-diagram">
       <div class="eco-top reveal">
-        <div class="eco-top-card">INTSOL<span style="color:#00C896;">COM</span> LLC<div style="font-size:.72rem;font-weight:400;color:rgba(255,255,255,.6);margin-top:.2rem;">United States \u2014 Holding Company</div></div>
+        <div class="eco-top-card">The Intsolcom <span style="color:#00C896;">Ecosystem</span><div style="font-size:.72rem;font-weight:400;color:rgba(255,255,255,.6);margin-top:.2rem;">United States &amp; Colombia</div></div>
       </div>
       <div class="eco-connectors reveal" data-delay="100"><div class="eco-vline"></div><div class="eco-vline"></div><div class="eco-vline"></div></div>
       <div class="eco-branches">
@@ -490,9 +490,9 @@ function renderHome() {
 <section class="section section-surface" id="comparison">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Why INTSOLCOM</span>
-      <h2 class="section-title">The holding company difference</h2>
-      <p class="section-subtitle">Technology holding companies deliver fundamentally different outcomes than traditional outsourcing providers.</p>
+      <span class="section-label">Why Intsolcom</span>
+      <h2 class="section-title">The ecosystem advantage</h2>
+      <p class="section-subtitle">The Intsolcom business ecosystem delivers fundamentally different outcomes than traditional outsourcing providers.</p>
     </div>
     <div class="comparison">
       <div class="comparison__col comparison__col--traditional reveal-left">
@@ -500,7 +500,7 @@ function renderHome() {
         <div class="comparison__list">${['Transactional vendor relationships','Siloed teams with no integration','Manual, repetitive processes','Generic, one-size-fits-all approach','Opaque operations and reporting','Limited technology capabilities'].map(s=>`<div class="comparison__item">${esc(s)}</div>`).join('')}</div>
       </div>
       <div class="comparison__col comparison__col--intsol reveal-right">
-        <div class="comparison__header"><div class="comparison__header-icon">\u2713</div><h3>INTSOLCOM Technology Holding</h3></div>
+        <div class="comparison__header"><div class="comparison__header-icon">\u2713</div>      <h3>The Intsolcom Ecosystem</h3></div>
         <div class="comparison__list">${['Strategic partnership model','Integrated ecosystem approach','AI-enabled, automated workflows','Tailored solutions per client','Transparent, real-time dashboards','Proprietary technology stack'].map(s=>`<div class="comparison__item">${esc(s)}</div>`).join('')}</div>
       </div>
     </div>
@@ -511,7 +511,7 @@ function renderHome() {
 <section class="cta-section" id="cta">
   <div class="cta-section__glow"></div><div class="cta-section__glow cta-section__glow--right"></div>
   <div class="container-sm reveal">
-    <h2>Ready to partner with a technology holding?</h2>
+    <h2>Ready to work with the Intsolcom ecosystem?</h2>
     <p>Let's discuss how INTSOLCOM can accelerate your growth through technology and operational excellence.</p>
     <div class="cta-section__actions">
       <a href="/contact" class="btn btn-accent btn-lg">Start a Conversation \u2192</a>
@@ -538,18 +538,39 @@ function renderHome() {
 }
 
 function renderHolding() {
-  return pageHead('Holding \u2014 INTSOLCOM','INTSOLCOM LLC is a technology holding company that builds, owns, and operates specialized business units, software platforms, and AI products.','https://intsolcom.com/holding') + navBar('/holding') + `
-<section class="page-hero"><div class="container"><h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;position:relative;z-index:1;">The <em style="font-style:normal;color:#00C896;">INTSOLCOM</em> Ecosystem</h1><p style="font-size:1.15rem;color:rgba(255,255,255,.55);max-width:600px;margin:1rem auto 0;position:relative;z-index:1;">A technology holding company that builds, owns, and operates specialized business units, software platforms, and AI products.</p></div></section>
+  return pageHead('Ecosystem \u2014 INTSOLCOM','The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia.','https://intsolcom.com/holding') + navBar('/holding') + `
+<section class="page-hero"><div class="container"><h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;position:relative;z-index:1;">The <em style="font-style:normal;color:#00C896;">Intsolcom</em> Business Ecosystem</h1><p style="font-size:1.15rem;color:rgba(255,255,255,.55);max-width:600px;margin:1rem auto 0;position:relative;z-index:1;">Two entities, one ecosystem. Strategic business development in the United States. Operational delivery in Colombia.</p></div></section>
 <section class="section"><div class="container"><div class="grid-2">
-  <div><div class="section-label">Mission</div><h2 class="section-title">Build and operate technology companies that transform industries through AI and intelligent operations.</h2><p class="section-subtitle">We identify opportunities where technology can fundamentally improve how businesses operate. We build or acquire the right assets, integrate them into our ecosystem, and scale them globally.</p></div>
-  <div><div class="section-label">Vision</div><h2 class="section-title">Be the leading technology holding company bridging Silicon Valley innovation with global operational excellence.</h2><p class="section-subtitle">Our dual presence in the United States and Colombia gives us a unique advantage: world-class governance with cost-efficient, high-quality nearshore delivery.</p></div>
+  <div><div class="section-label">Mission</div><h2 class="section-title">Build technology products and operate business services that transform how companies work \u2014 combining strategic presence in the United States with operational excellence in Colombia.</h2><p class="section-subtitle">We integrate proprietary technology platforms with operational delivery capabilities to create a unified business ecosystem. Our U.S. presence manages client relationships and strategy, while our Colombian operations deliver world-class execution.</p></div>
+  <div><div class="section-label">Vision</div><h2 class="section-title">Be the leading business ecosystem bridging U.S. strategic capabilities with Colombian operational excellence.</h2><p class="section-subtitle">Our dual-entity model \u2014 strategic business development in the United States and operational delivery in Colombia \u2014 gives clients the best of both worlds: American business acumen with nearshore efficiency and quality.</p></div>
 </div></div></section>
-<section class="section section-dark"><div class="container"><div class="section-header reveal"><span class="section-label">Corporate Structure</span><h2 class="section-title" style="color:#fff;">Governance & Strategy</h2></div><div class="grid-3">
-  <div class="card" style="background:rgba(255,255,255,.05);color:#fff;"><h3 style="color:#00C896;">Build</h3><p style="color:rgba(255,255,255,.6);">We develop proprietary software products from the ground up, solving real business problems with elegant technology.</p></div>
-  <div class="card" style="background:rgba(255,255,255,.05);color:#fff;"><h3 style="color:#8B5CF6;">Acquire</h3><p style="color:rgba(255,255,255,.6);">We identify and acquire technology companies with strong fundamentals and integrate them into our ecosystem for accelerated growth.</p></div>
-  <div class="card" style="background:rgba(255,255,255,.05);color:#fff;"><h3 style="color:#2563EB;">Scale</h3><p style="color:rgba(255,255,255,.6);">We provide operational infrastructure, capital, and strategic guidance to scale our portfolio companies globally.</p></div>
+<section class="section section-dark"><div class="container"><div class="section-header reveal"><span class="section-label">Business Model</span><h2 class="section-title" style="color:#fff;">Two Pillars, One Ecosystem</h2><p style="color:rgba(255,255,255,.5);max-width:600px;margin:0 auto;font-size:.95rem;">The Intsolcom business ecosystem is built on two foundational pillars that work together seamlessly.</p></div><div class="grid-2" style="margin-top:2rem;gap:1.5rem;">
+  <div class="card" style="background:rgba(255,255,255,.05);color:#fff;padding:2rem;">
+    <div style="font-size:2rem;margin-bottom:1rem;">\u{1F4BC}</div>
+    <h3 style="color:#00C896;font-size:1.25rem;margin-bottom:.75rem;">Business Operations</h3>
+    <p style="color:rgba(255,255,255,.6);margin-bottom:1.25rem;font-size:.9rem;">Strategic and operational business services managed across two entities in the Intsolcom ecosystem.</p>
+    <div style="display:flex;flex-direction:column;gap:.75rem;">
+      <div style="background:rgba(0,200,150,.08);padding:1rem;border-radius:8px;">
+        <div style="font-weight:600;font-size:.85rem;color:#00C896;margin-bottom:.25rem;">\u{1F1FA}\u{1F1F8} Strategic Operations \u2014 USA</div>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.5);">Commercial strategy, client partnerships, business development, and market expansion from the United States.</p>
+      </div>
+      <div style="background:rgba(0,200,150,.08);padding:1rem;border-radius:8px;">
+        <div style="font-weight:600;font-size:.85rem;color:#00C896;margin-bottom:.25rem;">\u{1F1E8}\u{1F1F4} Delivery Operations \u2014 Colombia</div>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.5);">Nearshore BPO, AI annotation, QA, and talent solutions delivered from Barranquilla, Colombia.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="background:rgba(255,255,255,.05);color:#fff;padding:2rem;">
+    <div style="font-size:2rem;margin-bottom:1rem;">\u2699\uFE0F</div>
+    <h3 style="color:#8B5CF6;font-size:1.25rem;margin-bottom:.75rem;">Technology & Products</h3>
+    <p style="color:rgba(255,255,255,.6);margin-bottom:1.25rem;font-size:.9rem;">Proprietary software platforms built, owned, and operated by the Intsolcom ecosystem.</p>
+    <div style="background:rgba(139,92,246,.08);padding:1rem;border-radius:8px;">
+      <div style="font-weight:600;font-size:.85rem;color:#8B5CF6;margin-bottom:.25rem;">\u{1F4E6} Product Portfolio</div>
+      <p style="font-size:.8rem;color:rgba(255,255,255,.5);">WONTIA CRM, MACROPONDER, and IA Annotation Manager \u2014 continuously developed and deployed at enterprise scale.</p>
+    </div>
+  </div>
 </div></div></section>
-<section class="cta-section"><div class="cta-section__glow"></div><div class="container-sm reveal"><h2>Partner with a technology holding</h2><p>Let's discuss how INTSOLCOM can accelerate your growth through our ecosystem of technology products and operational capabilities.</p><div class="cta-section__actions"><a href="/contact" class="btn btn-accent btn-lg">Start a Conversation \u2192</a></div></div></section>
+<section class="cta-section"><div class="cta-section__glow"></div><div class="container-sm reveal"><h2>Ready to work with the Intsolcom ecosystem?</h2><p>Let's discuss how the Intsolcom ecosystem can accelerate your growth through technology products and operational capabilities across the United States and Colombia.</p><div class="cta-section__actions"><a href="/contact" class="btn btn-accent btn-lg">Start a Conversation \u2192</a></div></div></section>
 ` + pageEnd('/holding');
 }
 
@@ -578,8 +599,8 @@ function renderTechnology() {
 
 function renderContact() {
   const ws = S.contact_whatsapp.replace(/[+ ()-]/g,'');
-  return pageHead('Contact \u2014 INTSOLCOM','Partner with a technology holding that delivers. Contact INTSOLCOM LLC (USA) or INTSOLCOM SAS (Colombia).','https://intsolcom.com/contact') + navBar('/contact') + `
-<section class="page-hero"><div class="container"><h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;position:relative;z-index:1;">Let's <em style="font-style:normal;color:#00C896;">talk</em></h1><p style="font-size:1.15rem;color:rgba(255,255,255,.55);max-width:600px;margin:1rem auto 0;position:relative;z-index:1;">Partner with a technology holding that delivers.</p></div></section>
+  return pageHead('Contact \u2014 INTSOLCOM','Partner with the Intsolcom ecosystem. Contact INTSOLCOM LLC (USA) or INTSOLCOM SAS (Colombia).','https://intsolcom.com/contact') + navBar('/contact') + `
+<section class="page-hero"><div class="container"><h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;position:relative;z-index:1;">Let's <em style="font-style:normal;color:#00C896;">talk</em></h1><p style="font-size:1.15rem;color:rgba(255,255,255,.55);max-width:600px;margin:1rem auto 0;position:relative;z-index:1;">Partner with the Intsolcom ecosystem.</p></div></section>
 <section class="section"><div class="container"><div class="grid-2">
   <div>
     <form method="post" action="/contact" style="display:flex;flex-direction:column;gap:1rem;">
@@ -708,7 +729,7 @@ const server = http.createServer((req, res) => {
 // ============================================================
 server.listen(PORT, () => {
   console.log('\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557');
-  console.log('\u2551  INTSOLCOM LLC \u2014 Technology Holding Website        \u2551');
+  console.log('\u2551  INTSOLCOM \u2014 Technology & Operations Ecosystem    \u2551');
   console.log('\u2551                                                    \u2551');
   console.log('\u2551  Local:  http://localhost:' + String(PORT).padEnd(26) + '\u2551');
   console.log('\u2551  Token:  ' + TOKEN.padEnd(26) + '\u2551');
