@@ -4,20 +4,41 @@ require_once __DIR__ . '/includes/config.php';
 $page     = getPage('business-units');
 $sections = $page ? getSections($page['id']) : [];
 $navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 ORDER BY sort_order ASC")->fetchAll();
-$busUnits = db()->query("SELECT * FROM business_units WHERE status = 1 ORDER BY order_num ASC")->fetchAll();
 
 $siteName    = setting('site_name', 'INTSOLCOM');
 $logoText    = setting('logo_text', 'INTSOL');
 $logoAccent  = setting('logo_accent', 'COM');
 
-$metaTitle       = $page['meta_title']       ?? 'Business Units — INTSOLCOM';
-$metaDescription = $page['meta_desc']         ?? 'Specialized divisions operating under INTSOLCOM LLC. From nearshore technology services to AI platforms, explore our family of business units.';
+$metaTitle       = 'Business Units — INTSOLCOM';
+$metaDescription = 'INTSOLCOM SAS (Colombia operations) and Marcas BPO (commercial brand). Two specialized units forming the Intsolcom business ecosystem.';
 $currentUrl      = SITE_URL . '/business-units';
 $lang            = currentLang();
 
-$buIcons = [
-  'building' => '🏢', 'users' => '👥', 'brain' => '🧠', 'tags' => '🏷️',
-  'chart' => '📊', 'shield' => '🛡️', 'globe' => '🌐', 'cpu' => '⚙️',
+$busUnits = [
+  [
+    'slug'         => 'intsolcom-sas',
+    'icon'         => '🇨🇴',
+    'name'         => 'INTSOLCOM SAS',
+    'tag'          => 'Legal Entity — Colombia',
+    'subtitle'     => 'Operational Delivery Center · Barranquilla, Colombia',
+    'description'  => 'International Solutions Companies S.A.S. is the operational engine of the Intsolcom ecosystem. Based in Barranquilla, Colombia, it executes all BPO operations, AI data annotation, software development, and talent management. Bilingual teams. EST timezone. Enterprise-grade delivery.',
+    'capabilities' => ['BPO Operations', 'AI Data Annotation', 'Software Development', 'Quality Assurance', 'Talent Management', 'Training'],
+    'link'         => '/business-units/intsolcom-sas',
+    'cta'          => 'Explore INTSOLCOM SAS',
+    'colorAccent'  => '#2563EB',
+  ],
+  [
+    'slug'         => 'business-operations',
+    'icon'         => '🏢',
+    'name'         => 'Marcas BPO',
+    'tag'          => 'Commercial Brand — BPO Services',
+    'subtitle'     => 'Business Operations Brand · Powered by INTSOLCOM SAS',
+    'description'  => 'Marcas BPO is the commercial brand through which clients access Intsolcom\'s business operations ecosystem. From administrative support to AI data services, Marcas BPO represents the full spectrum of operational capabilities delivered from Colombia.',
+    'capabilities' => ['Administrative Support', 'Sales Operations', 'Customer Operations', 'Back Office', 'AI Data Services', 'Marketing Operations'],
+    'link'         => '/business-units/business-operations',
+    'cta'          => 'Explore Marcas BPO',
+    'colorAccent'  => '#00C896',
+  ],
 ];
 ?>
 <!DOCTYPE html>
@@ -34,7 +55,7 @@ $buIcons = [
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="<?= h($metaTitle) ?>">
   <meta name="twitter:description" content="<?= h($metaDescription) ?>">
-  <title><?= h($metaTitle) ?> — <?= h($siteName) ?></title>
+  <title><?= h($metaTitle) ?></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -50,6 +71,172 @@ $buIcons = [
     "isPartOf": { "@type": "WebSite", "name": "<?= h($siteName) ?>", "url": "<?= h(SITE_URL) ?>" }
   }
   </script>
+  <style>
+    .bu-hero {
+      padding: 120px 0 60px;
+      text-align: center;
+      background: var(--color-surface, #F8FAFC);
+      position: relative;
+      overflow: hidden;
+    }
+    .bu-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 20%, rgba(0,200,150,.06) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(37,99,235,.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .bu-hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent, #00C896);
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .bu-hero__eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent, #00C896);
+    }
+    .bu-hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--color-dark, #0F172A);
+      max-width: 800px;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+    .bu-hero h1 em {
+      font-style: normal;
+      color: var(--color-accent, #00C896);
+    }
+    .bu-hero__desc {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      color: var(--color-light, #64748B);
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .bu-section {
+      padding: 80px 0;
+      background: #fff;
+    }
+    .bu-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .bu-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 28px;
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 36px 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.03);
+      transition: box-shadow .25s ease, border-color .25s ease;
+    }
+    .bu-card:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,.06), 0 12px 32px rgba(0,0,0,.06);
+      border-color: #CBD5E1;
+    }
+    .bu-card:last-child { margin-bottom: 0; }
+    .bu-card__icon {
+      flex-shrink: 0;
+      width: 64px; height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      background: #F1F5F9;
+      border-radius: 14px;
+      line-height: 1;
+    }
+    .bu-card__body { flex: 1; min-width: 0; }
+    .bu-card__tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-accent, #00C896);
+      margin-bottom: 6px;
+    }
+    .bu-card__name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0F172A;
+      margin: 0 0 4px;
+      line-height: 1.3;
+    }
+    .bu-card__subtitle {
+      font-size: 0.9375rem;
+      color: #64748B;
+      margin-bottom: 14px;
+    }
+    .bu-card__desc {
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: #475569;
+      margin-bottom: 16px;
+    }
+    .bu-card__caps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .bu-card__cap {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      background: #ECFDF5;
+      color: #059669;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .bu-card__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-accent, #00C896);
+      text-decoration: none;
+      transition: gap .2s ease;
+    }
+    .bu-card__cta:hover { gap: 10px; }
+
+    @media (max-width: 640px) {
+      .bu-card {
+        flex-direction: column;
+        gap: 16px;
+        padding: 24px 20px;
+      }
+      .bu-card__icon {
+        width: 48px; height: 48px;
+        font-size: 1.5rem;
+        border-radius: 12px;
+      }
+      .bu-hero { padding: 100px 0 40px; }
+      .bu-section { padding: 48px 0; }
+    }
+  </style>
 </head>
 <body>
 
@@ -81,54 +268,37 @@ $buIcons = [
 </nav>
 
 <main>
-  <section class="hero" style="min-height:auto;padding-top:var(--space-40);padding-bottom:var(--space-16);">
-    <div class="hero__grid"></div>
-    <div class="hero__overlay"></div>
+  <section class="bu-hero">
     <div class="container">
-      <div class="hero__content" style="max-width:700px;">
-        <div class="hero__badge">
-          <span class="hero__badge-dot"></span>
-          <?= ht('Divisions') ?>
-        </div>
-        <h1><?= ht('Business Units') ?></h1>
-        <p class="hero__description"><?= ht('Specialized divisions operating under INTSOLCOM LLC') ?></p>
-      </div>
+      <div class="bu-hero__eyebrow">Business Units</div>
+      <h1>Specialized divisions operating within the <em>Intsolcom ecosystem.</em></h1>
+      <p class="bu-hero__desc">Each business unit serves a distinct function — from operational delivery in Colombia to commercial service brands. Together they form a complete ecosystem of technology and business services.</p>
     </div>
   </section>
 
-  <section class="section" style="padding-top:var(--space-16);">
-    <div class="container">
-      <?php if (empty($busUnits)): ?>
-        <div class="text-center" style="padding:var(--space-16) 0;">
-          <p style="color:var(--color-light);font-size:1.125rem;"><?= ht('No business units found.') ?></p>
-        </div>
-      <?php else: ?>
-        <div class="grid-2">
-          <?php foreach ($busUnits as $idx => $bu):
-            $capabilities = json_decode($bu['capabilities'] ?? '[]', true) ?: [];
-            $iconKey = $bu['icon'] ?? 'building';
-            $iconChar = $buIcons[$iconKey] ?? '🏢';
-          ?>
-          <div class="eco-card card-hover reveal" style="transition-delay:<?= $idx * 0.05 ?>s;text-align:left;">
-            <div class="eco-card__logo" style="font-size:2rem;margin-left:0;"><?= h($iconChar) ?></div>
-            <h3 style="font-size:1.25rem;margin-bottom:var(--space-3);"><?= ht($bu['name']) ?></h3>
-            <p style="font-size:0.9375rem;margin-bottom:var(--space-4);"><?= ht($bu['description']) ?></p>
-            <?php if (!empty($capabilities)): ?>
-              <div class="product-card__tags" style="margin-bottom:var(--space-5);">
-                <?php foreach (array_slice($capabilities, 0, 4) as $cap): ?>
-                  <span class="product-card__tag"><?= ht($cap['title']) ?></span>
-                <?php endforeach; ?>
-              </div>
-            <?php endif; ?>
-            <a href="/business-units/<?= h($bu['slug']) ?>" class="btn btn-outline btn-sm"><?= ht('Explore') ?> →</a>
+  <section class="bu-section">
+    <div class="bu-container">
+      <?php foreach ($busUnits as $bu): ?>
+      <div class="bu-card">
+        <div class="bu-card__icon"><?= h($bu['icon']) ?></div>
+        <div class="bu-card__body">
+          <span class="bu-card__tag" style="color:<?= h($bu['colorAccent']) ?>"><?= ht($bu['tag']) ?></span>
+          <h2 class="bu-card__name"><?= ht($bu['name']) ?></h2>
+          <p class="bu-card__subtitle"><?= ht($bu['subtitle']) ?></p>
+          <p class="bu-card__desc"><?= ht($bu['description']) ?></p>
+          <div class="bu-card__caps">
+            <?php foreach ($bu['capabilities'] as $cap): ?>
+              <span class="bu-card__cap"><?= ht($cap) ?></span>
+            <?php endforeach; ?>
           </div>
-          <?php endforeach; ?>
+          <a href="<?= h($bu['link']) ?>" class="bu-card__cta"><?= ht($bu['cta']) ?> →</a>
         </div>
-      <?php endif; ?>
+      </div>
+      <?php endforeach; ?>
     </div>
   </section>
 
-  <section class="cta-section" style="margin-top:var(--space-16);">
+  <section class="cta-section" style="margin-top:0;">
     <div class="cta-section__glow"></div>
     <div class="cta-section__glow cta-section__glow--right"></div>
     <div class="container">
