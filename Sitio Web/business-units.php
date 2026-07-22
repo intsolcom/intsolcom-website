@@ -18,25 +18,25 @@ $busUnits = [
   [
     'slug'         => 'intsolcom-sas',
     'icon'         => '🇨🇴',
-    'name'         => 'INTSOLCOM SAS',
-    'tag'          => 'Legal Entity — Colombia',
-    'subtitle'     => 'Operational Delivery Center · Barranquilla, Colombia',
-    'description'  => 'International Solutions Companies S.A.S. is the operational engine of the Intsolcom ecosystem. Based in Barranquilla, Colombia, it executes all BPO operations, AI data annotation, software development, and talent management. Bilingual teams. EST timezone. Enterprise-grade delivery.',
-    'capabilities' => ['BPO Operations', 'AI Data Annotation', 'Software Development', 'Quality Assurance', 'Talent Management', 'Training'],
+    'name'         => t('INTSOLCOM SAS'),
+    'tag'          => t('Legal Entity — Colombia'),
+    'subtitle'     => t('Operational Delivery Center · Barranquilla, Colombia'),
+    'description'  => t('International Solutions Companies S.A.S. is the operational engine of the Intsolcom ecosystem. Based in Barranquilla, Colombia, it executes all BPO operations, AI data annotation, software development, and talent management. Bilingual teams. EST timezone. Enterprise-grade delivery.'),
+    'capabilities' => [t('BPO Operations'), t('AI Data Annotation'), t('Software Development'), t('Quality Assurance'), t('Talent Management'), t('Training')],
     'link'         => '/business-units/intsolcom-sas',
-    'cta'          => 'Explore INTSOLCOM SAS',
+    'cta'          => t('Explore INTSOLCOM SAS'),
     'colorAccent'  => '#2563EB',
   ],
   [
     'slug'         => 'business-operations',
     'icon'         => '🏢',
-    'name'         => 'Marcas BPO',
-    'tag'          => 'Commercial Brand — BPO Services',
-    'subtitle'     => 'Business Operations Brand · Powered by INTSOLCOM SAS',
-    'description'  => 'Marcas BPO is the commercial brand through which clients access Intsolcom\'s business operations ecosystem. From administrative support to AI data services, Marcas BPO represents the full spectrum of operational capabilities delivered from Colombia.',
-    'capabilities' => ['Administrative Support', 'Sales Operations', 'Customer Operations', 'Back Office', 'AI Data Services', 'Marketing Operations'],
+    'name'         => t('Marcas BPO'),
+    'tag'          => t('Commercial Brand — BPO Services'),
+    'subtitle'     => t('Business Operations Brand · Powered by INTSOLCOM SAS'),
+    'description'  => t("Marcas BPO is the commercial brand through which clients access Intsolcom's business operations ecosystem. From administrative support to AI data services, Marcas BPO represents the full spectrum of operational capabilities delivered from Colombia."),
+    'capabilities' => [t('Administrative Support'), t('Sales Operations'), t('Customer Operations'), t('Back Office'), t('AI Data Services'), t('Marketing Operations')],
     'link'         => '/business-units/business-operations',
-    'cta'          => 'Explore Marcas BPO',
+    'cta'          => t('Explore Marcas BPO'),
     'colorAccent'  => '#00C896',
   ],
 ];
@@ -270,9 +270,9 @@ $busUnits = [
 <main>
   <section class="bu-hero">
     <div class="container">
-      <div class="bu-hero__eyebrow">Business Units</div>
-      <h1>Specialized divisions operating within the <em>Intsolcom ecosystem.</em></h1>
-      <p class="bu-hero__desc">Each business unit serves a distinct function — from operational delivery in Colombia to commercial service brands. Together they form a complete ecosystem of technology and business services.</p>
+      <div class="bu-hero__eyebrow"><?= t('Business Units') ?></div>
+      <h1><?= t('Specialized divisions operating within the') ?> <em><?= t('Intsolcom ecosystem.') ?></em></h1>
+      <p class="bu-hero__desc"><?= t('Each business unit serves a distinct function — from operational delivery in Colombia to commercial service brands. Together they form a complete ecosystem of technology and business services.') ?></p>
     </div>
   </section>
 
@@ -302,11 +302,11 @@ $busUnits = [
     <div class="cta-section__glow"></div>
     <div class="cta-section__glow cta-section__glow--right"></div>
     <div class="container">
-      <h2><?= ht('Partner with INTSOLCOM') ?></h2>
-      <p><?= ht('Every business unit is backed by INTSOLCOM\'s resources, expertise, and commitment to operational excellence.') ?></p>
+      <h2><?= t('Partner with INTSOLCOM') ?></h2>
+      <p><?= t("Every business unit is backed by INTSOLCOM's resources, expertise, and commitment to operational excellence.") ?></p>
       <div class="cta-section__actions">
-        <a href="/contact" class="btn btn-accent btn-lg"><?= ht('Get in touch') ?></a>
-        <a href="/technology" class="btn btn-outline-white btn-lg"><?= ht('Explore Technology') ?></a>
+        <a href="/contact" class="btn btn-accent btn-lg"><?= t('Get in touch') ?></a>
+        <a href="/technology" class="btn btn-outline-white btn-lg"><?= t('Explore Technology') ?></a>
       </div>
     </div>
   </section>
@@ -323,29 +323,29 @@ $busUnits = [
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Company') ?></div>
+        <div class="footer__heading"><?= t('Company') ?></div>
         <div class="footer__links">
-          <a href="/holding"><?= ht('Holding') ?></a>
-          <a href="/business-units"><?= ht('Business Units') ?></a>
-          <a href="/contact"><?= ht('Contact') ?></a>
+          <a href="/holding"><?= t('Holding') ?></a>
+          <a href="/business-units"><?= t('Business Units') ?></a>
+          <a href="/contact"><?= t('Contact') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Solutions') ?></div>
+        <div class="footer__heading"><?= t('Solutions') ?></div>
         <div class="footer__links">
-          <a href="/technology"><?= ht('Technology') ?></a>
-          <a href="/industries"><?= ht('Industries') ?></a>
+          <a href="/technology"><?= t('Technology') ?></a>
+          <a href="/industries"><?= t('Industries') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Resources') ?></div>
+        <div class="footer__heading"><?= t('Resources') ?></div>
         <div class="footer__links">
-          <a href="/resources"><?= ht('Insights') ?></a>
-          <a href="/blog"><?= ht('Blog') ?></a>
+          <a href="/resources"><?= t('Insights') ?></a>
+          <a href="/blog"><?= t('Blog') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Contact') ?></div>
+        <div class="footer__heading"><?= t('Contact') ?></div>
         <div class="footer__links">
           <a href="mailto:<?= h(setting('contact_col_email','info@intsolcom.com')) ?>"><?= h(setting('contact_col_email','info@intsolcom.com')) ?></a>
           <a href="tel:<?= h(preg_replace('/[^+\d]/','',setting('contact_usa_phone','+1 (302) 555-0199'))) ?>"><?= h(setting('contact_usa_phone','+1 (302) 555-0199')) ?></a>
@@ -355,9 +355,9 @@ $busUnits = [
     <div class="footer__bottom">
       <span><?= ht(setting('footer_copyright','© 2026 INTSOLCOM LLC')) ?></span>
       <div class="footer__bottom-links">
-        <a href="/privacy"><?= ht('Privacy Policy') ?></a>
-        <a href="/terms"><?= ht('Terms of Service') ?></a>
-        <a href="/sitemap.xml"><?= ht('Sitemap') ?></a>
+        <a href="/privacy"><?= t('Privacy Policy') ?></a>
+        <a href="/terms"><?= t('Terms of Service') ?></a>
+        <a href="/sitemap.xml"><?= t('Sitemap') ?></a>
       </div>
     </div>
   </div>

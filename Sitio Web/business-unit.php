@@ -17,57 +17,57 @@ $lang       = currentLang();
 $units = [
   'intsolcom-sas' => [
     'name'        => 'INTSOLCOM SAS',
-    'subtitle'    => 'Operational Delivery Center · Barranquilla, Colombia',
-    'metaDesc'    => 'INTSOLCOM SAS is the operational delivery arm of Intsolcom. Nearshore BPO, AI data annotation, software development from Barranquilla, Colombia.',
-    'heroLabel'   => 'Legal Entity — Colombia',
+    'subtitle'    => t('Operational Delivery Center · Barranquilla, Colombia'),
+    'metaDesc'    => t('INTSOLCOM SAS is the operational delivery arm of Intsolcom. Nearshore BPO, AI data annotation, software development from Barranquilla, Colombia.'),
+    'heroLabel'   => t('Legal Entity — Colombia'),
     'heroIcon'    => '🇨🇴',
-    'about' => 'International Solutions Companies S.A.S. (commercially known as INTSOLCOM SAS) is the operational delivery arm of the Intsolcom ecosystem. Headquartered in Barranquilla, Colombia, it provides nearshore technology services, BPO operations, and AI data annotation to clients across the Americas.',
+    'about' => t('International Solutions Companies S.A.S. (commercially known as INTSOLCOM SAS) is the operational delivery arm of the Intsolcom ecosystem. Headquartered in Barranquilla, Colombia, it provides nearshore technology services, BPO operations, and AI data annotation to clients across the Americas.'),
     'capabilities' => [
-      ['title' => 'Software Development', 'desc' => 'Full-stack engineering teams: React, Node.js, Python, PHP, mobile'],
-      ['title' => 'AI Data Operations', 'desc' => 'Data labeling, annotation, model training support for computer vision and NLP'],
-      ['title' => 'BPO Services', 'desc' => 'Administrative support, customer operations, sales development, back office'],
-      ['title' => 'Quality Assurance', 'desc' => 'Automated and manual QA, testing frameworks, CI/CD integration'],
-      ['title' => 'Talent Management', 'desc' => 'Recruiting, training, certification, workforce planning'],
-      ['title' => 'IT Support', 'desc' => 'Bilingual L1/L2/L3 technical support for enterprise clients'],
-      ['title' => 'Training & Development', 'desc' => 'Continuous upskilling programs, English certification, tech bootcamps'],
-      ['title' => 'Delivery Management', 'desc' => 'Project management, SLAs, reporting, client dashboards'],
+      ['title' => t('Software Development'), 'desc' => t('Full-stack engineering teams: React, Node.js, Python, PHP, mobile')],
+      ['title' => t('AI Data Operations'), 'desc' => t('Data labeling, annotation, model training support for computer vision and NLP')],
+      ['title' => t('BPO Services'), 'desc' => t('Administrative support, customer operations, sales development, back office')],
+      ['title' => t('Quality Assurance'), 'desc' => t('Automated and manual QA, testing frameworks, CI/CD integration')],
+      ['title' => t('Talent Management'), 'desc' => t('Recruiting, training, certification, workforce planning')],
+      ['title' => t('IT Support'), 'desc' => t('Bilingual L1/L2/L3 technical support for enterprise clients')],
+      ['title' => t('Training & Development'), 'desc' => t('Continuous upskilling programs, English certification, tech bootcamps')],
+      ['title' => t('Delivery Management'), 'desc' => t('Project management, SLAs, reporting, client dashboards')],
     ],
     'reasons' => [
-      ['title' => 'EST Timezone', 'desc' => 'Real-time collaboration with US teams. No graveyard shifts.'],
-      ['title' => 'Bilingual C1-C2', 'desc' => 'Professional English across all roles. Not just technical English.'],
-      ['title' => 'Cost Efficient', 'desc' => '60-70% savings vs equivalent US-based teams.'],
+      ['title' => t('EST Timezone'), 'desc' => t('Real-time collaboration with US teams. No graveyard shifts.')],
+      ['title' => t('Bilingual C1-C2'), 'desc' => t('Professional English across all roles. Not just technical English.')],
+      ['title' => t('Cost Efficient'), 'desc' => t('60-70% savings vs equivalent US-based teams.')],
     ],
     'process' => [
-      ['title' => 'Discovery', 'desc' => 'We analyze your needs, define roles, and align on scope and timelines.'],
-      ['title' => 'Team Assembly', 'desc' => 'We recruit or assign the right bilingual talent from our Barranquilla center.'],
-      ['title' => 'Onboarding', 'desc' => 'Teams are trained on your tools, processes, and culture. Ramp-up is fast.'],
-      ['title' => 'Go Live', 'desc' => 'Full operational delivery with SLAs, reporting, and continuous improvement.'],
+      ['title' => t('Discovery'), 'desc' => t('We analyze your needs, define roles, and align on scope and timelines.')],
+      ['title' => t('Team Assembly'), 'desc' => t('We recruit or assign the right bilingual talent from our Barranquilla center.')],
+      ['title' => t('Onboarding'), 'desc' => t('Teams are trained on your tools, processes, and culture. Ramp-up is fast.')],
+      ['title' => t('Go Live'), 'desc' => t('Full operational delivery with SLAs, reporting, and continuous improvement.')],
     ],
-    'ctaText'  => 'Work with INTSOLCOM SAS',
+    'ctaText'  => t('Work with INTSOLCOM SAS'),
     'ctaLink'  => 'https://marcasbpo.com/contact',
     'ctaExternal' => true,
   ],
   'business-operations' => [
     'name'        => 'Marcas BPO',
-    'subtitle'    => 'Business Operations Brand · Powered by INTSOLCOM SAS',
-    'metaDesc'    => 'Marcas BPO is the commercial brand for Intsolcom\'s BPO ecosystem. Administrative support, sales ops, AI data services, and more — delivered from Colombia.',
-    'heroLabel'   => 'Commercial Brand — BPO Services',
+    'subtitle'    => t('Business Operations Brand · Powered by INTSOLCOM SAS'),
+    'metaDesc'    => t("Marcas BPO is the commercial brand for Intsolcom's BPO ecosystem. Administrative support, sales ops, AI data services, and more — delivered from Colombia."),
+    'heroLabel'   => t('Commercial Brand — BPO Services'),
     'heroIcon'    => '🏢',
-    'about' => 'Marcas BPO is the commercial brand representing Intsolcom\'s business operations ecosystem. All operational delivery is executed by INTSOLCOM SAS in Barranquilla, Colombia. Marcas BPO is how clients access these services.',
+    'about' => t("Marcas BPO is the commercial brand representing Intsolcom's business operations ecosystem. All operational delivery is executed by INTSOLCOM SAS in Barranquilla, Colombia. Marcas BPO is how clients access these services."),
     'capabilities' => [
-      ['title' => 'Administrative Support', 'desc' => 'Calendar, email, data entry, CRM admin, reporting'],
-      ['title' => 'Sales Operations', 'desc' => 'B2B sales, lead gen, appointment setting, pipeline management'],
-      ['title' => 'Marketing Operations', 'desc' => 'Email marketing, lead nurturing, automation, campaigns'],
-      ['title' => 'Customer Operations', 'desc' => 'Support, success, follow-up, omnichannel service desks'],
-      ['title' => 'Back Office', 'desc' => 'Data processing, document management, operational support'],
-      ['title' => 'AI Data Services', 'desc' => 'Video annotation, sports annotation, dataset operations, QA'],
+      ['title' => t('Administrative Support'), 'desc' => t('Calendar, email, data entry, CRM admin, reporting')],
+      ['title' => t('Sales Operations'), 'desc' => t('B2B sales, lead gen, appointment setting, pipeline management')],
+      ['title' => t('Marketing Operations'), 'desc' => t('Email marketing, lead nurturing, automation, campaigns')],
+      ['title' => t('Customer Operations'), 'desc' => t('Support, success, follow-up, omnichannel service desks')],
+      ['title' => t('Back Office'), 'desc' => t('Data processing, document management, operational support')],
+      ['title' => t('AI Data Services'), 'desc' => t('Video annotation, sports annotation, dataset operations, QA')],
     ],
-    'ctaText'       => 'Explore BPO Services',
+    'ctaText'       => t('Explore BPO Services'),
     'ctaLink'       => 'https://marcasbpo.com',
     'ctaExternal'   => true,
-    'ctaSecondary'  => 'Build Your Team',
+    'ctaSecondary'  => t('Build Your Team'),
     'ctaSecondaryLink' => 'https://marcasbpo.com/buildyourteam',
-    'note'          => 'For all commercial inquiries, visit marcashpo.com or contact info@marcashpo.com',
+    'note'          => t('For all commercial inquiries, visit marcashpo.com or contact info@marcashpo.com'),
   ],
 ];
 
@@ -118,9 +118,9 @@ if (!$unit) {
   <section class="section" style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;">
     <div>
       <div style="font-size:4rem;margin-bottom:16px;">🔍</div>
-      <h1><?= ht('Unit Not Found') ?></h1>
-      <p style="margin-top:1rem;color:var(--color-light);"><?= ht('The business unit you are looking for does not exist or has been removed.') ?></p>
-      <a href="/business-units" class="btn btn-accent" style="margin-top:2rem;"><?= ht('Back to Business Units') ?></a>
+      <h1><?= t('Unit Not Found') ?></h1>
+      <p style="margin-top:1rem;color:var(--color-light);"><?= t('The business unit you are looking for does not exist or has been removed.') ?></p>
+      <a href="/business-units" class="btn btn-accent" style="margin-top:2rem;"><?= t('Back to Business Units') ?></a>
     </div>
   </section>
 </main>
@@ -417,7 +417,7 @@ $hasNote     = !empty($unit['note']);
 
   <section class="section-bu">
     <div class="container-md">
-      <div class="section-label-bu">About</div>
+      <div class="section-label-bu"><?= t('About') ?></div>
       <h2 class="section-title-bu"><?= ht($unit['name']) ?></h2>
       <p class="section-lede"><?= ht($unit['about']) ?></p>
     </div>
@@ -425,8 +425,8 @@ $hasNote     = !empty($unit['note']);
 
   <section class="section-bu section-bu--alt">
     <div class="container-lg">
-      <div class="section-label-bu section-label-bu--purple">Capabilities</div>
-      <h2 class="section-title-bu">What We Deliver</h2>
+      <div class="section-label-bu section-label-bu--purple"><?= t('Capabilities') ?></div>
+      <h2 class="section-title-bu"><?= t('What We Deliver') ?></h2>
       <?php $capCols = count($unit['capabilities']) <= 3 ? 'cap-grid--cols3' : (count($unit['capabilities']) === 2 ? 'cap-grid--cols2' : ''); ?>
       <div class="cap-grid <?= $capCols ?>">
         <?php foreach ($unit['capabilities'] as $cap): ?>
@@ -442,8 +442,8 @@ $hasNote     = !empty($unit['note']);
   <?php if ($hasReasons): ?>
   <section class="section-bu">
     <div class="container-lg">
-      <div class="section-label-bu section-label-bu--amber">Why Colombia</div>
-      <h2 class="section-title-bu">Key Advantages</h2>
+      <div class="section-label-bu section-label-bu--amber"><?= t('Why Colombia') ?></div>
+      <h2 class="section-title-bu"><?= t('Key Advantages') ?></h2>
       <div class="cap-grid cap-grid--cols3" style="margin-top:32px;">
         <?php foreach ($unit['reasons'] as $idx => $reason): ?>
         <div class="reason-card">
@@ -460,8 +460,8 @@ $hasNote     = !empty($unit['note']);
   <?php if ($hasProcess): ?>
   <section class="section-bu section-bu--alt">
     <div class="container-lg">
-      <div class="section-label-bu section-label-bu--blue">Process</div>
-      <h2 class="section-title-bu">How We Work</h2>
+      <div class="section-label-bu section-label-bu--blue"><?= t('Process') ?></div>
+      <h2 class="section-title-bu"><?= t('How We Work') ?></h2>
       <div class="process-row">
         <?php foreach ($unit['process'] as $idx => $step): ?>
         <div class="process-step">
@@ -479,8 +479,8 @@ $hasNote     = !empty($unit['note']);
     <div class="cta-section__glow"></div>
     <div class="cta-section__glow cta-section__glow--right"></div>
     <div class="container">
-      <h2><?= ht('Ready to get started?') ?></h2>
-      <p><?= ht('Let\'s discuss how ' . $unit['name'] . ' can support your business goals.') ?></p>
+      <h2><?= t('Ready to get started?') ?></h2>
+      <p><?= t("Let's discuss how {unit} can support your business goals.") ?></p>
       <div class="cta-section__actions">
         <a href="<?= h($unit['ctaLink']) ?>" class="btn btn-accent btn-lg" <?= $unit['ctaExternal'] ? 'target="_blank" rel="noopener"' : '' ?>><?= ht($unit['ctaText']) ?> →</a>
         <?php if ($hasSecondary): ?>
@@ -510,29 +510,29 @@ $hasNote     = !empty($unit['note']);
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Company') ?></div>
+        <div class="footer__heading"><?= t('Company') ?></div>
         <div class="footer__links">
-          <a href="/holding"><?= ht('Holding') ?></a>
-          <a href="/business-units"><?= ht('Business Units') ?></a>
-          <a href="/contact"><?= ht('Contact') ?></a>
+          <a href="/holding"><?= t('Holding') ?></a>
+          <a href="/business-units"><?= t('Business Units') ?></a>
+          <a href="/contact"><?= t('Contact') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Solutions') ?></div>
+        <div class="footer__heading"><?= t('Solutions') ?></div>
         <div class="footer__links">
-          <a href="/technology"><?= ht('Technology') ?></a>
-          <a href="/industries"><?= ht('Industries') ?></a>
+          <a href="/technology"><?= t('Technology') ?></a>
+          <a href="/industries"><?= t('Industries') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Resources') ?></div>
+        <div class="footer__heading"><?= t('Resources') ?></div>
         <div class="footer__links">
-          <a href="/resources"><?= ht('Insights') ?></a>
-          <a href="/blog"><?= ht('Blog') ?></a>
+          <a href="/resources"><?= t('Insights') ?></a>
+          <a href="/blog"><?= t('Blog') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Contact') ?></div>
+        <div class="footer__heading"><?= t('Contact') ?></div>
         <div class="footer__links">
           <a href="mailto:<?= h(setting('contact_col_email','info@intsolcom.com')) ?>"><?= h(setting('contact_col_email','info@intsolcom.com')) ?></a>
           <a href="tel:<?= h(preg_replace('/[^+\d]/','',setting('contact_usa_phone','+1 (302) 555-0199'))) ?>"><?= h(setting('contact_usa_phone','+1 (302) 555-0199')) ?></a>
@@ -542,9 +542,9 @@ $hasNote     = !empty($unit['note']);
     <div class="footer__bottom">
       <span><?= ht(setting('footer_copyright','© 2026 INTSOLCOM LLC')) ?></span>
       <div class="footer__bottom-links">
-        <a href="/privacy"><?= ht('Privacy Policy') ?></a>
-        <a href="/terms"><?= ht('Terms of Service') ?></a>
-        <a href="/sitemap.xml"><?= ht('Sitemap') ?></a>
+        <a href="/privacy"><?= t('Privacy Policy') ?></a>
+        <a href="/terms"><?= t('Terms of Service') ?></a>
+        <a href="/sitemap.xml"><?= t('Sitemap') ?></a>
       </div>
     </div>
   </div>

@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'message'          => trim($_POST['message']          ?? ''),
   ];
 
-  if ($formData['name'] === '')            $errors['name']             = 'Name is required.';
-  if ($formData['email'] === '')           $errors['email']            = 'Email is required.';
+  if ($formData['name'] === '')            $errors['name']             = t('Name is required.');
+  if ($formData['email'] === '')           $errors['email']            = t('Email is required.');
   elseif (!filter_var($formData['email'], FILTER_VALIDATE_EMAIL))
-                                            $errors['email']            = 'Please enter a valid email.';
-  if ($formData['service_interest'] === '')$errors['service_interest'] = 'Please select a service interest.';
-  if ($formData['message'] === '')          $errors['message']          = 'Message is required.';
+                                            $errors['email']            = t('Please enter a valid email.');
+  if ($formData['service_interest'] === '')$errors['service_interest'] = t('Please select a service interest.');
+  if ($formData['message'] === '')          $errors['message']          = t('Message is required.');
   if (!empty($formData['phone']) && !preg_match('/^[+\d\s\-().]{7,20}$/', $formData['phone']))
-                                            $errors['phone']            = 'Please enter a valid phone number.';
+                                            $errors['phone']            = t('Please enter a valid phone number.');
 
   if (empty($errors)) {
     try {
@@ -60,18 +60,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $success = true;
       $formData = ['name' => '', 'email' => '', 'company' => '', 'phone' => '', 'country' => '', 'service_interest' => '', 'message' => ''];
     } catch (Exception $e) {
-      $errors['general'] = 'Something went wrong. Please try again or email us directly.';
+      $errors['general'] = t('Something went wrong. Please try again or email us directly.');
     }
   }
 }
 
 $serviceOptions = [
-  'technology'        => 'Technology / Software',
-  'ai_data'           => 'AI & Data Operations',
-  'business_services' => 'Business Services',
-  'consulting'        => 'Consulting',
-  'partnership'       => 'Partnership / Investment',
-  'other'             => 'Other',
+  'technology'        => t('Technology / Software'),
+  'ai_data'           => t('AI & Data Operations'),
+  'business_services' => t('Business Services'),
+  'consulting'        => t('Consulting'),
+  'partnership'       => t('Partnership / Investment'),
+  'other'             => t('Other'),
 ];
 ?>
 <!DOCTYPE html>
@@ -144,9 +144,9 @@ $serviceOptions = [
     <div class="hero__overlay"></div>
     <div class="container">
       <div class="hero__content" style="max-width:700px;">
-        <div class="hero__badge"><span class="hero__badge-dot"></span> <?= ht('Get in Touch') ?></div>
-        <h1><?= ht('Let\'s talk') ?></h1>
-        <p class="hero__description"><?= ht('Partner with a technology holding that delivers') ?></p>
+        <div class="hero__badge"><span class="hero__badge-dot"></span> <?= t('Get in Touch') ?></div>
+        <h1><?= t("Let's talk") ?></h1>
+        <p class="hero__description"><?= t('Partner with a technology holding that delivers') ?></p>
       </div>
     </div>
   </section>
@@ -158,56 +158,56 @@ $serviceOptions = [
           <?php if ($success): ?>
             <div class="form-success">
               <div style="font-size:2rem;margin-bottom:.5rem;">✓</div>
-              <h3><?= ht('Thank you!') ?></h3>
-              <p><?= ht('Your message has been received. Our team will get back to you within 24 hours.') ?></p>
+              <h3><?= t('Thank you!') ?></h3>
+              <p><?= t('Your message has been received. Our team will get back to you within 24 hours.') ?></p>
             </div>
           <?php else: ?>
-            <?php if (!empty($errors['general'])): ?>
-              <div class="form-error-msg" style="margin-bottom:var(--space-4);"><?= ht($errors['general']) ?></div>
-            <?php endif; ?>
-            <form method="POST" action="">
-              <div class="form-group">
-                <label class="form-label" for="name"><?= ht('Name') ?> *</label>
-                <input type="text" id="name" name="name" class="form-input <?= isset($errors['name']) ? 'error' : '' ?>" value="<?= h($formData['name']) ?>" placeholder="<?= ht('Your full name') ?>" required>
-                <?php if (isset($errors['name'])): ?><div class="form-error-msg"><?= ht($errors['name']) ?></div><?php endif; ?>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="email"><?= ht('Email') ?> *</label>
-                <input type="email" id="email" name="email" class="form-input <?= isset($errors['email']) ? 'error' : '' ?>" value="<?= h($formData['email']) ?>" placeholder="<?= ht('you@company.com') ?>" required>
-                <?php if (isset($errors['email'])): ?><div class="form-error-msg"><?= ht($errors['email']) ?></div><?php endif; ?>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="company"><?= ht('Company') ?></label>
-                <input type="text" id="company" name="company" class="form-input" value="<?= h($formData['company']) ?>" placeholder="<?= ht('Company name') ?>">
-              </div>
-              <div class="grid-2" style="gap:var(--space-4);">
+              <?php if (!empty($errors['general'])): ?>
+                <div class="form-error-msg" style="margin-bottom:var(--space-4);"><?= ht($errors['general']) ?></div>
+              <?php endif; ?>
+              <form method="POST" action="">
                 <div class="form-group">
-                  <label class="form-label" for="phone"><?= ht('Phone') ?></label>
-                  <input type="tel" id="phone" name="phone" class="form-input <?= isset($errors['phone']) ? 'error' : '' ?>" value="<?= h($formData['phone']) ?>" placeholder="+1 (555) 000-0000">
-                  <?php if (isset($errors['phone'])): ?><div class="form-error-msg"><?= ht($errors['phone']) ?></div><?php endif; ?>
+                  <label class="form-label" for="name"><?= t('Name') ?> *</label>
+                  <input type="text" id="name" name="name" class="form-input <?= isset($errors['name']) ? 'error' : '' ?>" value="<?= h($formData['name']) ?>" placeholder="<?= t('Your full name') ?>" required>
+                  <?php if (isset($errors['name'])): ?><div class="form-error-msg"><?= ht($errors['name']) ?></div><?php endif; ?>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="country"><?= ht('Country') ?></label>
-                  <input type="text" id="country" name="country" class="form-input" value="<?= h($formData['country']) ?>" placeholder="<?= ht('Your country') ?>">
+                  <label class="form-label" for="email"><?= t('Email') ?> *</label>
+                  <input type="email" id="email" name="email" class="form-input <?= isset($errors['email']) ? 'error' : '' ?>" value="<?= h($formData['email']) ?>" placeholder="<?= t('you@company.com') ?>" required>
+                  <?php if (isset($errors['email'])): ?><div class="form-error-msg"><?= ht($errors['email']) ?></div><?php endif; ?>
                 </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="service_interest"><?= ht('Service Interest') ?> *</label>
-                <select id="service_interest" name="service_interest" class="form-input <?= isset($errors['service_interest']) ? 'error' : '' ?>" required>
-                  <option value=""><?= ht('Select an option...') ?></option>
-                  <?php foreach ($serviceOptions as $val => $label): ?>
-                    <option value="<?= h($val) ?>" <?= $formData['service_interest'] === $val ? 'selected' : '' ?>><?= ht($label) ?></option>
-                  <?php endforeach; ?>
-                </select>
-                <?php if (isset($errors['service_interest'])): ?><div class="form-error-msg"><?= ht($errors['service_interest']) ?></div><?php endif; ?>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="message"><?= ht('Message') ?> *</label>
-                <textarea id="message" name="message" class="form-textarea <?= isset($errors['message']) ? 'error' : '' ?>" rows="5" placeholder="<?= ht('Tell us about your project or inquiry...') ?>" required><?= h($formData['message']) ?></textarea>
-                <?php if (isset($errors['message'])): ?><div class="form-error-msg"><?= ht($errors['message']) ?></div><?php endif; ?>
-              </div>
-              <button type="submit" class="btn btn-accent btn-lg" style="width:100%;"><?= ht('Send Message') ?></button>
-            </form>
+                <div class="form-group">
+                  <label class="form-label" for="company"><?= t('Company') ?></label>
+                  <input type="text" id="company" name="company" class="form-input" value="<?= h($formData['company']) ?>" placeholder="<?= t('Company name') ?>">
+                </div>
+                <div class="grid-2" style="gap:var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label" for="phone"><?= t('Phone') ?></label>
+                    <input type="tel" id="phone" name="phone" class="form-input <?= isset($errors['phone']) ? 'error' : '' ?>" value="<?= h($formData['phone']) ?>" placeholder="+1 (555) 000-0000">
+                    <?php if (isset($errors['phone'])): ?><div class="form-error-msg"><?= ht($errors['phone']) ?></div><?php endif; ?>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="country"><?= t('Country') ?></label>
+                    <input type="text" id="country" name="country" class="form-input" value="<?= h($formData['country']) ?>" placeholder="<?= t('Your country') ?>">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="service_interest"><?= t('Service Interest') ?> *</label>
+                  <select id="service_interest" name="service_interest" class="form-input <?= isset($errors['service_interest']) ? 'error' : '' ?>" required>
+                    <option value=""><?= t('Select an option...') ?></option>
+                    <?php foreach ($serviceOptions as $val => $label): ?>
+                      <option value="<?= h($val) ?>" <?= $formData['service_interest'] === $val ? 'selected' : '' ?>><?= $label ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <?php if (isset($errors['service_interest'])): ?><div class="form-error-msg"><?= ht($errors['service_interest']) ?></div><?php endif; ?>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="message"><?= t('Message') ?> *</label>
+                  <textarea id="message" name="message" class="form-textarea <?= isset($errors['message']) ? 'error' : '' ?>" rows="5" placeholder="<?= t('Tell us about your project or inquiry...') ?>" required><?= h($formData['message']) ?></textarea>
+                  <?php if (isset($errors['message'])): ?><div class="form-error-msg"><?= ht($errors['message']) ?></div><?php endif; ?>
+                </div>
+                <button type="submit" class="btn btn-accent btn-lg" style="width:100%;"><?= t('Send Message') ?></button>
+              </form>
           <?php endif; ?>
         </div>
 
@@ -223,14 +223,14 @@ $serviceOptions = [
             <?php if ($colEmail): ?><p style="color:var(--color-mid);margin-top:.25rem;"><?= h($colEmail) ?></p><?php endif; ?>
           </div>
           <div class="contact-card-item" style="background:var(--color-surface);">
-            <h4><?= ht('Quick Actions') ?></h4>
+            <h4><?= t('Quick Actions') ?></h4>
             <div class="contact-quick-actions">
-              <a href="tel:<?= h(preg_replace('/[^+\d]/','',$usaPhone)) ?>" class="btn btn-outline btn-sm">📞 <?= ht('Call US') ?></a>
+              <a href="tel:<?= h(preg_replace('/[^+\d]/','',$usaPhone)) ?>" class="btn btn-outline btn-sm">📞 <?= t('Call US') ?></a>
               <?php if ($whatsapp): ?>
-              <a href="https://wa.me/<?= h(preg_replace('/[^+\d]/','',$whatsapp)) ?>" class="btn btn-outline btn-sm" target="_blank" rel="noopener">💬 <?= ht('WhatsApp') ?></a>
+              <a href="https://wa.me/<?= h(preg_replace('/[^+\d]/','',$whatsapp)) ?>" class="btn btn-outline btn-sm" target="_blank" rel="noopener">💬 <?= t('WhatsApp') ?></a>
               <?php endif; ?>
               <?php if ($colEmail): ?>
-              <a href="mailto:<?= h($colEmail) ?>" class="btn btn-outline btn-sm">✉️ <?= ht('Email') ?></a>
+              <a href="mailto:<?= h($colEmail) ?>" class="btn btn-outline btn-sm">✉️ <?= t('Email') ?></a>
               <?php endif; ?>
             </div>
           </div>
@@ -250,14 +250,14 @@ $serviceOptions = [
           <a href="<?= h(setting('social_linkedin','#')) ?>" class="footer__social-icon" aria-label="LinkedIn" target="_blank" rel="noopener">in</a>
         </div>
       </div>
-      <div><div class="footer__heading"><?= ht('Company') ?></div><div class="footer__links"><a href="/holding"><?= ht('Holding') ?></a><a href="/business-units"><?= ht('Business Units') ?></a><a href="/contact"><?= ht('Contact') ?></a></div></div>
-      <div><div class="footer__heading"><?= ht('Solutions') ?></div><div class="footer__links"><a href="/technology"><?= ht('Technology') ?></a><a href="/industries"><?= ht('Industries') ?></a></div></div>
-      <div><div class="footer__heading"><?= ht('Resources') ?></div><div class="footer__links"><a href="/resources"><?= ht('Insights') ?></a><a href="/blog"><?= ht('Blog') ?></a></div></div>
-      <div><div class="footer__heading"><?= ht('Contact') ?></div><div class="footer__links"><a href="mailto:<?= h(setting('contact_col_email','info@intsolcom.com')) ?>"><?= h(setting('contact_col_email','info@intsolcom.com')) ?></a><a href="tel:<?= h(preg_replace('/[^+\d]/','',setting('contact_usa_phone','+1 (302) 555-0199'))) ?>"><?= h(setting('contact_usa_phone','+1 (302) 555-0199')) ?></a></div></div>
+      <div><div class="footer__heading"><?= t('Company') ?></div><div class="footer__links"><a href="/holding"><?= t('Holding') ?></a><a href="/business-units"><?= t('Business Units') ?></a><a href="/contact"><?= t('Contact') ?></a></div></div>
+      <div><div class="footer__heading"><?= t('Solutions') ?></div><div class="footer__links"><a href="/technology"><?= t('Technology') ?></a><a href="/industries"><?= t('Industries') ?></a></div></div>
+      <div><div class="footer__heading"><?= t('Resources') ?></div><div class="footer__links"><a href="/resources"><?= t('Insights') ?></a><a href="/blog"><?= t('Blog') ?></a></div></div>
+      <div><div class="footer__heading"><?= t('Contact') ?></div><div class="footer__links"><a href="mailto:<?= h(setting('contact_col_email','info@intsolcom.com')) ?>"><?= h(setting('contact_col_email','info@intsolcom.com')) ?></a><a href="tel:<?= h(preg_replace('/[^+\d]/','',setting('contact_usa_phone','+1 (302) 555-0199'))) ?>"><?= h(setting('contact_usa_phone','+1 (302) 555-0199')) ?></a></div></div>
     </div>
     <div class="footer__bottom">
       <span><?= ht(setting('footer_copyright','© 2026 INTSOLCOM LLC')) ?></span>
-      <div class="footer__bottom-links"><a href="/privacy"><?= ht('Privacy Policy') ?></a><a href="/terms"><?= ht('Terms of Service') ?></a><a href="/sitemap.xml"><?= ht('Sitemap') ?></a></div>
+      <div class="footer__bottom-links"><a href="/privacy"><?= t('Privacy Policy') ?></a><a href="/terms"><?= t('Terms of Service') ?></a><a href="/sitemap.xml"><?= t('Sitemap') ?></a></div>
     </div>
   </div>
 </footer>

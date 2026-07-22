@@ -9,6 +9,31 @@
 // call per unique string, ever). Subsequent requests are pure DB reads.
 
 /**
+ * Detect browser language from Accept-Language header.
+ * Returns 'en', 'es', or null if not detectable/supported.
+ */
+function detectBrowserLang(): ?string {
+    static $detected = null;
+    if ($detected !== null) return $detected;
+
+    $detected = null;
+    $header = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? $_SERVER['Accept-Language'] ?? '';
+    if ($header === '') return null;
+
+    $supported = ['es' => true, 'en' => true];
+    $parts = explode(',', $header);
+    foreach ($parts as $part) {
+        $lang = strtolower(trim(explode(';', $part)[0]));
+        if (strlen($lang) >= 2) $lang = substr($lang, 0, 2);
+        if (isset($supported[$lang])) {
+            $detected = $lang;
+            break;
+        }
+    }
+    return $detected;
+}
+
+/**
  * Ensure translations table exists (idempotent, cheap check).
  */
 function ensureTranslationsTable(): void {
@@ -47,6 +72,14 @@ function currentLang(): string {
         $lang = $_COOKIE['intsolcom_lang'];
         return $lang;
     }
+    // Browser language auto-detection on first visit (no cookie, no URL param)
+    $browser = detectBrowserLang();
+    if ($browser !== null && in_array($browser, $supported, true)) {
+        $lang = $browser;
+        setcookie('intsolcom_lang', $lang, time() + 86400 * 365, '/');
+        return $lang;
+    }
+
     $lang = 'en'; // default site language — always English unless visitor chooses Spanish
     return $lang;
 }
@@ -82,48 +115,67 @@ function t(string $text): string {
 
 /**
  * Calls Claude API to translate a single string. Returns null on failure.
+ * Rate-limited to MAX_API_CALLS per page load to prevent runaway API usage.
  */
 function mbpoTranslateViaClaude(string $text, string $targetLang): ?string {
-    if (!defined('ANTHROPIC_API_KEY') || ANTHROPIC_API_KEY === '' || strpos(ANTHROPIC_API_KEY, 'YOUR_ANTHROPIC') !== false) {
+    static $apiCallCount = 0;
+    $maxCalls = defined('I18N_MAX_API_CALLS') ? I18N_MAX_API_CALLS : 5;
+
+    if ($apiCallCount >= $maxCalls) return null;
+    $apiCallCount++;
+
+    try {
+        if (!defined('ANTHROPIC_API_KEY') || ANTHROPIC_API_KEY === '' || strpos(ANTHROPIC_API_KEY, 'YOUR_ANTHROPIC') !== false) {
+            return null;
+        }
+        if (!function_exists('curl_init')) {
+            return null;
+        }
+
+        $langNames = ['en' => 'English', 'es' => 'Spanish'];
+        $targetName = $langNames[$targetLang] ?? 'Spanish';
+
+        $payload = [
+            'model'      => ANTHROPIC_MODEL,
+            'max_tokens' => 500,
+            'system'     => "You are a professional translator for a BPO company's corporate website. Translate the given English text to {$targetName}. Preserve tone, formatting, capitalization style, any HTML tags, and any placeholder tokens like {name} or %ENDING% EXACTLY as written (do not translate or alter their contents). Keep it professional and corporate in register. Output ONLY the translation, nothing else — no quotes, no explanations.",
+            'messages'   => [
+                ['role' => 'user', 'content' => $text],
+            ],
+        ];
+
+        $ch = curl_init('https://api.anthropic.com/v1/messages');
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => json_encode($payload),
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'x-api-key: ' . ANTHROPIC_API_KEY,
+                'anthropic-version: 2023-06-01',
+            ],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 20,
+        ]);
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return null;
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($response === false || $httpCode >= 400) return null;
+
+        $data = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) return null;
+
+        $translated = $data['content'][0]['text'] ?? null;
+        return $translated !== null ? trim($translated) : null;
+    } catch (\Throwable $e) {
         return null;
     }
-    if (!function_exists('curl_init')) {
-        return null;
-    }
-
-    $langNames = ['en' => 'English', 'es' => 'Spanish'];
-    $targetName = $langNames[$targetLang] ?? 'Spanish';
-
-    $payload = [
-        'model'      => ANTHROPIC_MODEL,
-        'max_tokens' => 500,
-        'system'     => "You are a professional translator for a BPO company's corporate website. Translate the given English text to {$targetName}. Preserve tone, formatting, capitalization style, any HTML tags, and any placeholder tokens like {name} or %ENDING% EXACTLY as written (do not translate or alter their contents). Keep it professional and corporate in register. Output ONLY the translation, nothing else — no quotes, no explanations.",
-        'messages'   => [
-            ['role' => 'user', 'content' => $text],
-        ],
-    ];
-
-    $ch = curl_init('https://api.anthropic.com/v1/messages');
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => json_encode($payload),
-        CURLOPT_HTTPHEADER     => [
-            'Content-Type: application/json',
-            'x-api-key: ' . ANTHROPIC_API_KEY,
-            'anthropic-version: 2023-06-01',
-        ],
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 20,
-    ]);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($response === false || $httpCode >= 400) return null;
-
-    $data = json_decode($response, true);
-    $translated = $data['content'][0]['text'] ?? null;
-    return $translated !== null ? trim($translated) : null;
 }
 
 /**

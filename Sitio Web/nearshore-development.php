@@ -319,43 +319,43 @@ body.no-scroll { overflow: hidden; }
     <div class="hero__content">
       <div class="hero__badge reveal">
         <span class="hero__badge-dot"></span>
-        Nearshore Software Development
+        <?= t('Nearshore Software Development') ?>
       </div>
       <h1 class="reveal" style="transition-delay:100ms;">
-        Build software with <em>professional methodology.</em>
+        <?= t('Build software with') ?> <em><?= t('professional methodology.') ?></em>
       </h1>
       <p class="hero__description reveal" style="transition-delay:200ms;">
-        Dedicated development teams operating from Barranquilla, Colombia. Same timezone as the US. Bilingual engineers. Spec Driven Development. No freelancers. No generic agencies. Real product engineering.
+        <?= t('Dedicated development teams operating from Barranquilla, Colombia. Same timezone as the US. Bilingual engineers. Spec Driven Development. No freelancers. No generic agencies. Real product engineering.') ?>
       </p>
       <div class="hero__trust reveal" style="transition-delay:300ms;">
-        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> SDD Methodology</span>
-        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> Dedicated Teams</span>
-        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> EST Timezone</span>
-        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> C1-C2 English</span>
+        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> <?= t('SDD Methodology') ?></span>
+        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> <?= t('Dedicated Teams') ?></span>
+        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> <?= t('EST Timezone') ?></span>
+        <span class="hero__trust-badge"><span class="hero__trust-badge-dot"></span> <?= t('C1-C2 English') ?></span>
       </div>
       <div class="hero__actions reveal" style="transition-delay:350ms;">
-        <a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Build Your Team &rarr;</a>
-        <a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg">Talk to Us</a>
+        <a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-accent btn-lg"><?= t('Build Your Team') ?> &rarr;</a>
+        <a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg"><?= t('Talk to Us') ?></a>
       </div>
       <div class="hero__metrics reveal" style="transition-delay:450ms;">
         <div class="hero__metric">
           <div class="hero__metric-value">14 days</div>
-          <div class="hero__metric-label">Avg Deployment</div>
+          <div class="hero__metric-label"><?= t('Avg Deployment') ?></div>
         </div>
         <div class="hero__metric-divider"></div>
         <div class="hero__metric">
           <div class="hero__metric-value">60-70%</div>
-          <div class="hero__metric-label">Cost Savings vs US Hiring</div>
+          <div class="hero__metric-label"><?= t('Cost Savings vs US Hiring') ?></div>
         </div>
         <div class="hero__metric-divider"></div>
         <div class="hero__metric">
           <div class="hero__metric-value">300+</div>
-          <div class="hero__metric-label">Bilingual Pros</div>
+          <div class="hero__metric-label"><?= t('Bilingual Pros') ?></div>
         </div>
         <div class="hero__metric-divider"></div>
         <div class="hero__metric">
           <div class="hero__metric-value">98%</div>
-          <div class="hero__metric-label">Client Retention</div>
+          <div class="hero__metric-label"><?= t('Client Retention') ?></div>
         </div>
       </div>
     </div>
@@ -370,20 +370,20 @@ body.no-scroll { overflow: hidden; }
 <section class="section section-surface" id="methodology">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Methodology</span>
-      <h2 class="section-title">Spec Driven Development. <em>Explained simply.</em></h2>
-      <p class="section-subtitle">Before a single line of code is written, we define exactly what you need. You validate. We build. No surprises.</p>
+      <span class="section-label"><?= t('Methodology') ?></span>
+      <h2 class="section-title"><?= t('Spec Driven Development.') ?> <em><?= t('Explained simply.') ?></em></h2>
+      <p class="section-subtitle"><?= t('Before a single line of code is written, we define exactly what you need. You validate. We build. No surprises.') ?></p>
     </div>
 
     <div class="grid-3">
       <?php
       $steps = [
-        ['num' => '1', 'icon' => '&#128203;', 'title' => 'SPEC', 'desc' => 'We define together EXACTLY what you need. Zero ambiguity. You approve before any code is written.'],
-        ['num' => '2', 'icon' => '&#127912;', 'title' => 'DESIGN', 'desc' => 'Architecture, UX, UI &mdash; everything designed first. You see mockups, not promises.'],
-        ['num' => '3', 'icon' => '&#9000;', 'title' => 'DEVELOP', 'desc' => 'The team builds against the specification. No scope creep. No surprises.'],
-        ['num' => '4', 'icon' => '&#9881;', 'title' => 'TEST', 'desc' => 'Every feature validated against what you approved. Nothing ships without testing.'],
-        ['num' => '5', 'icon' => '&#128640;', 'title' => 'DEPLOY', 'desc' => 'Published on your infrastructure or ours. You decide.'],
-        ['num' => '6', 'icon' => '&#128200;', 'title' => 'OPTIMIZE', 'desc' => 'Continuous improvement based on real usage data. We don\'t disappear after launch.'],
+        ['num' => '1', 'icon' => '&#128203;', 'title' => t('SPEC'), 'desc' => t('We define together EXACTLY what you need. Zero ambiguity. You approve before any code is written.')],
+        ['num' => '2', 'icon' => '&#127912;', 'title' => t('DESIGN'), 'desc' => t('Architecture, UX, UI — everything designed first. You see mockups, not promises.')],
+        ['num' => '3', 'icon' => '&#9000;', 'title' => t('DEVELOP'), 'desc' => t('The team builds against the specification. No scope creep. No surprises.')],
+        ['num' => '4', 'icon' => '&#9881;', 'title' => t('TEST'), 'desc' => t('Every feature validated against what you approved. Nothing ships without testing.')],
+        ['num' => '5', 'icon' => '&#128640;', 'title' => t('DEPLOY'), 'desc' => t('Published on your infrastructure or ours. You decide.')],
+        ['num' => '6', 'icon' => '&#128200;', 'title' => t('OPTIMIZE'), 'desc' => t("Continuous improvement based on real usage data. We don't disappear after launch.")],
       ];
       foreach ($steps as $idx => $s):
       ?>
@@ -397,7 +397,7 @@ body.no-scroll { overflow: hidden; }
     </div>
 
     <p class="text-center mt-12 reveal" style="font-size:.9375rem; color:#475569; font-weight:500;">
-      We build what <strong style="color:#0F172A;">YOU</strong> need, not what WE think you need.
+      <?= t('We build what') ?> <strong style="color:#0F172A;"><?= t('YOU') ?></strong> <?= t('need, not what WE think you need.') ?>
     </p>
   </div>
   <div class="gradient-blob gradient-blob--3" style="top:40%;right:-100px;"></div>
@@ -409,19 +409,19 @@ body.no-scroll { overflow: hidden; }
 <section class="section" id="why-colombia">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label section-label--purple">Nearshore Hub</span>
-      <h2 class="section-title section-title--purple">Colombia. <em>The development hub for the Americas.</em></h2>
+      <span class="section-label section-label--purple"><?= t('Nearshore Hub') ?></span>
+      <h2 class="section-title section-title--purple"><?= t('Colombia.') ?> <em><?= t('The development hub for the Americas.') ?></em></h2>
     </div>
 
     <div class="grid-3">
       <?php
       $reasons = [
-        ['icon' => '&#127464;&#127476;', 'title' => 'EST Timezone', 'desc' => 'Your team works when you work. Daily standups at 9 AM your time. No 5 AM calls. No midnight handoffs.'],
-        ['icon' => '&#128172;', 'title' => 'Truly Bilingual', 'desc' => 'C1-C2 English. Not \'technical English\'. Real communication with your stakeholders.'],
-        ['icon' => '&#9989;', 'title' => 'Pre-Vetted Talent', 'desc' => 'We don\'t forward resumes. We present engineers who passed our technical assessment.'],
-        ['icon' => '&#129309;', 'title' => 'Cultural Fit', 'desc' => 'Colombia shares a work culture with the US. Zero cultural friction. Just results.'],
-        ['icon' => '&#128176;', 'title' => 'Cost Efficient', 'desc' => '60-70% less than equivalent US-based teams. Same quality, better economics.'],
-        ['icon' => '&#9992;', 'title' => '3 Hours from Miami', 'desc' => 'Direct flights. Visit your team whenever you want. They\'re not on the other side of the world.'],
+        ['icon' => '&#127464;&#127476;', 'title' => t('EST Timezone'), 'desc' => t('Your team works when you work. Daily standups at 9 AM your time. No 5 AM calls. No midnight handoffs.')],
+        ['icon' => '&#128172;', 'title' => t('Truly Bilingual'), 'desc' => t("C1-C2 English. Not 'technical English'. Real communication with your stakeholders.")],
+        ['icon' => '&#9989;', 'title' => t('Pre-Vetted Talent'), 'desc' => t("We don't forward resumes. We present engineers who passed our technical assessment.")],
+        ['icon' => '&#129309;', 'title' => t('Cultural Fit'), 'desc' => t('Colombia shares a work culture with the US. Zero cultural friction. Just results.')],
+        ['icon' => '&#128176;', 'title' => t('Cost Efficient'), 'desc' => t('60-70% less than equivalent US-based teams. Same quality, better economics.')],
+        ['icon' => '&#9992;', 'title' => t('3 Hours from Miami'), 'desc' => t("Direct flights. Visit your team whenever you want. They're not on the other side of the world.")],
       ];
       foreach ($reasons as $idx => $r):
       ?>
@@ -442,9 +442,9 @@ body.no-scroll { overflow: hidden; }
 <section class="section section-surface" id="tech-stack">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Technology</span>
-      <h2 class="section-title">The stack your <em>project needs.</em></h2>
-      <p class="section-subtitle">Modern technology. No legacy lock-in. No vendor marriage.</p>
+      <span class="section-label"><?= t('Technology') ?></span>
+      <h2 class="section-title"><?= t('The stack your') ?> <em><?= t('project needs.') ?></em></h2>
+      <p class="section-subtitle"><?= t('Modern technology. No legacy lock-in. No vendor marriage.') ?></p>
     </div>
 
     <div class="grid-2 reveal" style="gap:var(--space-10);">
@@ -479,18 +479,18 @@ body.no-scroll { overflow: hidden; }
 <section class="section" id="process">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Process</span>
-      <h2 class="section-title">Start building <em>in 2 weeks.</em></h2>
+      <span class="section-label"><?= t('Process') ?></span>
+      <h2 class="section-title"><?= t('Start building') ?> <em><?= t('in 2 weeks.') ?></em></h2>
     </div>
 
     <div class="timeline reveal">
       <?php
       $timeline = [
-        ['num' => '1', 'label' => 'Discovery Call', 'time' => '2 days', 'desc' => 'We learn about your project, goals, and team needs. 30 minutes.'],
-        ['num' => '2', 'label' => 'Free Spec Review', 'time' => '3-5 days', 'desc' => 'We prepare a technical specification. You review and approve.'],
-        ['num' => '3', 'label' => 'Team Proposal', 'time' => '1 week', 'desc' => 'Engineers selected for your project. Resumes + tech assessment results.'],
-        ['num' => '4', 'label' => 'SDD Sprint 1', 'time' => '2 weeks', 'desc' => 'Development begins against the approved spec. Daily updates.'],
-        ['num' => '5', 'label' => 'First Demo', 'time' => 'Continuous', 'desc' => 'Working software delivered. Iterate, improve, scale.'],
+        ['num' => '1', 'label' => t('Discovery Call'), 'time' => t('2 days'), 'desc' => t('We learn about your project, goals, and team needs. 30 minutes.')],
+        ['num' => '2', 'label' => t('Free Spec Review'), 'time' => t('3-5 days'), 'desc' => t('We prepare a technical specification. You review and approve.')],
+        ['num' => '3', 'label' => t('Team Proposal'), 'time' => t('1 week'), 'desc' => t('Engineers selected for your project. Resumes + tech assessment results.')],
+        ['num' => '4', 'label' => t('SDD Sprint 1'), 'time' => t('2 weeks'), 'desc' => t('Development begins against the approved spec. Daily updates.')],
+        ['num' => '5', 'label' => t('First Demo'), 'time' => t('Continuous'), 'desc' => t('Working software delivered. Iterate, improve, scale.')],
       ];
       foreach ($timeline as $step):
       ?>
@@ -504,7 +504,7 @@ body.no-scroll { overflow: hidden; }
     </div>
 
     <div class="text-center mt-12 reveal">
-      <a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Start with a free spec review &rarr;</a>
+      <a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-accent btn-lg"><?= t('Start with a free spec review') ?> &rarr;</a>
     </div>
   </div>
 </section>
@@ -515,19 +515,19 @@ body.no-scroll { overflow: hidden; }
 <section class="section section-surface" id="marcas-bpo">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Our Operations</span>
-      <h2 class="section-title">Powered by <em>Marcas BPO</em></h2>
+      <span class="section-label"><?= t('Our Operations') ?></span>
+      <h2 class="section-title"><?= t('Powered by') ?> <em><?= t('Marcas BPO') ?></em></h2>
     </div>
 
     <div class="reveal" style="max-width:720px; margin:0 auto;">
       <p style="font-size:1.0625rem; line-height:1.75; color:#475569; margin-bottom:var(--space-5);">
-        Marcas BPO is our operational brand. While INTSOLCOM handles strategy, partnerships, and technology products from the United States, Marcas BPO executes all development and BPO operations from Barranquilla, Colombia.
+        <?= t('Marcas BPO is our operational brand. While INTSOLCOM handles strategy, partnerships, and technology products from the United States, Marcas BPO executes all development and BPO operations from Barranquilla, Colombia.') ?>
       </p>
       <p style="font-size:1.0625rem; line-height:1.75; color:#475569; margin-bottom:var(--space-5);">
-        When you hire a development team through us, your commercial relationship is with INTSOLCOM LLC (USA). Your team works from our offices in Colombia, managed by Marcas BPO.
+        <?= t('When you hire a development team through us, your commercial relationship is with INTSOLCOM LLC (USA). Your team works from our offices in Colombia, managed by Marcas BPO.') ?>
       </p>
       <p style="font-size:1.0625rem; line-height:1.75; color:#475569; margin-bottom:var(--space-6);">
-        <strong style="color:#0F172A;">The best of both worlds: American contract. Colombian talent.</strong>
+        <strong style="color:#0F172A;"><?= t('The best of both worlds: American contract. Colombian talent.') ?></strong>
       </p>
     </div>
 
@@ -539,7 +539,7 @@ body.no-scroll { overflow: hidden; }
     </div>
 
     <div class="text-center mt-12 reveal">
-      <a href="https://marcasbpo.com" target="_blank" rel="noopener" class="btn btn-outline btn-lg">Learn more about our operations &rarr;</a>
+      <a href="https://marcasbpo.com" target="_blank" rel="noopener" class="btn btn-outline btn-lg"><?= t('Learn more about our operations') ?> &rarr;</a>
     </div>
   </div>
 </section>
@@ -550,19 +550,19 @@ body.no-scroll { overflow: hidden; }
 <section class="section" id="trust-faq">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Trust</span>
-      <h2 class="section-title">Questions <em>you probably have.</em></h2>
+      <span class="section-label"><?= t('Trust') ?></span>
+      <h2 class="section-title"><?= t('Questions') ?> <em><?= t('you probably have.') ?></em></h2>
     </div>
 
     <div class="faq reveal">
       <?php
       $faqs = [
-        ['q' => 'How do you protect my code and IP?', 'a' => 'We sign NDAs as standard. Your IP is yours. Always. We can work within your VPN, your repos, your infrastructure.'],
-        ['q' => 'What if I need to scale the team?', 'a' => 'Add developers in days, not months. We maintain a pre-vetted talent pool ready to join your project.'],
-        ['q' => 'Can I visit the offices in Colombia?', 'a' => 'Absolutely. Barranquilla is a 3-hour flight from Miami. We encourage visits.'],
-        ['q' => 'What guarantees do I have on code quality?', 'a' => 'Spec Driven Development means every deliverable is tested against the spec YOU approved. If it doesn\'t match, we fix it.'],
-        ['q' => 'How do you handle timezone differences?', 'a' => 'We don\'t. Colombia is EST. We work when you work.'],
-        ['q' => 'What\'s the minimum engagement?', 'a' => 'We recommend starting with a 3-month team to prove value. No long-term lock-in.'],
+        ['q' => t('How do you protect my code and IP?'), 'a' => t('We sign NDAs as standard. Your IP is yours. Always. We can work within your VPN, your repos, your infrastructure.')],
+        ['q' => t('What if I need to scale the team?'), 'a' => t('Add developers in days, not months. We maintain a pre-vetted talent pool ready to join your project.')],
+        ['q' => t('Can I visit the offices in Colombia?'), 'a' => t('Absolutely. Barranquilla is a 3-hour flight from Miami. We encourage visits.')],
+        ['q' => t('What guarantees do I have on code quality?'), 'a' => t("Spec Driven Development means every deliverable is tested against the spec YOU approved. If it doesn't match, we fix it.")],
+        ['q' => t('How do you handle timezone differences?'), 'a' => t("We don't. Colombia is EST. We work when you work.")],
+        ['q' => t("What's the minimum engagement?"), 'a' => t('We recommend starting with a 3-month team to prove value. No long-term lock-in.')],
       ];
       foreach ($faqs as $fidx => $faq):
       ?>
@@ -579,11 +579,11 @@ body.no-scroll { overflow: hidden; }
     </div>
 
     <div class="trust-badges reveal">
-      <span class="trust-badge">NDA Protected</span>
-      <span class="trust-badge">IP Protection</span>
-      <span class="trust-badge">Dedicated Teams</span>
-      <span class="trust-badge">No Lock-in</span>
-      <span class="trust-badge">Documented Methodology</span>
+      <span class="trust-badge"><?= t('NDA Protected') ?></span>
+      <span class="trust-badge"><?= t('IP Protection') ?></span>
+      <span class="trust-badge"><?= t('Dedicated Teams') ?></span>
+      <span class="trust-badge"><?= t('No Lock-in') ?></span>
+      <span class="trust-badge"><?= t('Documented Methodology') ?></span>
     </div>
   </div>
   <div class="gradient-blob gradient-blob--1" style="top:20%;left:-100px;"></div>
@@ -596,14 +596,14 @@ body.no-scroll { overflow: hidden; }
   <div class="cta-section__glow"></div>
   <div class="cta-section__glow cta-section__glow--right"></div>
   <div class="container-sm reveal">
-    <h2>Ready to build with a professional nearshore team?</h2>
-    <p>Schedule a 15-minute call. We'll review your project, answer your questions, and prepare a free spec review. No commitment.</p>
+    <h2><?= t('Ready to build with a professional nearshore team?') ?></h2>
+    <p><?= t("Schedule a 15-minute call. We'll review your project, answer your questions, and prepare a free spec review. No commitment.") ?></p>
     <div class="cta-section__actions">
-      <a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Schedule a Call &rarr;</a>
-      <a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg">Build Your Team &rarr;</a>
+      <a href="https://marcasbpo.com/contact" target="_blank" rel="noopener" class="btn btn-accent btn-lg"><?= t('Schedule a Call') ?> &rarr;</a>
+      <a href="https://marcasbpo.com/buildyourteam" target="_blank" rel="noopener" class="btn btn-outline-white btn-lg"><?= t('Build Your Team') ?> &rarr;</a>
     </div>
     <p style="margin-top:var(--space-6); font-size:.8125rem; color:rgba(255,255,255,.35);">
-      Or email us directly:
+      <?= t('Or email us directly:') ?>
       <a href="mailto:info@marcasbpo.com" style="color:rgba(255,255,255,.5); text-decoration:underline;">info@marcasbpo.com</a>
     </p>
   </div>
@@ -629,25 +629,25 @@ body.no-scroll { overflow: hidden; }
         </div>
       </div>
       <div>
-        <h4 class="footer__heading"><?= ht('Company') ?></h4>
+        <h4 class="footer__heading"><?= t('Company') ?></h4>
         <div class="footer__links">
-          <a href="/holding"><?= ht('About Us') ?></a>
-          <a href="/nearshore-development"><?= ht('Nearshore Development') ?></a>
-          <a href="/business-units"><?= ht('Business Units') ?></a>
-          <a href="/contact"><?= ht('Contact') ?></a>
+          <a href="/holding"><?= t('About Us') ?></a>
+          <a href="/nearshore-development"><?= t('Nearshore Development') ?></a>
+          <a href="/business-units"><?= t('Business Units') ?></a>
+          <a href="/contact"><?= t('Contact') ?></a>
         </div>
       </div>
       <div>
-        <h4 class="footer__heading"><?= ht('Solutions') ?></h4>
+        <h4 class="footer__heading"><?= t('Solutions') ?></h4>
         <div class="footer__links">
-          <a href="/technology"><?= ht('Technology') ?></a>
-          <a href="/industries"><?= ht('Industries') ?></a>
-          <a href="/resources"><?= ht('Resources') ?></a>
-          <a href="/blog"><?= ht('Blog') ?></a>
+          <a href="/technology"><?= t('Technology') ?></a>
+          <a href="/industries"><?= t('Industries') ?></a>
+          <a href="/resources"><?= t('Resources') ?></a>
+          <a href="/blog"><?= t('Blog') ?></a>
         </div>
       </div>
       <div>
-        <h4 class="footer__heading"><?= ht('Contact') ?></h4>
+        <h4 class="footer__heading"><?= t('Contact') ?></h4>
         <div class="footer__links">
           <?php $colEmail = setting('contact_col_email','info@intsolcom.com'); ?>
           <a href="https://marcasbpo.com" target="_blank" rel="noopener" style="color:#00C896; font-weight:600; font-size:.8125rem;">Marcas BPO</a>
@@ -660,15 +660,15 @@ body.no-scroll { overflow: hidden; }
     <div class="footer__bottom">
       <span><?= ht(setting('footer_copyright','&copy; 2026 INTSOLCOM LLC')) ?></span>
       <div class="footer__bottom-links">
-        <a href="/privacy"><?= ht('Privacy Policy') ?></a>
-        <a href="/terms"><?= ht('Terms of Service') ?></a>
+        <a href="/privacy"><?= t('Privacy Policy') ?></a>
+        <a href="/terms"><?= t('Terms of Service') ?></a>
       </div>
     </div>
   </div>
 </footer>
 
 <!-- Scroll to top -->
-<button id="scroll-top" aria-label="Scroll to top">&uarr;</button>
+<button id="scroll-top" aria-label="<?= t('Scroll to top') ?>">&uarr;</button>
 
 <!-- Scripts -->
 <script>window.MBPO_VIDEO={mute:1,autoplay:1,loop:1,controls:0,rel:0,modestbranding:1,showinfo:0,iv_load_policy:3,disablekb:1,playsinline:1,speed:1,layout:'cover',voffset:0};window.MBPO_FX={revealThreshold:0.08,counterDuration:1800,parallaxSpeed:0.15};</script>

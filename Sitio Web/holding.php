@@ -96,20 +96,20 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
       <div class="hero__content">
         <div class="hero__badge">
           <span class="hero__badge-dot"></span>
-          <?= ht($heroFields['badge'] ?? 'Technology & Operations Ecosystem') ?>
+          <?= ht($heroFields['badge'] ?? t('Technology & Operations Ecosystem')) ?>
         </div>
-        <h1><?= ht($heroFields['title'] ?? 'The <em>Intsolcom</em> Business Ecosystem') ?></h1>
-        <p class="hero__description"><?= ht($heroFields['subtitle'] ?? 'Two entities, one ecosystem. Strategic business development in the United States. Operational delivery in Colombia.') ?></p>
+        <h1><?= ht($heroFields['title'] ?? t('The Intsolcom Business Ecosystem')) ?></h1>
+        <p class="hero__description"><?= ht($heroFields['subtitle'] ?? t('Two entities, one ecosystem. Strategic business development in the United States. Operational delivery in Colombia.')) ?></p>
         <div class="hero__actions">
-          <a href="/contact" class="btn btn-accent btn-lg"><?= ht('Partner with us') ?></a>
-          <a href="/business-units" class="btn btn-outline-white btn-lg"><?= ht('Explore Business Units') ?></a>
+          <a href="/contact" class="btn btn-accent btn-lg"><?= t('Partner with us') ?></a>
+          <a href="/business-units" class="btn btn-outline-white btn-lg"><?= t('Explore Business Units') ?></a>
         </div>
         <?php
         $stats = [
-          ['value' => '50', 'suffix' => '+', 'label' => 'Team Members'],
-          ['value' => '3', 'suffix' => '', 'label' => 'Software Platforms'],
-          ['value' => '10', 'suffix' => '+', 'label' => 'Industries'],
-          ['value' => 'US', 'suffix' => '+CO', 'label' => 'Presence'],
+          ['value' => '50', 'suffix' => '+', 'label' => t('Team Members')],
+          ['value' => '3', 'suffix' => '', 'label' => t('Software Platforms')],
+          ['value' => '10', 'suffix' => '+', 'label' => t('Industries')],
+          ['value' => 'US', 'suffix' => '+CO', 'label' => t('Presence')],
         ];
         ?>
         <div class="hero__metrics">
@@ -117,7 +117,7 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
             <?php if (!$first): ?><div class="hero__metric-divider"></div><?php endif; $first = false; ?>
             <div>
               <div class="hero__metric-value"><?= h($st['value']) ?><span style="font-size:.75em;color:#00C896;"><?= h($st['suffix']) ?></span></div>
-              <div class="hero__metric-label"><?= ht($st['label']) ?></div>
+              <div class="hero__metric-label"><?= $st['label'] ?></div>
             </div>
           <?php endforeach; ?>
         </div>
@@ -160,9 +160,9 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
   <?php elseif ($sec['type'] === 'ecosystem'): ?>
     <section class="section <?= $bgClass ?>">
       <div class="container" style="text-align:center;">
-        <span class="section-label reveal"><?= ht($f['label'] ?? 'Business Ecosystem') ?></span>
-        <h2 class="section-title reveal"><?= ht($f['title'] ?? 'The Intsolcom Business Ecosystem') ?></h2>
-        <p class="section-subtitle reveal" style="margin:0 auto var(--space-12);"><?= ht($f['text'] ?? 'Two entities, one ecosystem. Strategic business development in the United States. Operational delivery in Colombia.') ?></p>
+        <span class="section-label reveal"><?= ht($f['label'] ?? t('Business Ecosystem')) ?></span>
+        <h2 class="section-title reveal"><?= ht($f['title'] ?? t('The Intsolcom Business Ecosystem')) ?></h2>
+        <p class="section-subtitle reveal" style="margin:0 auto var(--space-12);"><?= ht($f['text'] ?? t('Two entities, one ecosystem. Strategic business development in the United States. Operational delivery in Colombia.')) ?></p>
 
         <div class="ecosystem reveal">
           <div class="ecosystem__root">
@@ -183,7 +183,7 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
               <a href="/business-units/<?= h($bu['slug']) ?>" class="ecosystem__branch-card" style="text-decoration:none;color:inherit;">
                 <div style="font-size:1.5rem;margin-bottom:.5rem;"><?= h($bu['icon']) ?></div>
                 <h4><?= ht($bu['name']) ?></h4>
-                <span><?= ht('Business Unit') ?></span>
+                <span><?= t('Business Unit') ?></span>
               </a>
             </div>
             <?php endforeach; ?>
@@ -195,15 +195,15 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
   <?php elseif ($sec['type'] === 'stats'): ?>
     <section class="section <?= $bgClass ?>">
       <div class="container" style="text-align:center;">
-        <span class="section-label reveal"><?= ht($f['label'] ?? 'By the Numbers') ?></span>
-        <h2 class="section-title reveal"><?= ht($f['title'] ?? 'INTSOLCOM at a Glance') ?></h2>
+        <span class="section-label reveal"><?= ht($f['label'] ?? t('By the Numbers')) ?></span>
+        <h2 class="section-title reveal"><?= ht($f['title'] ?? t('INTSOLCOM at a Glance')) ?></h2>
         <div class="stats-band reveal" style="margin-top:var(--space-8);">
           <?php
           $statItems = !empty($f['stats']) ? json_decode($f['stats'], true) : [
-            ['value' => '50', 'suffix' => '+', 'label' => 'Team Members'],
-            ['value' => '3', 'suffix' => '', 'label' => 'Software Platforms'],
-            ['value' => '10', 'suffix' => '+', 'label' => 'Industries Served'],
-            ['value' => '2', 'suffix' => '', 'label' => 'Countries'],
+            ['value' => '50', 'suffix' => '+', 'label' => t('Team Members')],
+            ['value' => '3', 'suffix' => '', 'label' => t('Software Platforms')],
+            ['value' => '10', 'suffix' => '+', 'label' => t('Industries Served')],
+            ['value' => '2', 'suffix' => '', 'label' => t('Countries')],
           ];
           $sf = true;
           foreach ($statItems as $si):
@@ -211,7 +211,7 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
           ?>
           <div class="stats-band__item">
             <div class="stats-band__value" data-count="<?= h($si['value']) ?>" data-suffix="<?= h($si['suffix'] ?? '') ?>">0<?= h($si['suffix'] ?? '') ?></div>
-            <div class="stats-band__label"><?= ht($si['label']) ?></div>
+            <div class="stats-band__label"><?= t($si['label']) ?></div>
           </div>
           <?php endforeach; ?>
         </div>
@@ -223,10 +223,10 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
       <div class="cta-section__glow"></div>
       <div class="cta-section__glow cta-section__glow--right"></div>
       <div class="container">
-        <h2><?= ht($f['title'] ?? "Let's Build Together") ?></h2>
-        <p><?= ht($f['text'] ?? 'Partner with the Intsolcom business ecosystem for strategic business development in the United States and operational excellence in Colombia.') ?></p>
+        <h2><?= ht($f['title'] ?? t("Let's Build Together")) ?></h2>
+        <p><?= ht($f['text'] ?? t('Partner with the Intsolcom business ecosystem for strategic business development in the United States and operational excellence in Colombia.')) ?></p>
         <div class="cta-section__actions">
-          <a href="/contact" class="btn btn-accent btn-lg"><?= ht($f['btn_text'] ?? 'Partner with us') ?></a>
+          <a href="/contact" class="btn btn-accent btn-lg"><?= ht($f['btn_text'] ?? t('Partner with us')) ?></a>
           <?php if (!empty($f['btn2_text'])): ?>
             <a href="<?= h($f['btn2_url'] ?? '#') ?>" class="btn btn-outline-white btn-lg"><?= ht($f['btn2_text']) ?></a>
           <?php endif; ?>
@@ -249,29 +249,29 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Company') ?></div>
+        <div class="footer__heading"><?= t('Company') ?></div>
         <div class="footer__links">
-          <a href="/holding"><?= ht('Ecosystem') ?></a>
-          <a href="/business-units"><?= ht('Business Units') ?></a>
-          <a href="/contact"><?= ht('Contact') ?></a>
+          <a href="/holding"><?= t('Ecosystem') ?></a>
+          <a href="/business-units"><?= t('Business Units') ?></a>
+          <a href="/contact"><?= t('Contact') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Solutions') ?></div>
+        <div class="footer__heading"><?= t('Solutions') ?></div>
         <div class="footer__links">
-          <a href="/technology"><?= ht('Technology') ?></a>
-          <a href="/industries"><?= ht('Industries') ?></a>
+          <a href="/technology"><?= t('Technology') ?></a>
+          <a href="/industries"><?= t('Industries') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Resources') ?></div>
+        <div class="footer__heading"><?= t('Resources') ?></div>
         <div class="footer__links">
-          <a href="/resources"><?= ht('Insights') ?></a>
-          <a href="/blog"><?= ht('Blog') ?></a>
+          <a href="/resources"><?= t('Insights') ?></a>
+          <a href="/blog"><?= t('Blog') ?></a>
         </div>
       </div>
       <div>
-        <div class="footer__heading"><?= ht('Contact') ?></div>
+        <div class="footer__heading"><?= t('Contact') ?></div>
         <div class="footer__links">
           <?php $colEmail = setting('contact_col_email','info@intsolcom.com'); ?>
           <a href="mailto:<?= h($colEmail) ?>"><?= h($colEmail) ?></a>
@@ -283,9 +283,9 @@ $heroOverlay = $heroVideoId ? '' : '<div class="hero__grid"></div><div class="he
     <div class="footer__bottom">
       <span><?= ht(setting('footer_copyright','© 2026 INTSOLCOM LLC')) ?></span>
       <div class="footer__bottom-links">
-        <a href="/privacy"><?= ht('Privacy Policy') ?></a>
-        <a href="/terms"><?= ht('Terms of Service') ?></a>
-        <a href="/sitemap.xml"><?= ht('Sitemap') ?></a>
+        <a href="/privacy"><?= t('Privacy Policy') ?></a>
+        <a href="/terms"><?= t('Terms of Service') ?></a>
+        <a href="/sitemap.xml"><?= t('Sitemap') ?></a>
       </div>
     </div>
   </div>
