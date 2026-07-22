@@ -79,15 +79,16 @@ $_curLang = currentLang();
 }
 </style>
 <script>
-(function(){
-  var btns = document.querySelectorAll('#lang-switch .lang-btn');
-  btns.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var lang = btn.getAttribute('data-lang');
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('#lang-switch .lang-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var lang = this.getAttribute('data-lang');
       var url = new URL(window.location.href);
       url.searchParams.set('lang', lang);
+      document.cookie = 'intsolcom_lang=' + lang + ';path=/;max-age=' + (365*24*60*60) + ';SameSite=Lax';
       window.location.href = url.toString();
     });
   });
-})();
+});
 </script>
