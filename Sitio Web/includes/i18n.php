@@ -44,7 +44,7 @@ function currentLang(): string {
         return $lang;
     }
     if (isset($_COOKIE['intsolcom_lang']) && in_array($_COOKIE['intsolcom_lang'], $supported, true)) {
-        $lang = $_COOKIE['mbpo_lang'];
+        $lang = $_COOKIE['intsolcom_lang'];
         return $lang;
     }
     $lang = 'en'; // default site language — always English unless visitor chooses Spanish
