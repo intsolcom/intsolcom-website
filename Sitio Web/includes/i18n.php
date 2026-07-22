@@ -84,7 +84,10 @@ function t(string $text): string {
  * Calls Claude API to translate a single string. Returns null on failure.
  */
 function mbpoTranslateViaClaude(string $text, string $targetLang): ?string {
-    if (!defined('ANTHROPIC_API_KEY') || ANTHROPIC_API_KEY === '' || strpos(ANTHROPIC_API_KEY, 'PEGA-TU') !== false) {
+    if (!defined('ANTHROPIC_API_KEY') || ANTHROPIC_API_KEY === '' || strpos(ANTHROPIC_API_KEY, 'YOUR_ANTHROPIC') !== false) {
+        return null;
+    }
+    if (!function_exists('curl_init')) {
         return null;
     }
 
