@@ -246,6 +246,7 @@ if ($isLoggedIn && isset($_GET['action'])) {
 
             // ── PRETRANSLATE ──
             case 'pretranslate':
+                set_time_limit(0);
                 $texts = [];
                 $res = $db->query("SELECT value FROM settings WHERE value != '' UNION SELECT field_value FROM section_fields WHERE field_value != ''");
                 while ($r = $res->fetch()) $texts[] = $r['value'];
