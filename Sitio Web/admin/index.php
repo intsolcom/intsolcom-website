@@ -3,13 +3,13 @@ session_start();
 require_once __DIR__ . '/../includes/config.php';
 
 // ─── Auth ───
-if (isset($_GET['logout'])) { session_destroy(); header('Location: index.php'); exit; }
+if (isset($_GET['logout'])) { session_destroy(); header('Location: /'); exit; }
 $isLoggedIn = isset($_SESSION['intsolcom_admin']) && $_SESSION['intsolcom_admin'] === true;
 if (!$isLoggedIn && !empty($_POST['username']) && !empty($_POST['password'])) {
     if ($_POST['username'] === ADMIN_USER && $_POST['password'] === ADMIN_PASS) {
         $_SESSION['intsolcom_admin'] = true;
         $isLoggedIn = true;
-        header('Location: index.php'); exit;
+        header('Location: /admin'); exit;
     } else { $loginError = 'Invalid credentials.'; }
 }
 
