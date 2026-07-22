@@ -14,8 +14,10 @@ define('UPLOAD_URL', SITE_URL . '/assets/uploads/');
 define('ADMIN_USER', 'admin');
 define('ADMIN_PASS', 'IntsolcomAdmin2026!');
 
-// ---- AI CHAT AGENTS ----
-// Get your key at console.anthropic.com → Settings → API Keys
+// ---- AI TRANSLATION ----
+// DeepSeek API (OpenAI-compatible) — used for on-the-fly EN→ES translation
+define('DEEPSEEK_API_KEY', 'YOUR_DEEPSEEK_API_KEY');
+// Legacy Anthropic key (kept for backward compatibility)
 define('ANTHROPIC_API_KEY', 'YOUR_ANTHROPIC_API_KEY');
 define('ANTHROPIC_MODEL',   'claude-sonnet-4-6');
 

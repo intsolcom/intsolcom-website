@@ -114,7 +114,7 @@ function t(string $text): string {
 }
 
 /**
- * Calls Claude API to translate a single string. Returns null on failure.
+ * Calls DeepSeek API to translate a single string. Returns null on failure.
  * Rate-limited to MAX_API_CALLS per page load to prevent runaway API usage.
  */
 function mbpoTranslateViaClaude(string $text, string $targetLang): ?string {
@@ -125,7 +125,8 @@ function mbpoTranslateViaClaude(string $text, string $targetLang): ?string {
     $apiCallCount++;
 
     try {
-        if (!defined('ANTHROPIC_API_KEY') || ANTHROPIC_API_KEY === '' || strpos(ANTHROPIC_API_KEY, 'YOUR_ANTHROPIC') !== false) {
+        $apiKey = defined('DEEPSEEK_API_KEY') ? DEEPSEEK_API_KEY : (defined('ANTHROPIC_API_KEY') ? ANTHROPIC_API_KEY : '');
+        if ($apiKey === '' || strpos($apiKey, 'YOUR_') !== false) {
             return null;
         }
         if (!function_exists('curl_init')) {
@@ -136,22 +137,22 @@ function mbpoTranslateViaClaude(string $text, string $targetLang): ?string {
         $targetName = $langNames[$targetLang] ?? 'Spanish';
 
         $payload = [
-            'model'      => ANTHROPIC_MODEL,
-            'max_tokens' => 500,
-            'system'     => "You are a professional translator for a BPO company's corporate website. Translate the given English text to {$targetName}. Preserve tone, formatting, capitalization style, any HTML tags, and any placeholder tokens like {name} or %ENDING% EXACTLY as written (do not translate or alter their contents). Keep it professional and corporate in register. Output ONLY the translation, nothing else — no quotes, no explanations.",
-            'messages'   => [
+            'model'       => 'deepseek-chat',
+            'max_tokens'  => 500,
+            'temperature' => 0.1,
+            'messages'    => [
+                ['role' => 'system', 'content' => "You are a professional translator for a technology company's corporate website. Translate the given English text to {$targetName}. Preserve tone, formatting, capitalization style, any HTML tags, and any placeholder tokens like {name} or %ENDING% EXACTLY as written (do not translate or alter their contents). Keep it professional and corporate in register. Output ONLY the translation, nothing else — no quotes, no explanations."],
                 ['role' => 'user', 'content' => $text],
             ],
         ];
 
-        $ch = curl_init('https://api.anthropic.com/v1/messages');
+        $ch = curl_init('https://api.deepseek.com/v1/chat/completions');
         curl_setopt_array($ch, [
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => json_encode($payload),
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/json',
-                'x-api-key: ' . ANTHROPIC_API_KEY,
-                'anthropic-version: 2023-06-01',
+                'Authorization: Bearer ' . $apiKey,
             ],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 20,
@@ -171,7 +172,8 @@ function mbpoTranslateViaClaude(string $text, string $targetLang): ?string {
         $data = json_decode($response, true);
         if (json_last_error() !== JSON_ERROR_NONE) return null;
 
-        $translated = $data['content'][0]['text'] ?? null;
+        // DeepSeek (OpenAI-compatible) format
+        $translated = $data['choices'][0]['message']['content'] ?? null;
         return $translated !== null ? trim($translated) : null;
     } catch (\Throwable $e) {
         return null;

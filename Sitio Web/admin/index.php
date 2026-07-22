@@ -779,7 +779,7 @@ function toast(msg) {
 function post(action, data, cb) {
     var fd = new FormData();
     for (var k in data) fd.append(k, data[k]);
-    fetch('index.php?action=' + action, { method: 'POST', body: fd })
+    fetch('?action=' + action, { method: 'POST', body: fd })
         .then(r => r.json()).then(cb).catch(function(e) { toast('Error: ' + e.message); });
 }
 
