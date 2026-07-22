@@ -273,13 +273,13 @@ body.no-scroll { overflow: hidden; }
     <div class="hero__content">
       <div class="hero__badge reveal">
         <span class="hero__badge-dot"></span>
-        <?= ht($fields['eyebrow'] ?? t('Technology & Operations Ecosystem')) ?>
+        <?= ht($fields['eyebrow'] ?: 'Technology & Operations Ecosystem') ?>
       </div>
       <h1 class="reveal" data-delay="100">
-        <?= ht($fields['headline'] ?? t('We build and operate')) ?> <em><?= ht($fields['headline_em'] ?? t('technology companies.')) ?></em>
+        <?= ht($fields['headline'] ?: 'We build and operate') ?> <em><?= ht($fields['headline_em'] ?: 'technology companies.') ?></em>
       </h1>
       <p class="hero__description reveal" data-delay="200">
-        <?= ht($fields['description'] ?? t('The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia. We build technology products and operate business services at scale.')) ?>
+        <?= ht($fields['description'] ?: 'The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia. We build technology products and operate business services at scale.') ?>
       </p>
       <div class="hero__actions reveal" data-delay="300">
         <a href="/holding" class="btn btn-accent btn-lg">

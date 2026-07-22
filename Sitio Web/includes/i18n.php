@@ -95,6 +95,9 @@ function t(string $text): string {
     $lang = currentLang();
     if ($lang === 'en') return $text; // source language, no translation needed
 
+    // If text already contains Spanish-specific characters, it's likely already translated
+    if (preg_match('/[áéíóúñÁÉÍÓÚÑ¿¡]/u', $text)) return $text;
+
     ensureTranslationsTable();
 
     $hash = md5($text);
