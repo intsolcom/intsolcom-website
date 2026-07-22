@@ -343,11 +343,13 @@ small {
               padding var(--duration-base) var(--ease-out);
 }
 
+.nav.scrolled,
 .nav--scrolled {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   padding: 0.75rem 0;
 }
 
@@ -373,6 +375,7 @@ small {
   color: var(--color-white);
 }
 
+.nav.scrolled .nav__logo,
 .nav--scrolled .nav__logo {
   color: var(--color-dark);
 }
@@ -400,6 +403,7 @@ small {
   color: rgba(255, 255, 255, 0.8);
 }
 
+.nav.scrolled .nav__link,
 .nav--scrolled .nav__link {
   color: var(--color-mid);
 }
@@ -439,6 +443,7 @@ small {
   background: var(--color-white);
 }
 
+.nav.scrolled .nav__hamburger span,
 .nav--scrolled .nav__hamburger span {
   background: var(--color-dark);
 }
