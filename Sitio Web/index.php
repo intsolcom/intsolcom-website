@@ -752,6 +752,40 @@ body.no-scroll { overflow: hidden; }
   </div>
 </section>
 
+<!-- BLOG WIDGET -->
+<section class="section section-surface">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Insights</span>
+      <h2 class="section-title">Latest from <em>our blog</em></h2>
+    </div>
+    <?php
+    $blogPosts = db()->query("SELECT * FROM resources WHERE type='article' AND status=1 ORDER BY published_at DESC LIMIT 3")->fetchAll();
+    if ($blogPosts):
+    ?>
+    <div class="grid-3">
+      <?php foreach($blogPosts as $bp): ?>
+      <a href="/blog/<?= h($bp['slug']) ?>" class="card" style="text-decoration:none;display:block;transition:transform .2s;overflow:hidden;">
+        <?php if($bp['cover_image']): ?>
+        <div style="height:160px;overflow:hidden;border-radius:12px 12px 0 0;">
+          <img src="<?= h($bp['cover_image']) ?>" alt="<?= h($bp['title']) ?>" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <?php endif; ?>
+        <div style="padding:1.25rem;">
+          <div style="font-size:.7rem;color:#94A3B8;margin-bottom:.4rem;"><?= h(date('M j, Y', strtotime($bp['published_at']))) ?> · <?= (int)$bp['read_time'] ?> min read</div>
+          <h3 style="font-size:.95rem;font-weight:700;color:#0F172A;line-height:1.4;margin-bottom:.5rem;"><?= h($bp['title']) ?></h3>
+          <p style="font-size:.8rem;color:#475569;line-height:1.5;"><?= h(mb_strlen($bp['excerpt']) > 100 ? mb_substr($bp['excerpt'], 0, 100) . '...' : $bp['excerpt']) ?></p>
+        </div>
+      </a>
+      <?php endforeach; ?>
+    </div>
+    <div class="text-center mt-12 reveal">
+      <a href="/blog" class="btn btn-outline btn-lg">Read all insights →</a>
+    </div>
+    <?php endif; ?>
+  </div>
+</section>
+
 <?php elseif ($type === 'faq'): ?>
 <!-- FAQ SECTION -->
 <section class="section section-surface" id="faq" data-nav-section="faq">
