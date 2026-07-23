@@ -21,6 +21,10 @@ define('DEEPSEEK_API_KEY', 'YOUR_DEEPSEEK_API_KEY');
 define('ANTHROPIC_API_KEY', 'YOUR_ANTHROPIC_API_KEY');
 define('ANTHROPIC_MODEL',   'claude-sonnet-4-6');
 
+// ---- BLOG REST API ----
+// Token for external systems to publish blog posts via POST/PUT /api/blog
+define('API_BLOG_TOKEN', 'YOUR_API_BLOG_TOKEN');
+
 // ---- BYT — credential encryption ----
 // Used to encrypt third-party API keys before storing them in the database.
 // This key itself must NEVER be committed to a public repo.
