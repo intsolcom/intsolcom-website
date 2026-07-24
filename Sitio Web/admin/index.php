@@ -253,6 +253,32 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 $count = mbpoPretranslate($texts, 'es');
                 echo json_encode(['ok'=>true, 'count'=>$count]); exit;
 
+            // ── BLOG: GET POSTS (for scheduler) ──
+            case 'blog_get_posts':
+                $posts = $db->query("SELECT id, title, slug, status, published_at FROM resources WHERE type='article' AND status != 0 ORDER BY published_at DESC")->fetchAll();
+                echo json_encode(['ok'=>true, 'posts'=>$posts]); exit;
+
+            // ── DISTRO: SCHEDULE POST ──
+            case 'distro_schedule':
+                $body = json_decode(file_get_contents('php://input'), true);
+                $postId = (int)($body['post_id'] ?? 0);
+                $platforms = $body['platforms'] ?? [];
+                $scheduledAt = $body['scheduled_at'] ?? '';
+                if (!$postId || empty($platforms) || !$scheduledAt) {
+                    echo json_encode(['ok'=>false, 'error'=>'post_id, platforms, and scheduled_at required']); exit;
+                }
+                $post = $db->prepare("SELECT title FROM resources WHERE id = ?")->execute([$postId])->fetch();
+                $title = $post ? $post['title'] : 'Unknown';
+                $ins = $db->prepare("INSERT INTO distro_schedule (post_id, title, platforms, scheduled_at, status) VALUES (?,?,?,?,'pending')");
+                $ins->execute([$postId, $title, json_encode($platforms), $scheduledAt]);
+                echo json_encode(['ok'=>true, 'id'=>(int)$db->lastInsertId()]); exit;
+
+            // ── DISTRO: GET SCHEDULE ──
+            case 'distro_get_schedule':
+                $schedule = $db->query("SELECT * FROM distro_schedule ORDER BY scheduled_at DESC LIMIT 50")->fetchAll();
+                foreach ($schedule as &$s) { $s['platforms'] = json_decode($s['platforms'] ?? '[]', true); }
+                echo json_encode(['ok'=>true, 'schedule'=>$schedule]); exit;
+
             // ── GET TABLE DATA ──
             case 'get_table_data':
                 $table = $_GET['table'] ?? '';
@@ -527,6 +553,7 @@ td{color:#CBD5E1}
     <a data-tab="media">Media</a>
     <a data-tab="settings">Settings</a>
     <a data-tab="translations">Translations</a>
+    <a data-tab="scheduler">📅 Scheduler</a>
     <a href="?logout" class="logout">Logout</a>
   </nav>
   <div class="sidebar-stats">v2.0 &middot; <?=h(ADMIN_USER)?></div>
@@ -738,6 +765,17 @@ td{color:#CBD5E1}
     <p style="margin-bottom:16px;color:rgba(255,255,255,.5);font-size:.84rem">Pre-translate all site content (settings + section fields) from English to Spanish using Claude AI. Each unique string is translated once and cached.</p>
     <button class="btn btn-primary" id="pretranslateBtn" onclick="pretranslate()">Pre-translate All Content</button>
     <span id="pretranslateResult" style="margin-left:12px;font-size:.82rem"></span>
+  </div>
+</div>
+
+<!-- ============ SCHEDULER TAB ============ -->
+<div class="tab-content" id="tab-scheduler">
+  <div class="header"><h2>📅 Content Scheduler</h2>
+    <button class="btn btn-primary" onclick="schedulerOpen()" style="margin-left:auto">+ New Schedule</button>
+  </div>
+  <div class="panel">
+    <h3>Programmed Publications</h3>
+    <div id="sched-history-list"><div class="empty">Loading...</div></div>
   </div>
 </div>
 
@@ -1335,7 +1373,73 @@ function pretranslate() {
         else { res.textContent = 'Error: ' + r.error; res.style.color = '#ef4444'; }
     });
 }
+// ── SCHEDULER API ──
+function apiFetch(action, opts = {}) {
+    if (!opts.headers) opts.headers = {};
+    return fetch('?action=' + action, opts);
+}
+function h_js(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+let schedAllPosts = [];
+let schedTemplates = JSON.parse(localStorage.getItem('sched_templates') || '[]');
+
+function schedulerOpen() { document.getElementById('sched-modal').style.display='flex'; schedulerLoadArticles(); schedulerLoadHistory(); const t=new Date();t.setDate(t.getDate()+1);t.setHours(9,0,0,0);document.getElementById('sched-datetime').value=t.toISOString().slice(0,16); document.getElementById('sched-grid-type').value=''; schedulerUpdatePreview(); }
+function schedulerClose() { document.getElementById('sched-modal').style.display='none'; document.querySelectorAll('.sched-article-cb').forEach(c=>c.checked=false); }
+async function schedulerLoadArticles() { const r=await apiFetch('blog_get_posts'); const j=await r.json(); if(j.ok){schedAllPosts=j.posts||[]; schedulerRenderArticles('');} }
+function schedulerRenderArticles(filter='') { const list=document.getElementById('sched-article-list'); if(!list)return; const f=filter.toLowerCase(); const filtered=schedAllPosts.filter(p=>!f||(p.title||'').toLowerCase().includes(f)||(p.slug||'').toLowerCase().includes(f)); if(!filtered.length){list.innerHTML='<div class=\"empty\">No articles found</div>';return;} list.innerHTML=filtered.map(p=>'<label class=\"nav-item-row\" style=\"cursor:pointer\"><input type=\"checkbox\" class=\"sched-article-cb\" value=\"'+p.id+'\" onchange=\"schedulerUpdatePreview()\"><span class=\"info\">'+h_js(p.title)+'<br><span class=\"meta\">'+(p.status||'draft')+'</span></span></label>').join(''); schedulerUpdatePreview(); }
+function schedulerFilter(){schedulerRenderArticles(document.getElementById('sched-search')?.value||'');}
+function schedulerUpdatePreview() { const checked=document.querySelectorAll('.sched-article-cb:checked'); const el=document.getElementById('sched-count'); if(el)el.textContent=checked.length+' selected'; const platforms=Array.from(document.querySelectorAll('.sched-platform-cb:checked')).map(c=>c.value); const dt=document.getElementById('sched-datetime')?.value; const grid=document.getElementById('sched-grid-type')?.value; const dates=grid?schedulerGenGrid(dt,grid):(dt?[dt]:[]); const pl=document.getElementById('sched-preview-list'); const pc=document.getElementById('sched-preview-count'); if(!checked.length||!dates.length||!platforms.length){if(pl)pl.innerHTML='<div class=\"empty\">Select articles, date and platforms.</div>';if(pc)pc.textContent='0 posts';return;} let slots=[],di=0; const arts=Array.from(checked).map(c=>schedAllPosts.find(p=>p.id==c.value)).filter(Boolean); for(const d of dates){const a=arts[di%arts.length];for(const pf of platforms){slots.push({date:d,article:a,platform:pf});}di++;} if(pc)pc.textContent=slots.length+' posts'; const icons={intsolcom:'?��',linkedin_me:'👤',linkedin_co:'🏢'}; if(pl)pl.innerHTML=slots.map(s=>'<div style=\"display:flex;align-items:center;gap:.5rem;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.78rem\"><span>'+ (icons[s.platform]||'📡') +'</span><span style=\"flex:1\">'+h_js(s.article?.title||'?')+'</span><span style=\"color:rgba(255,255,255,.3);font-size:.68rem\">'+ (s.date||'').replace('T',' ') +'</span></div>').join(''); }
+function schedulerGenGrid(dt,type){if(!dt)return[];const d=new Date(dt);const res=[dt];if(type==='daily'){for(let i=1;i<7;i++){const nd=new Date(d);nd.setDate(d.getDate()+i);res.push(nd.toISOString().slice(0,16));}}else if(type==='weekly'){for(let i=1;i<4;i++){const nd=new Date(d);nd.setDate(d.getDate()+i*7);res.push(nd.toISOString().slice(0,16));}}else if(type==='biweekly'){const nd=new Date(d);nd.setDate(d.getDate()+14);res.push(nd.toISOString().slice(0,16));}else if(type==='monthly'){for(let i=1;i<3;i++){const nd=new Date(d);nd.setMonth(d.getMonth()+i);res.push(nd.toISOString().slice(0,16));}} return res; }
+async function schedulerConfirm(){const checked=document.querySelectorAll('.sched-article-cb:checked');if(!checked.length){toast('Select at least one article');return;}const platforms=Array.from(document.querySelectorAll('.sched-platform-cb:checked')).map(c=>c.value);if(!platforms.length){toast('Select at least one platform');return;}const dt=document.getElementById('sched-datetime')?.value;if(!dt){toast('Select date and time');return;}const grid=document.getElementById('sched-grid-type')?.value;const dates=schedulerGenGrid(dt,grid);const finalDates=dates.length?dates:[dt];const btn=document.getElementById('sched-confirm-btn');btn.disabled=true;btn.textContent='Scheduling...';let ok=0,total=0;const ids=Array.from(checked).map(c=>parseInt(c.value));let di=0; for(const d of finalDates){const pid=ids[di%ids.length];const r=await apiFetch('distro_schedule',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_id:pid,platforms,scheduled_at:d})});const j=await r.json();if(j.ok)ok++;total++;di++;} btn.disabled=false;btn.textContent='Confirm Schedule';toast(ok+'/'+total+' posts scheduled');schedulerClose();}
+function schedulerSaveTemplate(){const name=document.getElementById('sched-template-name')?.value.trim();if(!name){toast('Name the template');return;}const grid=document.getElementById('sched-grid-type')?.value;const platforms=Array.from(document.querySelectorAll('.sched-platform-cb:checked')).map(c=>c.value);schedTemplates.push({name,gridType:grid,platforms,created:new Date().toISOString()});localStorage.setItem('sched_templates',JSON.stringify(schedTemplates));toast('Template saved');}
+function schedulerLoadTemplates(){const sel=document.getElementById('sched-template-load');if(!sel)return;sel.innerHTML='<option value=\"\">Load template...</option>'+schedTemplates.map((t,i)=>'<option value=\"'+i+'\">'+h_js(t.name)+'</option>').join('');}
+function schedulerLoadTemplate(idx){if(!idx&&idx!==0)return;const t=schedTemplates[parseInt(idx)];if(!t)return;document.getElementById('sched-grid-type').value=t.gridType||'';document.querySelectorAll('.sched-platform-cb').forEach(c=>{c.checked=(t.platforms||[]).includes(c.value);});schedulerUpdatePreview();toast('Template loaded: '+t.name);}
+function schedulerExportCSV(){const checked=document.querySelectorAll('.sched-article-cb:checked');if(!checked.length){toast('Select articles first');return;}const platforms=Array.from(document.querySelectorAll('.sched-platform-cb:checked')).map(c=>c.value);const dt=document.getElementById('sched-datetime')?.value||'';const grid=document.getElementById('sched-grid-type')?.value||'';const dates=schedulerGenGrid(dt,grid);const finalDates=dates.length?dates:[dt];let csv='Date,Article,Platform\n';const arts=Array.from(checked).map(c=>schedAllPosts.find(p=>p.id==c.value)).filter(Boolean);let di=0;for(const d of finalDates){const a=arts[di%arts.length];for(const pf of platforms){csv+=d+','+(a?.title||'?')+','+pf+'\n';}di++;}const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='schedule-'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(url);toast('CSV downloaded');}
+async function schedulerLoadHistory(){const el=document.getElementById('sched-history-list');if(!el)return;const r=await apiFetch('distro_get_schedule');const j=await r.json();if(!j.ok||!j.schedule.length){el.innerHTML='<div class=\"empty\">No scheduled publications.</div>';return;}const icons={completed:'✅',pending:'⏳',failed:'❌',partial:'⚠️',optimizing:'🤖',posting:'📤'};el.innerHTML=j.schedule.map(s=>'<div class=\"nav-item-row\"><span>'+ (icons[s.status]||'⏳') +'</span><span class=\"info\">'+h_js(s.title||'?')+'<br><span class=\"meta\">'+(s.status||'').toUpperCase()+' · '+(s.scheduled_at||'').replace('T',' ').substring(0,16)+'</span></span></div>').join('');}
+if(document.getElementById('tab-scheduler')){setTimeout(()=>{schedulerLoadHistory();},2000);}
 </script>
+
+<!-- SCHEDULER MODAL -->
+<div class="modal-overlay" id="sched-modal" style="display:none" onclick="if(event.target===this)schedulerClose()">
+  <div class="modal" style="max-width:800px;max-height:90vh;overflow-y:auto">
+    <span class="modal-close" onclick="schedulerClose()">✕</span>
+    <h3>📅 New Content Schedule</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px">
+      <!-- LEFT: Select articles -->
+      <div>
+        <label style="color:rgba(255,255,255,.4);font-size:.76rem">Select Articles</label>
+        <input type="text" id="sched-search" placeholder="Search articles..." oninput="schedulerFilter()" style="width:100%;padding:8px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.82rem;margin:8px 0;outline:none">
+        <label class="inline-check" style="margin-bottom:8px"><input type="checkbox" id="sched-select-all" onchange="schedulerToggleAll(this.checked)"> Select all</label>
+        <div id="sched-article-list" style="max-height:300px;overflow-y:auto">Loading...</div>
+      </div>
+      <!-- RIGHT: Configure -->
+      <div>
+        <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="sched-datetime"></div>
+        <div class="form-group"><label>Grid (optional)</label><select id="sched-grid-type" onchange="schedulerUpdatePreview()" style="width:100%;padding:8px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.82rem"><option value="">Single post</option><option value="daily">Daily (7 days)</option><option value="weekly">Weekly (4 weeks)</option><option value="biweekly">Bi-weekly</option><option value="monthly">Monthly (3 months)</option></select></div>
+        <div class="form-group"><label>Platforms</label>
+          <label class="inline-check"><input type="checkbox" class="sched-platform-cb" value="intsolcom" checked onchange="schedulerUpdatePreview()"> 🌐 intsolcom.com</label>
+          <label class="inline-check"><input type="checkbox" class="sched-platform-cb" value="linkedin_me" onchange="schedulerUpdatePreview()"> 👤 LinkedIn (personal)</label>
+          <label class="inline-check"><input type="checkbox" class="sched-platform-cb" value="linkedin_co" onchange="schedulerUpdatePreview()"> 🏢 LinkedIn (company)</label>
+        </div>
+        <div class="form-group"><label>Template</label><div class="form-row"><input type="text" id="sched-template-name" placeholder="Template name" style="padding:8px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.8rem"><button class="btn btn-sm btn-outline" onclick="schedulerSaveTemplate()">Save</button></div></div>
+        <div class="form-group"><select id="sched-template-load" onchange="schedulerLoadTemplate(this.value)" style="width:100%;padding:8px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.82rem"><option value="">Load template...</option></select></div>
+        <div style="background:rgba(0,200,150,.04);border:1px solid rgba(0,200,150,.15);border-radius:12px;padding:14px;margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong style="font-size:.82rem;color:#F8FAFC">Preview</strong><span id="sched-count" style="font-size:.72rem;color:rgba(255,255,255,.4)">0 selected</span></div>
+          <div id="sched-preview-list" style="font-size:.8rem"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)">
+            <span id="sched-preview-count" style="font-size:.72rem;color:rgba(255,255,255,.4)">0 posts</span>
+            <div class="btn-row">
+              <button class="btn btn-sm btn-outline" onclick="schedulerExportCSV()">📥 CSV</button>
+              <button class="btn btn-sm btn-primary" id="sched-confirm-btn" onclick="schedulerConfirm()">✅ Confirm Schedule</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
 </body>
 </html>
 
