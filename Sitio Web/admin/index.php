@@ -114,23 +114,80 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 $db->prepare("DELETE FROM testimonials WHERE id = ?")->execute([$id]);
                 echo json_encode(['ok'=>true]); exit;
 
-            // ── UPLOAD ──
+            // ── UPLOAD (Enhanced: WebP, EXIF strip, album) ──
             case 'upload':
                 if (empty($_FILES['file'])) { echo json_encode(['ok'=>false,'error'=>'No file']); exit; }
                 $file = $_FILES['file'];
-                if ($file['error'] !== UPLOAD_ERR_OK) { echo json_encode(['ok'=>false,'error'=>'Upload error: ' . $file['error']]); exit; }
-                if ($file['size'] > 5 * 1024 * 1024) { echo json_encode(['ok'=>false,'error'=>'Max 5MB']); exit; }
-                $allowed = ['image/jpeg','image/png','image/gif','image/webp','image/svg+xml','image/svg'];
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mime = finfo_file($finfo, $file['tmp_name']);
-                finfo_close($finfo);
-                if (!in_array($mime, $allowed)) { echo json_encode(['ok'=>false,'error'=>'Images only']); exit; }
-                $ext = pathinfo($file['name'], PATHINFO_EXTENSION) ?: 'jpg';
-                $newName = uniqid('img_') . '.' . strtolower($ext);
+                if ($file['error'] !== UPLOAD_ERR_OK) { echo json_encode(['ok'=>false,'error'=>'Upload error: '.$file['error']]); exit; }
+                if ($file['size'] > 10 * 1024 * 1024) { echo json_encode(['ok'=>false,'error'=>'Max 10MB']); exit; }
+                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION) ?: 'jpg');
+                if (!in_array($ext, ['jpg','jpeg','png','gif','webp','svg','ico'])) { echo json_encode(['ok'=>false,'error'=>'Images only (jpg,png,gif,webp,svg)']); exit; }
+                
+                $newName = 'img_' . uniqid() . '.' . ($ext === 'svg' ? 'svg' : ($ext === 'gif' ? 'gif' : 'webp'));
                 $dest = UPLOAD_DIR . $newName;
-                if (!move_uploaded_file($file['tmp_name'], $dest)) { echo json_encode(['ok'=>false,'error'=>'Move failed']); exit; }
-                $db->prepare("INSERT INTO media (filename, original_name, mime_type, file_size) VALUES (?, ?, ?, ?)")->execute([$newName, $file['name'], $mime, $file['size']]);
-                echo json_encode(['ok'=>true, 'url' => UPLOAD_URL . $newName, 'filename'=>$newName]); exit;
+                
+                // SVG: just move
+                if ($ext === 'svg') {
+                    if (!move_uploaded_file($file['tmp_name'], $dest)) { echo json_encode(['ok'=>false,'error'=>'Move failed']); exit; }
+                }
+                // GIF: just move (preserve animation)
+                else if ($ext === 'gif') {
+                    if (!move_uploaded_file($file['tmp_name'], $dest)) { echo json_encode(['ok'=>false,'error'=>'Move failed']); exit; }
+                }
+                // JPG/PNG/WebP: convert to WebP + strip EXIF
+                else {
+                    $srcImg = null;
+                    if (in_array($ext, ['jpg','jpeg'])) $srcImg = @imagecreatefromjpeg($file['tmp_name']);
+                    else if ($ext === 'png') $srcImg = @imagecreatefrompng($file['tmp_name']);
+                    else if ($ext === 'webp') $srcImg = @imagecreatefromwebp($file['tmp_name']);
+                    
+                    if (!$srcImg) {
+                        // Fallback: just move original
+                        $newName = 'img_' . uniqid() . '.' . $ext;
+                        $dest = UPLOAD_DIR . $newName;
+                        move_uploaded_file($file['tmp_name'], $dest);
+                    } else {
+                        // Strip EXIF by re-encoding
+                        imagepalettetotruecolor($srcImg);
+                        imagewebp($srcImg, $dest, 82);
+                        imagedestroy($srcImg);
+                        // Keep original size: resize if > 2000px
+                        list($w, $h) = getimagesize($dest);
+                        if ($w > 2000) {
+                            $ratio = 2000 / $w;
+                            $newW = 2000;
+                            $newH = (int)($h * $ratio);
+                            $resized = imagecreatetruecolor($newW, $newH);
+                            $src2 = imagecreatefromwebp($dest);
+                            imagecopyresampled($resized, $src2, 0, 0, 0, 0, $newW, $newH, $w, $h);
+                            imagewebp($resized, $dest, 82);
+                            imagedestroy($resized);
+                            imagedestroy($src2);
+                        }
+                    }
+                }
+                
+                $folder = $_POST['folder'] ?? 'general';
+                $folder = preg_replace('/[^a-z0-9_-]/', '', strtolower($folder)) ?: 'general';
+                $albumId = null;
+                $alb = $db->prepare("SELECT id FROM media_albums WHERE slug = ? LIMIT 1");
+                $alb->execute([$folder]);
+                $albumRow = $alb->fetch();
+                if ($albumRow) $albumId = $albumRow['id'];
+                
+                $db->prepare("INSERT INTO media (filename, original_name, mime_type, file_size, folder, webp_version) VALUES (?, ?, ?, ?, ?, ?)")->execute([$newName, $file['name'], $file['type'] ?? 'image/webp', filesize($dest), $folder, $ext !== 'webp' && $ext !== 'svg' && $ext !== 'gif' ? 'webp' : '']);
+                $mediaId = (int)$db->lastInsertId();
+                
+                // Update album cover if first image
+                if ($albumId) {
+                    $c = $db->prepare("SELECT cover_image FROM media_albums WHERE id = ?");
+                    $c->execute([$albumId]);
+                    if (!$c->fetchColumn()) {
+                        $db->prepare("UPDATE media_albums SET cover_image = ? WHERE id = ?")->execute([$newName, $albumId]);
+                    }
+                }
+                
+                echo json_encode(['ok'=>true, 'url' => UPLOAD_URL . $newName, 'filename'=>$newName, 'id'=>$mediaId, 'folder'=>$folder, 'webp'=>$ext !== 'webp' && $ext !== 'svg' && $ext !== 'gif']); exit;
 
             // ── SAVE UNIT ──
             case 'save_unit':
@@ -391,6 +448,51 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 if ($row) @unlink(UPLOAD_DIR . $row['filename']);
                 $db->prepare("DELETE FROM media WHERE id = ?")->execute([$id]);
                 echo json_encode(['ok'=>true]); exit;
+
+            // ── MEDIA ALBUMS ──
+            case 'get_albums':
+                $albums = $db->query("SELECT a.*, (SELECT COUNT(*) FROM media WHERE folder = a.slug) as file_count FROM media_albums a ORDER BY a.sort_order")->fetchAll();
+                echo json_encode(['ok'=>true, 'albums'=>$albums]); exit;
+            
+            case 'save_album':
+                $id = (int)($_POST['id'] ?? 0);
+                $name = trim($_POST['name'] ?? '');
+                $slug = strtolower(preg_replace('/[^a-z0-9]+/', '-', $name));
+                if (!$name) { echo json_encode(['ok'=>false,'error'=>'Name required']); exit; }
+                if ($id) $db->prepare("UPDATE media_albums SET name=?, slug=? WHERE id=?")->execute([$name, $slug, $id]);
+                else $db->prepare("INSERT INTO media_albums (name, slug) VALUES (?,?)")->execute([$name, $slug]);
+                echo json_encode(['ok'=>true, 'id'=>$id ?: (int)$db->lastInsertId()]); exit;
+            
+            case 'delete_album':
+                $id = (int)($_POST['id'] ?? 0);
+                if ($id <= 0) { echo json_encode(['ok'=>false,'error'=>'Invalid id']); exit; }
+                $db->prepare("UPDATE media SET folder='general' WHERE folder = (SELECT slug FROM media_albums WHERE id=?)")->execute([$id]);
+                $db->prepare("DELETE FROM media_albums WHERE id=? AND slug!='general'")->execute([$id]);
+                echo json_encode(['ok'=>true]); exit;
+            
+            case 'update_media_folder':
+                $id = (int)($_POST['id'] ?? 0);
+                $folder = $_POST['folder'] ?? 'general';
+                $db->prepare("UPDATE media SET folder=? WHERE id=?")->execute([$folder, $id]);
+                echo json_encode(['ok'=>true]); exit;
+            
+            case 'reorder_media':
+                $orders = json_decode(file_get_contents('php://input'), true) ?? [];
+                $st = $db->prepare("UPDATE media SET sort_order = ? WHERE id = ?");
+                foreach ($orders as $o) $st->execute([(int)($o['order'] ?? 0), (int)($o['id'] ?? 0)]);
+                echo json_encode(['ok'=>true]); exit;
+
+            // ── UNSPLASH SEARCH ──
+            case 'unsplash_search':
+                $query = urlencode($_GET['q'] ?? 'technology');
+                $page = max(1, (int)($_GET['page'] ?? 1));
+                $url = "https://api.unsplash.com/search/photos?query=$query&per_page=12&page=$page&client_id=YOUR_UNSPLASH_ACCESS_KEY";
+                $ch = curl_init($url);
+                curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_TIMEOUT=>8]);
+                $resp = curl_exec($ch); curl_close($ch);
+                $data = json_decode($resp, true);
+                $results = array_map(fn($r) => ['id'=>$r['id'], 'url'=>$r['urls']['regular'], 'thumb'=>$r['urls']['thumb'], 'author'=>$r['user']['name'], 'download'=>$r['links']['download_location']], $data['results'] ?? []);
+                echo json_encode(['ok'=>true, 'results'=>$results, 'total'=>$data['total']??0]); exit;
 
             // ── GET SECTIONS (list for a page) ──
             case 'get_sections':
@@ -804,12 +906,24 @@ td{color:#CBD5E1}
          ondrop="event.preventDefault();mediaHandleDrop(event)">
       <div style="font-size:2.5rem;margin-bottom:.5rem">📁</div>
       <div style="font-weight:700;color:#F8FAFC;font-size:.95rem">Drop images here or <span style="color:#00C896">browse</span></div>
-      <div style="color:rgba(255,255,255,.35);font-size:.75rem;margin-top:.35rem">PNG, JPG, GIF, WebP, SVG — Max 5MB</div>
+      <div style="color:rgba(255,255,255,.35);font-size:.75rem;margin-top:.35rem">PNG, JPG, GIF, WebP, SVG — Max 10MB</div>
       <input type="file" id="media-file-input" accept="image/*" multiple style="display:none" onchange="mediaHandleFiles(this.files)">
     </div>
     <!-- Upload Progress -->
     <div id="media-progress" style="display:none;margin-top:12px">
       <div style="display:flex;align-items:center;gap:8px;color:#00C896;font-size:.82rem"><span class="spinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(0,200,150,.2);border-top-color:#00C896;border-radius:50%;animation:spin .6s linear infinite"></span><span id="media-progress-text">Uploading...</span></div>
+    </div>
+    <!-- Album selector -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap" id="media-albums-bar">
+      <span style="font-size:.76rem;color:rgba(255,255,255,.4)">Album:</span>
+      <select id="media-album-filter" onchange="mediaFilterByAlbum()" style="padding:6px 10px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.78rem;min-width:140px">
+        <?php foreach (db()->query("SELECT * FROM media_albums ORDER BY sort_order")->fetchAll() as $alb): ?>
+        <option value="<?=h($alb['slug'])?>"><?=h($alb['name'])?></option>
+        <?php endforeach; ?>
+      </select>
+      <button class="btn btn-sm btn-outline" onclick="mediaNewAlbum()" style="font-size:.7rem">+ Album</button>
+      <span style="flex:1"></span>
+      <button class="btn btn-sm btn-outline" onclick="mediaOpenUnsplash()" style="font-size:.75rem">🔍 Unsplash</button>
     </div>
     <!-- Toolbar -->
     <div style="display:flex;align-items:center;gap:12px;margin:20px 0" id="media-toolbar">
@@ -1709,6 +1823,78 @@ async function distroPublishNow() {
     var tab = document.getElementById('tab-scheduler');
     if (tab) obs.observe(tab, {attributes:true, attributeFilter:['class']});
 })();
+
+// ── ALBUMS ──
+var currentAlbum = 'general';
+function mediaFilterByAlbum() {
+    currentAlbum = document.getElementById('media-album-filter')?.value || 'general';
+    mediaRender();
+}
+function mediaNewAlbum() {
+    var name = prompt('Album name:');
+    if (!name) return;
+    post('save_album', {name:name}, function(r) {
+        if (r.ok) { toast('Album created'); location.reload(); }
+        else toast(r.error);
+    });
+}
+// Override mediaRender to filter by album
+var _origMediaRender = mediaRender;
+mediaRender = function() {
+    var grid = document.getElementById('media-grid');
+    if (!grid) return;
+    var search = (document.getElementById('media-search')?.value || '').toLowerCase();
+    var album = currentAlbum || 'general';
+    var filtered = mediaItems.filter(function(m) {
+        var folderMatch = (m.folder||'general') === album || album === 'all';
+        var searchMatch = !search || (m.name||'').toLowerCase().includes(search);
+        return folderMatch && searchMatch;
+    });
+    var empty = document.getElementById('media-empty');
+    var count = document.getElementById('media-count');
+    if (count) count.textContent = filtered.length + ' files';
+    if (empty) empty.style.display = filtered.length ? 'none' : 'block';
+    grid.innerHTML = filtered.map(function(m) {
+        return '<div class="media-card" id="media-'+m.id+'" draggable="true" data-id="'+m.id+'">'+
+            '<img src="'+m.url+'" alt="" loading="lazy" onclick="mediaPreview(\''+m.url+'\',\''+(m.name||'')+'\')">'+
+            '<div class="info"><span title="'+(m.name||'')+'">'+(m.name||'')+'</span>'+
+            '<button class="btn btn-sm btn-outline" onclick="mediaCopy(\''+m.url+'\')" title="Copy URL">📋</button>'+
+            '<button class="btn btn-sm btn-danger" onclick="mediaDelete('+m.id+',this)" title="Delete">✕</button></div></div>';
+    }).join('');
+};
+
+// ── UNSPLASH ──
+function mediaOpenUnsplash() {
+    document.getElementById('unsplash-modal').style.display = 'flex';
+    mediaUnsplashSearch();
+}
+function mediaUnsplashSearch() {
+    var q = document.getElementById('unsplash-query')?.value || 'technology';
+    var res = document.getElementById('unsplash-results');
+    res.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,.3)">Searching...</div>';
+    fetch('?action=unsplash_search&q=' + encodeURIComponent(q)).then(function(r){return r.json()}).then(function(j) {
+        if (!j.ok || !j.results) { res.innerHTML = '<div style="grid-column:1/-1">No results</div>'; return; }
+        res.innerHTML = j.results.map(function(img) {
+            return '<div style="cursor:pointer;border-radius:8px;overflow:hidden;position:relative" onclick="mediaImportUnsplash(\''+img.url+'\',\''+(img.author||'')+'\')">'+
+                '<img src="'+img.thumb+'" style="width:100%;aspect-ratio:4/3;object-fit:cover" loading="lazy">'+
+                '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);padding:4px 8px;font-size:.65rem;color:#fff">'+img.author+'</div></div>';
+        }).join('');
+    });
+}
+function mediaImportUnsplash(url, author) {
+    fetch(url).then(function(r){return r.blob()}).then(function(blob) {
+        var fd = new FormData();
+        fd.append('file', blob, 'unsplash-'+Date.now()+'.jpg');
+        fd.append('folder', currentAlbum);
+        fetch('?action=upload', {method:'POST',body:fd}).then(function(r){return r.json()}).then(function(resp) {
+            if (resp.ok) {
+                mediaItems.unshift({id:resp.id||Date.now(), url:resp.url, name:resp.filename||'unsplash', folder:currentAlbum});
+                mediaRender();
+                toast('Imported from Unsplash');
+            } else toast(resp.error);
+        });
+    });
+}
 </script>
 
 <!-- SCHEDULER MODAL -->
@@ -1748,6 +1934,19 @@ async function distroPublishNow() {
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- UNSPLASH MODAL -->
+<div class="modal-overlay" id="unsplash-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:700px;max-height:85vh;overflow-y:auto">
+    <button class="modal-close" onclick="document.getElementById('unsplash-modal').style.display='none'">✕</button>
+    <h3>🔍 Unsplash — Free Stock Photos</h3>
+    <div style="display:flex;gap:8px;margin:12px 0">
+      <input type="text" id="unsplash-query" placeholder="Search photos..." onkeydown="if(event.key==='Enter')mediaUnsplashSearch()" style="flex:1;padding:8px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.82rem;outline:none">
+      <button class="btn btn-primary" onclick="mediaUnsplashSearch()">Search</button>
+    </div>
+    <div id="unsplash-results" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px"></div>
   </div>
 </div>
 
