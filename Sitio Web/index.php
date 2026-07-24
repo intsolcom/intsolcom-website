@@ -774,7 +774,7 @@ body.no-scroll { overflow: hidden; }
         <div style="padding:1.25rem;">
           <div style="font-size:.7rem;color:#94A3B8;margin-bottom:.4rem;"><?= h(date('M j, Y', strtotime($bp['published_at']))) ?> · <?= (int)$bp['read_time'] ?> min read</div>
           <h3 style="font-size:.95rem;font-weight:700;color:#0F172A;line-height:1.4;margin-bottom:.5rem;"><?= h($bp['title']) ?></h3>
-          <p style="font-size:.8rem;color:#475569;line-height:1.5;"><?= h(mb_strlen($bp['excerpt']) > 100 ? mb_substr($bp['excerpt'], 0, 100) . '...' : $bp['excerpt']) ?></p>
+          <p style="font-size:.8rem;color:#475569;line-height:1.5;"><?= h(strlen($bp['excerpt']) > 100 ? substr($bp['excerpt'], 0, 100) . '...' : $bp['excerpt']) ?></p>
         </div>
       </a>
       <?php endforeach; ?>
