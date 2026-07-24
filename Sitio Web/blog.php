@@ -97,7 +97,7 @@ if ($pageNum === 1) {
                     <a href="/blog/<?= h($featured['slug']) ?>" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);align-items:center;background:var(--color-white);border:1px solid var(--color-surface2);border-radius:var(--radius-lg);overflow:hidden;text-decoration:none;color:inherit;transition:box-shadow var(--duration-base);" onmouseover="this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.boxShadow='var(--shadow-sm)'">
                         <div style="aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;overflow:hidden;">
                             <?php if (!empty($featured['cover_image'])): ?>
-                                <img src="<?= h(UPLOAD_URL . $featured['cover_image']) ?>" alt="<?= h($featured['title']) ?>" style="width:100%;height:100%;object-fit:cover;">
+                                <img src="<?= h(str_starts_with($featured['cover_image'], 'http') ? $featured['cover_image'] : UPLOAD_URL . $featured['cover_image']) ?>" alt="<?= h($featured['title']) ?>" style="width:100%;height:100%;object-fit:cover;">
                             <?php else: ?>
                                 <div style="width:100%;height:100%;background:linear-gradient(135deg,rgba(0,200,150,.08),rgba(15,23,42,.03));display:flex;align-items:center;justify-content:center;font-size:3rem;">&#128221;</div>
                             <?php endif; ?>
@@ -124,7 +124,7 @@ if ($pageNum === 1) {
                         <div class="product-card__gradient" style="background:linear-gradient(90deg,#00C896,transparent);opacity:.3;"></div>
                         <div class="product-card__header" style="padding:0;">
                             <?php if (!empty($post['cover_image'])): ?>
-                                <img src="<?= h(UPLOAD_URL . $post['cover_image']) ?>" alt="<?= h($post['title']) ?>" style="width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:var(--radius-md) var(--radius-md) 0 0;margin-bottom:var(--space-4);" loading="lazy">
+                                <img src="<?= h(str_starts_with($post['cover_image'], 'http') ? $post['cover_image'] : UPLOAD_URL . $post['cover_image']) ?>" alt="<?= h($post['title']) ?>" style="width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:var(--radius-md) var(--radius-md) 0 0;margin-bottom:var(--space-4);" loading="lazy">
                             <?php endif; ?>
                             <div style="padding:0 var(--space-5);">
                                 <h3 style="font-size:1.125rem;"><?= ht($post['title']) ?></h3>

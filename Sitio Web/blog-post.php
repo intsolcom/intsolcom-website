@@ -143,7 +143,7 @@ $shareTitle = urlencode($post['title']);
     <?php if (!empty($post['cover_image'])): ?>
     <section class="section" style="padding-top:0;padding-bottom:0;">
         <div class="container">
-            <img src="<?= h(UPLOAD_URL . $post['cover_image']) ?>" alt="<?= h($post['title']) ?>" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);" loading="lazy">
+            <img src="<?= h(str_starts_with($post['cover_image'], 'http') ? $post['cover_image'] : UPLOAD_URL . $post['cover_image']) ?>" alt="<?= h($post['title']) ?>" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);" loading="lazy">
         </div>
     </section>
     <?php endif; ?>
@@ -174,7 +174,7 @@ $shareTitle = urlencode($post['title']);
                 <a href="/blog/<?= h($rel['slug']) ?>" class="card card-hover reveal" style="text-decoration:none;color:inherit;transition-delay:<?= $idx * 0.05 ?>s;">
                     <?php if (!empty($rel['cover_image'])): ?>
                         <div style="width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius-md);margin-bottom:var(--space-4);">
-                            <img src="<?= h(UPLOAD_URL . $rel['cover_image']) ?>" alt="<?= h($rel['title']) ?>" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+                            <img src="<?= h(str_starts_with($rel['cover_image'], 'http') ? $rel['cover_image'] : UPLOAD_URL . $rel['cover_image']) ?>" alt="<?= h($rel['title']) ?>" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
                         </div>
                     <?php endif; ?>
                     <span class="eco-card__badge" style="color:#00C896;background:rgba(0,200,150,.08);"><?= ht('Article') ?></span>
