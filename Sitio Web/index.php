@@ -220,7 +220,15 @@ body.no-scroll { overflow: hidden; }
 <nav class="nav nav--transparent">
   <div class="container">
     <a href="/" class="nav__logo">
-      <?= h($s('logo_text','INTSOL')) ?><span style="color:var(--accent)"><?= h($s('logo_accent','COM')) ?></span>
+      <?php $logoLight = $s('logo_light_url', ''); $logoDark = $s('logo_dark_url', ''); ?>
+      <?php if ($logoLight || $logoDark): ?>
+        <img src="<?= h($logoLight ?: $logoDark) ?>" alt="INTSOLCOM" class="nav__logo-img nav__logo-img--light" style="height:var(--nav-logo-h,36px);width:auto;">
+        <?php if ($logoDark): ?>
+        <img src="<?= h($logoDark) ?>" alt="INTSOLCOM" class="nav__logo-img nav__logo-img--dark" style="height:var(--nav-logo-h,36px);width:auto;">
+        <?php endif; ?>
+      <?php else: ?>
+        <span><?= h($s('logo_text','INTSOL')) ?><span style="color:var(--accent)"><?= h($s('logo_accent','COM')) ?></span></span>
+      <?php endif; ?>
     </a>
     <div class="nav__links">
       <?php foreach ($navItems as $item): ?>

@@ -384,10 +384,12 @@ small {
   color: var(--color-dark);
 }
 
-.nav__logo img {
-  height: 32px;
-  width: auto;
-}
+.nav__logo-img { display:block; transition: opacity 0.3s ease; }
+.nav__logo-img--dark { display:none; }
+.nav.scrolled .nav__logo-img--light,
+.nav--scrolled .nav__logo-img--light { display:none; }
+.nav.scrolled .nav__logo-img--dark,
+.nav--scrolled .nav__logo-img--dark { display:block; }
 
 .nav__links {
   display: flex;
