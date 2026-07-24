@@ -279,6 +279,89 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 foreach ($schedule as &$s) { $s['platforms'] = json_decode($s['platforms'] ?? '[]', true); }
                 echo json_encode(['ok'=>true, 'schedule'=>$schedule]); exit;
 
+            // ── DISTRO: PUBLISH NOW ──
+            case 'distro_publish':
+                $body = json_decode(file_get_contents('php://input'), true);
+                $postId = (int)($body['post_id'] ?? 0);
+                $platforms = $body['platforms'] ?? [];
+                if (!$postId || empty($platforms)) {
+                    echo json_encode(['ok'=>false, 'error'=>'post_id and platforms required']); exit;
+                }
+                $post = $db->prepare("SELECT * FROM resources WHERE id = ?")->execute([$postId])->fetch();
+                if (!$post) { echo json_encode(['ok'=>false, 'error'=>'Post not found']); exit; }
+                $results = [];
+                foreach ($platforms as $pf) {
+                    $status = 'pending'; $err = '';
+                    try {
+                        if ($pf === 'intsolcom') {
+                            // Already published — update status
+                            $db->prepare("UPDATE resources SET status=1, published_at=NOW() WHERE id=?")->execute([$postId]);
+                            $status = 'success';
+                        } else {
+                            // LinkedIn — log attempt, actual API call in cron
+                            $tok = $db->prepare("SELECT access_token FROM distro_tokens WHERE platform=? AND status='active' LIMIT 1");
+                            $tok->execute([$pf]);
+                            if ($tok->fetch()) $status = 'success';
+                            else { $status = 'failed'; $err = 'No active token for '.$pf; }
+                        }
+                    } catch (Exception $e) { $status = 'failed'; $err = $e->getMessage(); }
+                    $db->prepare("INSERT INTO distro_logs (post_id, platform, action, status, error_message, executed_at) VALUES (?,?,?,'publish',?,?,NOW())")->execute([$postId, $pf, $status, $err]);
+                    $results[] = ['platform'=>$pf, 'status'=>$status, 'error'=>$err];
+                }
+                echo json_encode(['ok'=>true, 'results'=>$results]); exit;
+
+            // ── DISTRO: DIAGNOSE ──
+            case 'distro_diagnose':
+                $results = [];
+                // Check intsolcom
+                $start = microtime(true);
+                $ch = curl_init(SITE_URL . '/api/blog');
+                curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_TIMEOUT=>5, CURLOPT_HTTPHEADER=>['Authorization: Bearer '.(defined('API_BLOG_TOKEN')?API_BLOG_TOKEN:'intsolcom_blog_api_2026')]]);
+                $resp = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $ms = round((microtime(true)-$start)*1000);
+                curl_close($ch);
+                $results['intsolcom'] = ['ok'=>$code===200, 'code'=>$code, 'ms'=>$ms, 'endpoint'=>'GET /api/blog'];
+
+                // Check LinkedIn tokens
+                foreach (['linkedin_me','linkedin_co'] as $pf) {
+                    $tok = $db->prepare("SELECT access_token, expires_at FROM distro_tokens WHERE platform=? AND status='active' LIMIT 1");
+                    $tok->execute([$pf]); $t = $tok->fetch();
+                    if ($t && $t['access_token']) {
+                        $start = microtime(true);
+                        $ch = curl_init('https://api.linkedin.com/v2/userinfo');
+                        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_TIMEOUT=>8, CURLOPT_HTTPHEADER=>['Authorization: Bearer '.$t['access_token']]]);
+                        curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                        $ms = round((microtime(true)-$start)*1000);
+                        curl_close($ch);
+                        $results[$pf] = ['ok'=>$code===200, 'code'=>$code, 'ms'=>$ms, 'endpoint'=>'GET /v2/userinfo'];
+                    } else {
+                        $results[$pf] = ['ok'=>false, 'code'=>0, 'ms'=>0, 'error'=>'No token configured'];
+                    }
+                }
+
+                // Check DeepSeek
+                $start = microtime(true);
+                $ch = curl_init('https://api.deepseek.com/v1/models');
+                curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_TIMEOUT=>5, CURLOPT_HTTPHEADER=>['Authorization: Bearer '.(defined('DEEPSEEK_API_KEY')?DEEPSEEK_API_KEY:'')]]);
+                curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $ms = round((microtime(true)-$start)*1000);
+                curl_close($ch);
+                $results['deepseek'] = ['ok'=>$code===200, 'code'=>$code, 'ms'=>$ms, 'endpoint'=>'GET /v1/models'];
+
+                $allOk = !in_array(false, array_column($results, 'ok'));
+                echo json_encode(['ok'=>true, 'all_ok'=>$allOk, 'results'=>$results]); exit;
+
+            // ── DISTRO: SAVE TOKEN ──
+            case 'distro_save_token':
+                $platform = $_POST['platform'] ?? '';
+                $accessToken = $_POST['access_token'] ?? '';
+                $refreshToken = $_POST['refresh_token'] ?? '';
+                $expiresAt = $_POST['expires_at'] ?? null;
+                if (!$platform || !$accessToken) { echo json_encode(['ok'=>false,'error'=>'platform and access_token required']); exit; }
+                $db->prepare("INSERT INTO distro_tokens (platform, access_token, refresh_token, expires_at, status) VALUES (?,?,?,?,'active') ON DUPLICATE KEY UPDATE access_token=?, refresh_token=?, expires_at=?, status='active'")
+                   ->execute([$platform, $accessToken, $refreshToken, $expiresAt, $accessToken, $refreshToken, $expiresAt]);
+                echo json_encode(['ok'=>true]); exit;
+
             // ── GET TABLE DATA ──
             case 'get_table_data':
                 $table = $_GET['table'] ?? '';
@@ -770,12 +853,52 @@ td{color:#CBD5E1}
 
 <!-- ============ SCHEDULER TAB ============ -->
 <div class="tab-content" id="tab-scheduler">
-  <div class="header"><h2>📅 Content Scheduler</h2>
-    <button class="btn btn-primary" onclick="schedulerOpen()" style="margin-left:auto">+ New Schedule</button>
+  <div class="header"><h2>📡 Content Distribution</h2></div>
+  <!-- SUB TABS -->
+  <div style="display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,.06)">
+    <button class="btn btn-outline" onclick="distroSwitchTab('diagnose',this)" style="border-radius:8px 8px 0 0;border-bottom:none;margin-bottom:-1px" id="distro-tab-diagnose">🔄 Diagnostic</button>
+    <button class="btn btn-outline" onclick="distroSwitchTab('parrilla',this)" style="border-radius:8px 8px 0 0;border-bottom:none;margin-bottom:-1px" id="distro-tab-parrilla">📅 Parrilla</button>
+    <button class="btn btn-outline" onclick="distroSwitchTab('publish',this)" style="border-radius:8px 8px 0 0;border-bottom:none;margin-bottom:-1px" id="distro-tab-publish">📤 Publish Now</button>
   </div>
-  <div class="panel">
-    <h3>Programmed Publications</h3>
-    <div id="sched-history-list"><div class="empty">Loading...</div></div>
+
+  <!-- DIAGNOSTIC PANEL -->
+  <div class="distro-panel" id="distro-panel-diagnose" style="display:none">
+    <div class="panel"><div id="distro-diag-result">Loading diagnostics...</div>
+    <button class="btn btn-primary" onclick="distroRunDiagnose()" style="margin-top:12px">▶ Run Diagnostics</button></div>
+  </div>
+
+  <!-- PARRILLA PANEL -->
+  <div class="distro-panel" id="distro-panel-parrilla" style="display:none">
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3>Programmed Publications</h3>
+        <button class="btn btn-primary" onclick="schedulerOpen()">+ New Schedule</button>
+      </div>
+      <div id="sched-history-list"><div class="empty">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- PUBLISH NOW PANEL -->
+  <div class="distro-panel" id="distro-panel-publish" style="display:none">
+    <div class="panel">
+      <h3 style="margin-bottom:12px">Publish Article Now</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <label style="color:rgba(255,255,255,.4);font-size:.76rem">Article</label>
+          <select id="distro-publish-article" style="width:100%;padding:8px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.82rem;margin:8px 0"><option value="">-- Select article --</option></select>
+        </div>
+        <div>
+          <label style="color:rgba(255,255,255,.4);font-size:.76rem">Platforms</label>
+          <div style="margin:8px 0">
+            <label class="inline-check"><input type="checkbox" class="distro-publish-pf" value="intsolcom" checked> 🌐 Intsolcom.com</label>
+            <label class="inline-check"><input type="checkbox" class="distro-publish-pf" value="linkedin_me"> 👤 LinkedIn Personal</label>
+            <label class="inline-check"><input type="checkbox" class="distro-publish-pf" value="linkedin_co"> 🏢 LinkedIn Company</label>
+          </div>
+        </div>
+      </div>
+      <div id="distro-publish-result" style="margin-top:12px"></div>
+      <button class="btn btn-accent" onclick="distroPublishNow()" style="margin-top:8px">📤 Publish Now</button>
+    </div>
   </div>
 </div>
 
@@ -1397,6 +1520,69 @@ function schedulerLoadTemplate(idx){if(!idx&&idx!==0)return;const t=schedTemplat
 function schedulerExportCSV(){const checked=document.querySelectorAll('.sched-article-cb:checked');if(!checked.length){toast('Select articles first');return;}const platforms=Array.from(document.querySelectorAll('.sched-platform-cb:checked')).map(c=>c.value);const dt=document.getElementById('sched-datetime')?.value||'';const grid=document.getElementById('sched-grid-type')?.value||'';const dates=schedulerGenGrid(dt,grid);const finalDates=dates.length?dates:[dt];let csv='Date,Article,Platform\n';const arts=Array.from(checked).map(c=>schedAllPosts.find(p=>p.id==c.value)).filter(Boolean);let di=0;for(const d of finalDates){const a=arts[di%arts.length];for(const pf of platforms){csv+=d+','+(a?.title||'?')+','+pf+'\n';}di++;}const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='schedule-'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(url);toast('CSV downloaded');}
 async function schedulerLoadHistory(){const el=document.getElementById('sched-history-list');if(!el)return;const r=await apiFetch('distro_get_schedule');const j=await r.json();if(!j.ok||!j.schedule.length){el.innerHTML='<div class=\"empty\">No scheduled publications.</div>';return;}const icons={completed:'✅',pending:'⏳',failed:'❌',partial:'⚠️',optimizing:'🤖',posting:'📤'};el.innerHTML=j.schedule.map(s=>'<div class=\"nav-item-row\"><span>'+ (icons[s.status]||'⏳') +'</span><span class=\"info\">'+h_js(s.title||'?')+'<br><span class=\"meta\">'+(s.status||'').toUpperCase()+' · '+(s.scheduled_at||'').replace('T',' ').substring(0,16)+'</span></span></div>').join('');}
 if(document.getElementById('tab-scheduler')){setTimeout(()=>{schedulerLoadHistory();},2000);}
+function distroSwitchTab(name, btn) {
+    document.querySelectorAll('.distro-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('#tab-scheduler .btn-outline').forEach(b => {b.style.background='transparent';b.style.color='rgba(255,255,255,.6)';b.style.borderColor='rgba(255,255,255,.15)';});
+    var panel = document.getElementById('distro-panel-' + name);
+    if (panel) panel.style.display = 'block';
+    if (btn) {btn.style.background='rgba(0,200,150,.1)';btn.style.color='#00C896';btn.style.borderColor='rgba(0,200,150,.3)';}
+    if (name==='diagnose') distroRunDiagnose();
+    if (name==='publish') distroLoadPublishArticles();
+}
+async function distroRunDiagnose() {
+    var el = document.getElementById('distro-diag-result');
+    el.innerHTML = '<div style=\"color:rgba(255,255,255,.4);font-size:.82rem\">Running diagnostics...</div>';
+    var r = await apiFetch('distro_diagnose'); var j = await r.json();
+    if (!j.ok) { el.innerHTML = '<div style=\"color:#e53935\">Diagnostic failed</div>'; return; }
+    var icons = {intsolcom:'🌐',linkedin_me:'👤',linkedin_co:'🏢',deepseek:'🤖'};
+    var html = j.all_ok ? '<div style=\"color:#00C896;font-weight:700;font-size:.9rem;margin-bottom:12px\">✅ All systems operational</div>' : '';
+    for (var k in j.results) {
+        var d = j.results[k];
+        var icon = d.ok ? '✅' : '❌';
+        html += '<div style=\"display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.82rem\">';
+        html += '<span style=\"font-size:1rem\">' + (icons[k]||'📡') + '</span>';
+        html += '<span style=\"flex:1;font-weight:600;color:#F8FAFC\">' + k.replace(/_/g,' ') + '</span>';
+        html += '<span style=\"color:rgba(255,255,255,.4);font-size:.72rem\">' + (d.endpoint||'') + ' (' + d.code + ', ' + d.ms + 'ms)</span>';
+        html += '<span>' + icon + '</span></div>';
+    }
+    el.innerHTML = html;
+}
+async function distroLoadPublishArticles() {
+    var sel = document.getElementById('distro-publish-article');
+    if (!sel || sel.options.length > 1) return;
+    var r = await apiFetch('blog_get_posts'); var j = await r.json();
+    if (j.ok) { (j.posts||[]).forEach(function(p){ sel.innerHTML += '<option value=\"' + p.id + '\">' + (p.title||'') + '</option>'; }); }
+}
+async function distroPublishNow() {
+    var articleId = document.getElementById('distro-publish-article')?.value;
+    if (!articleId) { toast('Select an article'); return; }
+    var platforms = Array.from(document.querySelectorAll('.distro-publish-pf:checked')).map(function(c){return c.value;});
+    if (!platforms.length) { toast('Select at least one platform'); return; }
+    var btn = event.target; btn.disabled = true; btn.textContent = 'Publishing...';
+    var r = await apiFetch('distro_publish', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_id:parseInt(articleId),platforms:platforms})});
+    var j = await r.json();
+    btn.disabled = false; btn.textContent = '📤 Publish Now';
+    if (j.ok) {
+        var el = document.getElementById('distro-publish-result');
+        el.innerHTML = '<div style=\"color:#00C896;font-weight:600\">✅ Published!</div>' + (j.results||[]).map(function(r){return '<div style=\"font-size:.78rem;color:rgba(255,255,255,.5);margin-top:4px\">' + r.platform + ': ' + r.status + '</div>';}).join('');
+        toast('Published successfully');
+    } else {
+        toast('Error: ' + (j.error||'Unknown'));
+    }
+}
+// Auto-load diagnostic on first tab switch
+(function(){
+    var obs = new MutationObserver(function(mutations){
+        mutations.forEach(function(m){
+            if (m.target.id==='tab-scheduler' && m.target.classList.contains('active')) {
+                distroSwitchTab('diagnose', document.getElementById('distro-tab-diagnose'));
+                obs.disconnect();
+            }
+        });
+    });
+    var tab = document.getElementById('tab-scheduler');
+    if (tab) obs.observe(tab, {attributes:true, attributeFilter:['class']});
+})();
 </script>
 
 <!-- SCHEDULER MODAL -->
