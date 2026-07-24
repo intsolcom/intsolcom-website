@@ -338,9 +338,13 @@ small {
   width: 100%;
   z-index: var(--z-sticky);
   padding: 1.25rem 0;
-  transition: background var(--duration-base) var(--ease-out),
-              box-shadow var(--duration-base) var(--ease-out),
-              padding var(--duration-base) var(--ease-out);
+  transition: background 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+}
+
+.nav .nav__logo,
+.nav .nav__link,
+.nav .nav__hamburger span {
+  transition: color 0.3s ease, background 0.3s ease;
 }
 
 .nav.scrolled,
