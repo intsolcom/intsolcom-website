@@ -617,6 +617,7 @@ td{color:#CBD5E1}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -791,27 +792,50 @@ td{color:#CBD5E1}
 
 <!-- ============ MEDIA TAB ============ -->
 <div class="tab-content" id="tab-media">
-  <div class="header"><h2>Media Library</h2></div>
+  <div class="header"><h2>Media Library</h2><span id="media-count" style="font-size:.8rem;color:rgba(255,255,255,.4);margin-left:12px"></span></div>
   <div class="panel">
-    <h3>Upload File</h3>
-    <div class="form-row">
-      <div class="form-group"><input type="file" id="uploadFile" accept="image/*" style="padding:7px"></div>
-      <div><button class="btn btn-primary" onclick="uploadFile()">Upload</button></div>
+    <!-- Upload Zone -->
+    <div id="media-upload-zone" style="border:2px dashed rgba(255,255,255,.12);border-radius:16px;padding:2.5rem;text-align:center;cursor:pointer;transition:all .25s;background:rgba(255,255,255,.01);position:relative;overflow:hidden" 
+         onclick="document.getElementById('media-file-input').click()"
+         onmouseover="this.style.borderColor='#00C896';this.style.background='rgba(0,200,150,.04)';this.style.transform='scale(1.01)'"
+         onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.background='rgba(255,255,255,.01)';this.style.transform=''"
+         ondragover="event.preventDefault();this.style.borderColor='#00C896';this.style.background='rgba(0,200,150,.06)'"
+         ondragleave="this.style.borderColor='rgba(255,255,255,.12)';this.style.background='rgba(255,255,255,.01)'"
+         ondrop="event.preventDefault();mediaHandleDrop(event)">
+      <div style="font-size:2.5rem;margin-bottom:.5rem">📁</div>
+      <div style="font-weight:700;color:#F8FAFC;font-size:.95rem">Drop images here or <span style="color:#00C896">browse</span></div>
+      <div style="color:rgba(255,255,255,.35);font-size:.75rem;margin-top:.35rem">PNG, JPG, GIF, WebP, SVG — Max 5MB</div>
+      <input type="file" id="media-file-input" accept="image/*" multiple style="display:none" onchange="mediaHandleFiles(this.files)">
     </div>
-    <div style="margin-top:24px"><h3 style="margin-bottom:12px">Library</h3>
-      <div class="media-grid">
-        <?php foreach ($mediaItems as $m): ?>
-        <div class="media-card" id="media-<?=$m['id']?>">
-          <img src="<?=h(UPLOAD_URL.$m['filename'])?>" alt="">
-          <div class="info">
-            <span title="<?=h($m['original_name'])?>"><?=h($m['original_name'])?></span>
-            <button class="btn btn-outline btn-sm" onclick="copyUrl('<?=h(UPLOAD_URL.$m['filename'])?>')" title="Copy URL">&#128279;</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteMedia(<?=$m['id']?>,this)" title="Delete">&#10005;</button>
-          </div>
+    <!-- Upload Progress -->
+    <div id="media-progress" style="display:none;margin-top:12px">
+      <div style="display:flex;align-items:center;gap:8px;color:#00C896;font-size:.82rem"><span class="spinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(0,200,150,.2);border-top-color:#00C896;border-radius:50%;animation:spin .6s linear infinite"></span><span id="media-progress-text">Uploading...</span></div>
+    </div>
+    <!-- Toolbar -->
+    <div style="display:flex;align-items:center;gap:12px;margin:20px 0" id="media-toolbar">
+      <input type="text" id="media-search" placeholder="Search files..." oninput="mediaFilter()" style="padding:7px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.8rem;width:200px;outline:none">
+      <button class="btn btn-sm btn-outline" onclick="mediaSort('name')">Name ↑</button>
+      <button class="btn btn-sm btn-outline" onclick="mediaSort('date')">Date ↑</button>
+      <button class="btn btn-sm btn-outline" onclick="mediaSort('size')">Size ↑</button>
+      <span style="flex:1"></span>
+      <button class="btn btn-sm btn-danger" onclick="mediaDeleteSelected()" style="display:none" id="media-delete-selected">Delete selected</button>
+      <button class="btn btn-sm btn-outline" onclick="mediaSelectAll()">Select all</button>
+    </div>
+    <!-- Grid -->
+    <div class="media-grid" id="media-grid">
+      <?php foreach ($mediaItems as $m): ?>
+      <div class="media-card" id="media-<?=$m['id']?>">
+        <img src="<?=h(UPLOAD_URL.$m['filename'])?>" alt="" loading="lazy" onclick="mediaPreview('<?=h(UPLOAD_URL.$m['filename'])?>','<?=h($m['original_name'])?>')">
+        <div class="info">
+          <span title="<?=h($m['original_name'])?>"><?=h($m['original_name'])?></span>
+          <button class="btn btn-sm btn-outline" onclick="mediaCopy('<?=h(UPLOAD_URL.$m['filename'])?>')" title="Copy URL">📋</button>
+          <button class="btn btn-sm btn-danger" onclick="mediaDelete(<?=$m['id']?>,this)" title="Delete">✕</button>
         </div>
-        <?php endforeach; ?>
       </div>
+      <?php endforeach; ?>
     </div>
+    <!-- Empty state -->
+    <div id="media-empty" style="display:none;text-align:center;padding:3rem;color:rgba(255,255,255,.2);font-size:.85rem">No images uploaded yet. Drop files above.</div>
   </div>
 </div>
 
@@ -1441,28 +1465,130 @@ function saveClients() {
 }
 
 // ── MEDIA ──
-function uploadFile() {
-    var fileInput = document.getElementById('uploadFile');
-    if (!fileInput.files[0]) { toast('Select a file'); return; }
-    var fd = new FormData();
-    fd.append('file', fileInput.files[0]);
-    fetch('index.php?action=upload', { method: 'POST', body: fd }).then(r => r.json()).then(function(resp) {
-        if (resp.ok) { toast('Uploaded!'); location.reload(); }
-        else toast(resp.error);
+// ── MEDIA SYSTEM ──
+let mediaItems = [];
+let mediaSortKey = 'date';
+let mediaSortDir = -1;
+function mediaInit() {
+    fetch('?action=get_table_data&table=media&id=0').catch(()=>{}).then(()=>{
+        // Load all media via the existing mediaItems PHP var rendered in page
+        loadMediaGrid();
     });
 }
-
-function copyUrl(url) {
-    navigator.clipboard.writeText(url).then(function() { toast('URL copied'); });
+function loadMediaGrid() {
+    var grid = document.getElementById('media-grid');
+    var empty = document.getElementById('media-empty');
+    var count = document.getElementById('media-count');
+    if (!grid) return;
+    // Get items from rendered cards (PHP) via DOM
+    var cards = grid.querySelectorAll('.media-card');
+    mediaItems = [];
+    cards.forEach(function(c) {
+        var img = c.querySelector('img');
+        var delBtn = c.querySelector('[onclick*=\"deleteMedia\"]');
+        var id = c.id.replace('media-','');
+        mediaItems.push({
+            id: parseInt(id),
+            url: img ? img.src : '',
+            name: c.querySelector('span') ? c.querySelector('span').textContent : '',
+            date: '',
+            size: 0
+        });
+    });
+    if (count) count.textContent = mediaItems.length + ' files';
+    if (empty) empty.style.display = mediaItems.length ? 'none' : 'block';
+    mediaRender();
 }
-
-function deleteMedia(id, btn) {
+function mediaRender() {
+    var grid = document.getElementById('media-grid');
+    if (!grid) return;
+    var search = (document.getElementById('media-search')?.value || '').toLowerCase();
+    var filtered = mediaItems.filter(function(m) {
+        return !search || (m.name||'').toLowerCase().includes(search) || (m.url||'').toLowerCase().includes(search);
+    });
+    if (mediaSortKey === 'date') filtered.sort(function(a,b) { return mediaSortDir * ((b.id||0) - (a.id||0)); });
+    var empty = document.getElementById('media-empty');
+    var count = document.getElementById('media-count');
+    if (count) count.textContent = filtered.length + ' files';
+    if (empty) empty.style.display = filtered.length ? 'none' : 'block';
+    grid.innerHTML = filtered.map(function(m) {
+        return '<div class="media-card" id="media-'+m.id+'"><input type="checkbox" class="media-select-cb" value="'+m.id+'" onchange="mediaUpdateDeleteBtn()" style="position:absolute;top:6px;left:6px;z-index:2;accent-color:#00C896">'+
+            '<img src="'+m.url+'" alt="" loading="lazy" onerror="this.style.background=\'#1E293B\';this.style.minHeight=\'100px\'" style="cursor:pointer" onclick="mediaPreview(\''+m.url+'\',\''+(m.name||'')+'\')">'+
+            '<div class="info"><span title="'+(m.name||'')+'" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">'+(m.name||'')+'</span>'+
+            '<button class="btn btn-sm btn-outline" onclick="mediaCopy(\''+m.url+'\')" title="Copy URL">📋</button>'+
+            '<button class="btn btn-sm btn-danger" onclick="mediaDelete('+m.id+',this)" title="Delete">✕</button></div></div>';
+    }).join('');
+}
+function mediaHandleDrop(e) {
+    mediaHandleFiles(e.dataTransfer.files);
+}
+function mediaHandleFiles(files) {
+    if (!files || !files.length) return;
+    var prog = document.getElementById('media-progress');
+    var txt = document.getElementById('media-progress-text');
+    if (prog) prog.style.display = 'flex';
+    var uploaded = 0;
+    Array.from(files).forEach(function(f) {
+        if (!f.type.match(/image\//)) { uploaded++; if (uploaded===files.length && prog) prog.style.display='none'; return; }
+        var fd = new FormData(); fd.append('file', f);
+        fetch('?action=upload', {method:'POST',body:fd}).then(function(r){return r.json()}).then(function(resp) {
+            if (resp.ok) {
+                mediaItems.unshift({id: Date.now(), url: resp.url, name: resp.filename||f.name});
+                mediaRender();
+            } else { toast(resp.error); }
+            uploaded++;
+            if (txt) txt.textContent = 'Uploaded '+uploaded+'/'+files.length;
+            if (uploaded >= files.length) { if (prog) prog.style.display='none'; toast('Upload complete'); }
+        });
+    });
+}
+function mediaFilter() { mediaRender(); }
+function mediaSort(key) { if (mediaSortKey===key) mediaSortDir *= -1; else {mediaSortKey=key;mediaSortDir=-1;} mediaRender(); }
+function mediaCopy(url) { navigator.clipboard.writeText(url).then(function(){toast('URL copied');}); }
+function mediaPreview(url, name) {
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2000;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer';
+    overlay.onclick = function() { overlay.remove(); };
+    overlay.innerHTML = '<img src="'+url+'" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px"><div style="color:#fff;margin-top:12px;font-size:.82rem">'+name+'</div><div style="color:rgba(255,255,255,.4);font-size:.72rem;margin-top:4px">Click anywhere to close</div>';
+    document.body.appendChild(overlay);
+}
+function mediaDelete(id, btn) {
     if (!confirm('Delete this file?')) return;
-    post('delete_media', { id: id }, function(r) {
-        if (r.ok) {
-            var card = document.getElementById('media-' + id);
-            if (card) card.remove();
-            toast('Deleted');
+    post('delete_media', {id:id}, function(r) {
+        if (r.ok) { mediaItems = mediaItems.filter(function(m){return m.id!==id;}); mediaRender(); toast('Deleted'); }
+        else toast(r.error);
+    });
+}
+function mediaSelectAll() {
+    var all = document.querySelectorAll('.media-select-cb');
+    var anyChecked = Array.from(all).some(function(c){return c.checked;});
+    all.forEach(function(c){c.checked = !anyChecked;});
+    mediaUpdateDeleteBtn();
+}
+function mediaUpdateDeleteBtn() {
+    var checked = document.querySelectorAll('.media-select-cb:checked');
+    var btn = document.getElementById('media-delete-selected');
+    if (btn) btn.style.display = checked.length ? 'inline-flex' : 'none';
+    if (btn) btn.textContent = 'Delete ('+checked.length+')';
+}
+function mediaDeleteSelected() {
+    var checked = document.querySelectorAll('.media-select-cb:checked');
+    if (!checked.length) return;
+    if (!confirm('Delete '+checked.length+' files?')) return;
+    var ids = Array.from(checked).map(function(c){return parseInt(c.value);});
+    var done = 0;
+    ids.forEach(function(id) {
+        post('delete_media', {id:id}, function(r) {
+            done++;
+            if (r.ok) { mediaItems = mediaItems.filter(function(m){return m.id!==id;}); mediaRender(); }
+            if (done >= ids.length) toast('Deleted '+done+' files');
+        });
+    });
+}
+// Init media on first load
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(loadMediaGrid, 500);
+});
         } else toast(r.error);
     });
 }
