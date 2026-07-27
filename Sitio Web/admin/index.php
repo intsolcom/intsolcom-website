@@ -727,19 +727,19 @@ td{color:#CBD5E1}
 <aside class="sidebar">
   <div class="sidebar-logo">INTSOL<span>COM</span></div>
   <nav class="sidebar-nav">
-    <a data-tab="dashboard" class="active">Dashboard</a>
-    <a data-tab="pages">Pages &amp; Sections</a>
-    <a data-tab="nav">Navigation</a>
-    <a data-tab="units">Business Units</a>
-    <a data-tab="products">Products</a>
-    <a data-tab="industries">Industries</a>
-    <a data-tab="resources">Resources</a>
-    <a data-tab="testimonials">Testimonials</a>
-    <a data-tab="clients">Clients</a>
-    <a data-tab="media">Media</a>
-    <a data-tab="settings">Settings</a>
-    <a data-tab="translations">Translations</a>
-    <a data-tab="scheduler">📅 Scheduler</a>
+    <a data-tab="dashboard" class="active" onclick="switchTab('dashboard');return false" href="#">Dashboard</a>
+    <a data-tab="pages" onclick="switchTab('pages');return false" href="#">Pages &amp; Sections</a>
+    <a data-tab="nav" onclick="switchTab('nav');return false" href="#">Navigation</a>
+    <a data-tab="units" onclick="switchTab('units');return false" href="#">Business Units</a>
+    <a data-tab="products" onclick="switchTab('products');return false" href="#">Products</a>
+    <a data-tab="industries" onclick="switchTab('industries');return false" href="#">Industries</a>
+    <a data-tab="resources" onclick="switchTab('resources');return false" href="#">Resources</a>
+    <a data-tab="testimonials" onclick="switchTab('testimonials');return false" href="#">Testimonials</a>
+    <a data-tab="clients" onclick="switchTab('clients');return false" href="#">Clients</a>
+    <a data-tab="media" onclick="switchTab('media');return false" href="#">Media</a>
+    <a data-tab="settings" onclick="switchTab('settings');return false" href="#">Settings</a>
+    <a data-tab="translations" onclick="switchTab('translations');return false" href="#">Translations</a>
+    <a data-tab="scheduler" onclick="switchTab('scheduler');return false" href="#">📅 Scheduler</a>
     <a href="?logout" class="logout">Logout</a>
   </nav>
   <div class="sidebar-stats">v2.0 &middot; <?=h(ADMIN_USER)?></div>
