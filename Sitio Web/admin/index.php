@@ -1951,6 +1951,4 @@ function mediaImportUnsplash(url, author) {
 </div>
 
 </body>
-</body>
 </html>
-
