@@ -1703,9 +1703,6 @@ function mediaDeleteSelected() {
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(loadMediaGrid, 500);
 });
-        } else toast(r.error);
-    });
-}
 
 // ── SETTINGS ──
 function saveSettingsGroup(btn) {
