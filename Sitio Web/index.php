@@ -887,7 +887,6 @@ body.no-scroll { overflow: hidden; }
             <span style="flex-shrink:0;margin-top:1px;">🇨🇴</span>
             <span>Intsolcom SAS<br><?= h($s('contact_col_address','Carrera 53 #79-01, Barranquilla, Colombia')) ?></span>
           </span>
-          <a href="<?= h('https://wa.me/' . str_replace(['+',' ','-','(',')'],'',$s('contact_whatsapp','+573005550199'))) ?>" style="font-size:.8125rem;color:#00C896;">WhatsApp</a>
         </div>
       </div>
     </div>
