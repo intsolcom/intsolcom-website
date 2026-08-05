@@ -855,6 +855,7 @@ body.no-scroll { overflow: hidden; }
         <div class="footer__links">
           <a href="/holding"><?= t('About Us') ?></a>
           <a href="/business-units"><?= t('Business Units') ?></a>
+          <a href="/nearshore-development"><?= t('Nearshore Development') ?></a>
           <a href="/industries"><?= t('Industries') ?></a>
           <a href="/resources"><?= t('Resources') ?></a>
           <a href="/contact"><?= t('Contact') ?></a>
@@ -872,19 +873,32 @@ body.no-scroll { overflow: hidden; }
       <div>
         <h4 class="footer__heading"><?= t('Contact') ?></h4>
         <div class="footer__links">
-          <a style="color:#fff;font-weight:600;font-size:.8125rem;">Intsolcom, LLC — United States (Strategic &amp; Commercial)</a>
-          <span style="font-size:.8125rem;color:#94A3B8;line-height:1.5;"><?= h($s('contact_usa_address','390 NE 191st St, STE 17284, Miami, FL 33179')) ?></span>
-          <span style="font-size:.8125rem;color:#94A3B8;"><?= h($s('contact_usa_phone','+1 (302) 555-0199')) ?></span>
-          <a style="color:#fff;font-weight:600;font-size:.8125rem;margin-top:.5rem;">Intsolcom SAS — Colombia (Operational Delivery)</a>
-          <span style="font-size:.8125rem;color:#94A3B8;line-height:1.5;"><?= h($s('contact_col_address','Carrera 53 #79-01, Barranquilla, Colombia')) ?></span>
-          <a href="<?= h('mailto:' . $s('contact_col_email','info@intsolcom.com')) ?>" style="font-size:.8125rem;color:#00C896;"><?= h($s('contact_col_email','info@intsolcom.com')) ?></a>
+          <span style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8125rem;color:#94A3B8;line-height:1.6;">
+            <span style="flex-shrink:0;margin-top:1px;">📍</span>
+            <span>Intsolcom, LLC<br><?= h($s('contact_usa_address','390 NE 191st St, STE 17284, Miami, FL 33179')) ?></span>
+          </span>
+          <a href="tel:+17863861515" style="display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:#94A3B8;line-height:1.6;transition:color .2s;" onmouseover="this.style.color='#00C896'" onmouseout="this.style.color='#94A3B8'">
+            <span>📞</span>
+            <span><?= h($s('contact_usa_phone','+1 (786) 386-1515')) ?></span>
+          </a>
+          <a href="mailto:contact@intsolcom.com" style="display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:#94A3B8;line-height:1.6;transition:color .2s;" onmouseover="this.style.color='#00C896'" onmouseout="this.style.color='#94A3B8'">
+            <span>✉</span>
+            <span>contact@intsolcom.com</span>
+          </a>
+          <span style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8125rem;color:#94A3B8;line-height:1.6;margin-top:.35rem;">
+            <span style="flex-shrink:0;margin-top:1px;">🇨🇴</span>
+            <span>Intsolcom SAS<br><?= h($s('contact_col_address','Carrera 53 #79-01, Barranquilla, Colombia')) ?></span>
+          </span>
           <a href="<?= h('https://wa.me/' . str_replace(['+',' ','-','(',')'],'',$s('contact_whatsapp','+573005550199'))) ?>" style="font-size:.8125rem;color:#00C896;">WhatsApp</a>
         </div>
       </div>
     </div>
     <div class="footer__bottom">
-      <span><?= h($s('footer_copyright','© 2026 INTSOLCOM LLC')) ?></span>
-      <div class="footer__bottom-links">
+      <div style="text-align:center;">
+        <span style="display:block;"><?= h($s('footer_copyright','© 2026 INTSOLCOM, LLC. All rights reserved.')) ?></span>
+        <span style="display:block;font-size:.7rem;color:#64748B;margin-top:4px;"><?= h($s('footer_tagline','Technology Holding • United States & Colombia')) ?></span>
+      </div>
+      <div class="footer__bottom-links" style="justify-content:center;">
         <a href="/privacy"><?= t('Privacy Policy') ?></a>
         <a href="/terms"><?= t('Terms of Service') ?></a>
       </div>
