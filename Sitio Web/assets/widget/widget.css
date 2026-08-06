@@ -1,0 +1,9 @@
+/* INTSOLCOM Blog Widget — Default Theme */
+intsolcom-blog {
+  --blog-primary: #00C896;
+  --blog-text: #0F172A;
+  --blog-bg: #FFFFFF;
+  --blog-radius: 12px;
+  display: block;
+  width: 100%;
+}
