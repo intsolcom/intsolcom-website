@@ -31,12 +31,58 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================
-     2. NAVIGATION — scroll class, mobile toggle
+     2. NAVIGATION — scroll class, mobile toggle, auto theme
      ========================================================== */
   const nav = document.querySelector('.nav');
   if (nav) {
     const tick = () => nav.classList.toggle('scrolled', window.scrollY > 50);
     window.addEventListener('scroll', tick, { passive: true }); tick();
+
+    // ── Auto theme detection ──────────────────────────────
+    // Decides nav contrast by the page's FIRST section:
+    // dark top → .nav--transparent (white logo/links)
+    // light top → plain nav (dark logo/links)
+    (function autoNavTheme() {
+      // 1) Normalize logo spans: strip inline colors so CSS classes apply
+      const logo = nav.querySelector('.nav__logo');
+      if (logo) {
+        logo.querySelectorAll('span').forEach((sp, i) => {
+          sp.removeAttribute('style');
+          if (i === 0) sp.classList.add('nav__logo-text');
+          else sp.classList.add('nav__logo-accent');
+        });
+      }
+
+      // 2) Find the first visible section behind the nav
+      const probe = document.querySelector(
+        '.hero, .page-hero, main > section, main > article, body > section, .bu-hero, .bu-detail-hero, .section-dark'
+      );
+      if (!probe) return;
+
+      const cls = String(probe.className || '');
+      const isDarkClass = /(^|\s)(hero|page-hero|section-dark)(\s|$)/.test(cls);
+
+      // 3) Sample actual background color (walk up if transparent)
+      let el = probe;
+      let bg = '';
+      while (el && el !== document.documentElement) {
+        bg = getComputedStyle(el).backgroundColor;
+        if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') break;
+        el = el.parentElement;
+      }
+
+      let dark = isDarkClass;
+      if (!dark && bg && bg !== 'transparent') {
+        const m = bg.match(/[\d.]+/g);
+        if (m && m.length >= 3) {
+          const r = +m[0] / 255, g = +m[1] / 255, b = +m[2] / 255;
+          const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+          dark = lum < 0.35;
+        }
+      }
+
+      nav.classList.toggle('nav--transparent', dark);
+    })();
   }
 
   const navToggle   = document.querySelector('.nav-toggle');

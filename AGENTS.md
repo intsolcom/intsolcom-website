@@ -11,6 +11,7 @@
 - Emojis en JS como escapes Unicode (`\u{1F310}`).
 - El logo del sitio debe ser CSS-driven (clases `.nav__logo-text` / `.nav__logo-accent`), nunca colores inline desde settings.
 - Páginas con hero oscuro usan `nav--transparent`; páginas con top claro usan `nav` simple.
+- El tema del nav se auto-corrige en runtime vía `autoNavTheme()` en main.js (detecta si el primer bloque es oscuro). No quitar esa lógica.
 - El menú móvil se togglea con clases `open` y `active` (JS) — mantener ambas en CSS.
 - Wontia AIP = Applied Intelligence System (no CRM). INTSOLCOM solo da intro y linkea a wontia.com.
 - IA Annotation Manager linkea a iaam.com.
