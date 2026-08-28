@@ -70,6 +70,21 @@
       this.loadPosts();
     }
 
+    _esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    _safeColor(c) {
+      return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c) ? c : '#00C896';
+    }
+
+    _safeUrl(u) {
+      u = String(u || '');
+      return /^(https:\/\/|mailto:)/i.test(u) ? u : '#';
+    }
+
     async loadPosts() {
       if (this._loading) return;
       this._loading = true;
@@ -91,7 +106,7 @@
         if (!resp.ok) throw new Error('API error ' + resp.status);
         var json = await resp.json();
         if (json.ok) this.renderPosts(json.data);
-        else this.showError(json.error || 'Failed to load posts');
+        else this.showError(this._esc(json.error || 'Failed to load posts'));
       } catch (e) {
         this.showError('Could not load blog posts');
       }
@@ -103,10 +118,13 @@
       for (var i = 0; i < this._config.limit; i++) {
         cards += '<div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-meta"></div></div>';
       }
-      this.shadowRoot.innerHTML = '<style>' + THEME + '</style><div class="blog-' + this._config.layout + '">' + cards + '</div>';
+      this.shadowRoot.innerHTML = '<style>' + THEME + '</style><div class="blog-' + this._esc(this._config.layout) + '">' + cards + '</div>';
     }
 
     renderPosts(data) {
+      var esc = this._esc.bind(this);
+      var safeColor = this._safeColor.bind(this);
+      var safeUrl = this._safeUrl.bind(this);
       var posts = data.items || [];
       var pagination = data.pagination || {};
       if (!posts.length) {
@@ -119,18 +137,18 @@
 
       posts.forEach(function(p, i) {
         var isFeatured = i === 0 && p.featured;
-        var url = 'https://blog.intsolcom.com/' + p.slug;
-        html += '<a class="card' + (isFeatured ? ' featured-card' : '') + '" href="' + url + '" target="_blank" rel="noopener">';
+        var url = safeUrl('https://blog.intsolcom.com/' + encodeURIComponent(String(p.slug || '')));
+        html += '<a class="card' + (isFeatured ? ' featured-card' : '') + '" href="' + url + '" target="_blank" rel="noopener noreferrer">';
         if (isFeatured) html += '<span class="featured-badge">Featured</span>';
-        if (p.cover_image) html += '<img class="card-img" src="' + p.cover_image + '" alt="' + (p.title || '') + '" loading="lazy">';
+        if (p.cover_image) html += '<img class="card-img" src="' + safeUrl(p.cover_image) + '" alt="' + esc(p.title) + '" loading="lazy">';
         html += '<div class="card-body">';
-        if (p.cat_name) html += '<span class="card-cat" style="background:' + (p.cat_color || '#00C896') + '15;color:' + (p.cat_color || '#00C896') + '">' + p.cat_name + '</span>';
-        html += '<div class="card-title">' + (p.title || '') + '</div>';
-        if (p.excerpt) html += '<div class="card-excerpt">' + p.excerpt + '</div>';
+        if (p.cat_name) html += '<span class="card-cat" style="background:' + safeColor(p.cat_color) + '15;color:' + safeColor(p.cat_color) + '">' + esc(p.cat_name) + '</span>';
+        html += '<div class="card-title">' + esc(p.title) + '</div>';
+        if (p.excerpt) html += '<div class="card-excerpt">' + esc(p.excerpt) + '</div>';
         html += '<div class="card-meta">';
-        if (p.author_name) html += '<span>' + p.author_name + '</span>';
+        if (p.author_name) html += '<span>' + esc(p.author_name) + '</span>';
         if (p.published_at) html += '<span>' + new Date(p.published_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) + '</span>';
-        if (p.read_time) html += '<span>' + p.read_time + ' min read</span>';
+        if (p.read_time) html += '<span>' + esc(p.read_time) + ' min read</span>';
         html += '</div></div></a>';
       });
 
@@ -141,7 +159,7 @@
         var self = this;
         html += '<div class="pagination">';
         html += '<button ' + (pagination.has_prev ? '' : 'disabled') + ' onclick="this.closest(\'intsolcom-blog\').prevPage()">← Prev</button>';
-        html += '<span style="font-size:.78rem;color:#94a3b8">' + pagination.page + ' / ' + pagination.total_pages + '</span>';
+        html += '<span style="font-size:.78rem;color:#94a3b8">' + esc(pagination.page) + ' / ' + esc(pagination.total_pages) + '</span>';
         html += '<button ' + (pagination.has_next ? '' : 'disabled') + ' onclick="this.closest(\'intsolcom-blog\').nextPage()">Next →</button>';
         html += '</div>';
       }
@@ -151,7 +169,7 @@
 
     prevPage() { if (this._page > 1) { this._page--; this.loadPosts(); } }
     nextPage() { this._page++; this.loadPosts(); }
-    showError(msg) { this.shadowRoot.innerHTML = '<style>' + THEME + '</style><div class="error-state">' + msg + '</div>'; }
+    showError(msg) { this.shadowRoot.innerHTML = '<style>' + THEME + '</style><div class="error-state">' + this._esc(msg) + '</div>'; }
   }
 
   if (!customElements.get('intsolcom-blog')) {

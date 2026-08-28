@@ -24,9 +24,21 @@ function apiAuth(): bool {
     $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
     if (preg_match('/Bearer\s+(.+)/', $header, $m)) {
         $token = $m[1];
-        return $token === (defined('API_BLOG_TOKEN') ? API_BLOG_TOKEN : 'intsolcom_blog_api_2026');
+        $expected = defined('API_BLOG_TOKEN') ? API_BLOG_TOKEN : '';
+        if ($expected === '') return false; // no token configured → deny
+        return hash_equals($expected, $token);
     }
     return false;
+}
+
+// ── HTML sanitizer for blog content (defense in depth) ──
+function apiSanitizeHtml(string $html): string {
+    $allowed = '<p><br><h2><h3><h4><ul><ol><li><strong><b><em><i><a><img><blockquote><code><pre><span><table><thead><tbody><tr><th><td><hr><figure><figcaption>';
+    $out = strip_tags($html, $allowed);
+    // Strip event handlers and javascript: URLs
+    $out = preg_replace('/\son\w+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $out);
+    $out = preg_replace('/(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/i', '$1="#"', $out);
+    return $out;
 }
 
 function apiError(int $code, string $msg): never {
@@ -73,7 +85,7 @@ try {
         $title      = trim($body['title'] ?? '');
         $slug       = trim($body['slug'] ?? '');
         $excerpt    = trim($body['excerpt'] ?? '');
-        $content    = $body['content'] ?? '';
+        $content    = apiSanitizeHtml($body['content'] ?? '');
         $coverImage = trim($body['cover_image'] ?? '');
         $author     = trim($body['author'] ?? 'INTSOLCOM Team');
         $readTime   = (int)($body['read_time'] ?? 5);
@@ -131,7 +143,7 @@ try {
         foreach ($fields as $f) {
             if (isset($body[$f])) {
                 $sets[] = "$f = ?";
-                $vals[] = $body[$f];
+                $vals[] = $f === 'content' ? apiSanitizeHtml($body[$f]) : $body[$f];
             }
         }
 
@@ -146,5 +158,6 @@ try {
 
     apiError(405, 'Method not allowed');
 } catch (Exception $e) {
-    apiError(500, 'Server error: ' . $e->getMessage());
+    error_log('[INTSOLCOM] API blog error: ' . $e->getMessage());
+    apiError(500, 'Server error');
 }

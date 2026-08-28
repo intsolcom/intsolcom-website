@@ -1,20 +1,76 @@
 <?php
+// ─── Session hardening (before session_start) ───
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+ini_set('session.use_strict_mode', '1');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Lax');
+if ($isHttps) ini_set('session.cookie_secure', '1');
 session_start();
 require_once __DIR__ . '/../includes/config.php';
+
+// ─── CSRF token (one per session) ───
+if (empty($_SESSION['intsolcom_csrf'])) {
+    $_SESSION['intsolcom_csrf'] = bin2hex(random_bytes(32));
+}
+$csrfToken = $_SESSION['intsolcom_csrf'];
 
 // ─── Auth ───
 if (isset($_GET['logout'])) { session_destroy(); header('Location: /'); exit; }
 $isLoggedIn = isset($_SESSION['intsolcom_admin']) && $_SESSION['intsolcom_admin'] === true;
-if (!$isLoggedIn && !empty($_POST['username']) && !empty($_POST['password'])) {
-    if ($_POST['username'] === ADMIN_USER && $_POST['password'] === ADMIN_PASS) {
-        $_SESSION['intsolcom_admin'] = true;
-        $isLoggedIn = true;
-        header('Location: /admin'); exit;
-    } else { $loginError = 'Invalid credentials.'; }
+
+// Brute-force lockout: 5 failed attempts → 15 min lock
+$loginLockUntil = (int)($_SESSION['intsolcom_lock_until'] ?? 0);
+$loginLocked = $loginLockUntil > time();
+if ($loginLocked && !empty($_POST['username'])) {
+    $loginError = 'Too many failed attempts. Locked for 15 minutes.';
+}
+
+if (!$isLoggedIn && !$loginLocked && !empty($_POST['username']) && !empty($_POST['password'])) {
+    // CSRF check on login form
+    $loginCsrfOk = isset($_POST['csrf']) && hash_equals($csrfToken, (string)$_POST['csrf']);
+    if (!$loginCsrfOk) {
+        $loginError = 'Invalid session. Please try again.';
+    } else {
+        $userOk = hash_equals((string)ADMIN_USER, (string)$_POST['username']);
+        $passOk = false;
+        if (defined('ADMIN_PASS_HASH') && ADMIN_PASS_HASH !== '') {
+            $passOk = password_verify((string)$_POST['password'], ADMIN_PASS_HASH);
+        } else {
+            $passOk = hash_equals((string)ADMIN_PASS, (string)$_POST['password']);
+        }
+        if ($userOk && $passOk) {
+            session_regenerate_id(true);
+            $_SESSION['intsolcom_admin'] = true;
+            $_SESSION['intsolcom_csrf'] = bin2hex(random_bytes(32));
+            unset($_SESSION['intsolcom_fails'], $_SESSION['intsolcom_lock_until']);
+            $isLoggedIn = true;
+            header('Location: /admin'); exit;
+        } else {
+            $_SESSION['intsolcom_fails'] = (int)($_SESSION['intsolcom_fails'] ?? 0) + 1;
+            if ((int)$_SESSION['intsolcom_fails'] >= 5) {
+                $_SESSION['intsolcom_lock_until'] = time() + 900;
+                $_SESSION['intsolcom_fails'] = 0;
+                $loginError = 'Too many failed attempts. Locked for 15 minutes.';
+            } else {
+                $loginError = 'Invalid credentials.';
+            }
+            sleep(1); // slow down brute force
+        }
+    }
 }
 
 // ─── AJAX Handler ───
 if ($isLoggedIn && isset($_GET['action'])) {
+    // CSRF verification for ALL state-changing requests
+    $sent = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    $csrfOk = $sent !== '' && hash_equals($csrfToken, $sent);
+    if (!$csrfOk) {
+        http_response_code(403);
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'error' => 'CSRF token invalid']);
+        exit;
+    }
     header('Content-Type: application/json');
     $action = $_GET['action'];
     try {
@@ -121,52 +177,54 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 if ($file['error'] !== UPLOAD_ERR_OK) { echo json_encode(['ok'=>false,'error'=>'Upload error: '.$file['error']]); exit; }
                 if ($file['size'] > 10 * 1024 * 1024) { echo json_encode(['ok'=>false,'error'=>'Max 10MB']); exit; }
                 $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION) ?: 'jpg');
-                if (!in_array($ext, ['jpg','jpeg','png','gif','webp','svg','ico'])) { echo json_encode(['ok'=>false,'error'=>'Images only (jpg,png,gif,webp,svg)']); exit; }
-                
-                $newName = 'img_' . uniqid() . '.' . ($ext === 'svg' ? 'svg' : ($ext === 'gif' ? 'gif' : 'webp'));
+                if (!in_array($ext, ['jpg','jpeg','png','gif','webp','ico'])) { echo json_encode(['ok'=>false,'error'=>'Images only (jpg,png,gif,webp)']); exit; }
+
+                // Real MIME validation — never trust client or extension
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $mime = $finfo->file($file['tmp_name']);
+                $allowedMime = [
+                    'image/jpeg' => 'jpg', 'image/png' => 'png',
+                    'image/gif' => 'gif', 'image/webp' => 'webp',
+                    'image/x-icon' => 'ico', 'image/vnd.microsoft.icon' => 'ico',
+                ];
+                if (!isset($allowedMime[$mime])) { echo json_encode(['ok'=>false,'error'=>'Invalid file type']); exit; }
+                $realExt = $allowedMime[$mime];
+
+                $newName = 'img_' . uniqid() . '.' . ($realExt === 'gif' ? 'gif' : 'webp');
                 $dest = UPLOAD_DIR . $newName;
-                
-                // SVG: just move
-                if ($ext === 'svg') {
-                    if (!move_uploaded_file($file['tmp_name'], $dest)) { echo json_encode(['ok'=>false,'error'=>'Move failed']); exit; }
-                }
+
                 // GIF: just move (preserve animation)
-                else if ($ext === 'gif') {
+                if ($realExt === 'gif') {
                     if (!move_uploaded_file($file['tmp_name'], $dest)) { echo json_encode(['ok'=>false,'error'=>'Move failed']); exit; }
                 }
-                // JPG/PNG/WebP: convert to WebP + strip EXIF
+                // JPG/PNG/WebP/ICO: convert to WebP + strip EXIF
                 else {
                     $srcImg = null;
-                    if (in_array($ext, ['jpg','jpeg'])) $srcImg = @imagecreatefromjpeg($file['tmp_name']);
-                    else if ($ext === 'png') $srcImg = @imagecreatefrompng($file['tmp_name']);
-                    else if ($ext === 'webp') $srcImg = @imagecreatefromwebp($file['tmp_name']);
-                    
-                    if (!$srcImg) {
-                        // Fallback: just move original
-                        $newName = 'img_' . uniqid() . '.' . $ext;
-                        $dest = UPLOAD_DIR . $newName;
-                        move_uploaded_file($file['tmp_name'], $dest);
-                    } else {
-                        // Strip EXIF by re-encoding
-                        imagepalettetotruecolor($srcImg);
-                        imagewebp($srcImg, $dest, 82);
-                        imagedestroy($srcImg);
-                        // Keep original size: resize if > 2000px
-                        list($w, $h) = getimagesize($dest);
-                        if ($w > 2000) {
-                            $ratio = 2000 / $w;
-                            $newW = 2000;
-                            $newH = (int)($h * $ratio);
-                            $resized = imagecreatetruecolor($newW, $newH);
-                            $src2 = imagecreatefromwebp($dest);
-                            imagecopyresampled($resized, $src2, 0, 0, 0, 0, $newW, $newH, $w, $h);
-                            imagewebp($resized, $dest, 82);
-                            imagedestroy($resized);
-                            imagedestroy($src2);
-                        }
+                    if ($realExt === 'jpg') $srcImg = @imagecreatefromjpeg($file['tmp_name']);
+                    else if ($realExt === 'png') $srcImg = @imagecreatefrompng($file['tmp_name']);
+                    else if ($realExt === 'webp') $srcImg = @imagecreatefromwebp($file['tmp_name']);
+
+                    if (!$srcImg) { echo json_encode(['ok'=>false,'error'=>'Corrupt or unsupported image']); exit; }
+
+                    // Strip EXIF by re-encoding
+                    imagepalettetotruecolor($srcImg);
+                    imagewebp($srcImg, $dest, 82);
+                    imagedestroy($srcImg);
+                    // Keep original size: resize if > 2000px
+                    list($w, $h) = getimagesize($dest);
+                    if ($w > 2000) {
+                        $ratio = 2000 / $w;
+                        $newW = 2000;
+                        $newH = (int)($h * $ratio);
+                        $resized = imagecreatetruecolor($newW, $newH);
+                        $src2 = imagecreatefromwebp($dest);
+                        imagecopyresampled($resized, $src2, 0, 0, 0, 0, $newW, $newH, $w, $h);
+                        imagewebp($resized, $dest, 82);
+                        imagedestroy($resized);
+                        imagedestroy($src2);
                     }
                 }
-                
+
                 $folder = $_POST['folder'] ?? 'general';
                 $folder = preg_replace('/[^a-z0-9_-]/', '', strtolower($folder)) ?: 'general';
                 $albumId = null;
@@ -174,10 +232,10 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 $alb->execute([$folder]);
                 $albumRow = $alb->fetch();
                 if ($albumRow) $albumId = $albumRow['id'];
-                
-                $db->prepare("INSERT INTO media (filename, original_name, mime_type, file_size, folder, webp_version) VALUES (?, ?, ?, ?, ?, ?)")->execute([$newName, $file['name'], $file['type'] ?? 'image/webp', filesize($dest), $folder, $ext !== 'webp' && $ext !== 'svg' && $ext !== 'gif' ? 'webp' : '']);
+
+                $db->prepare("INSERT INTO media (filename, original_name, mime_type, file_size, folder, webp_version) VALUES (?, ?, ?, ?, ?, ?)")->execute([$newName, $file['name'], $mime, filesize($dest), $folder, $realExt !== 'gif' ? 'webp' : '']);
                 $mediaId = (int)$db->lastInsertId();
-                
+
                 // Update album cover if first image
                 if ($albumId) {
                     $c = $db->prepare("SELECT cover_image FROM media_albums WHERE id = ?");
@@ -186,8 +244,8 @@ if ($isLoggedIn && isset($_GET['action'])) {
                         $db->prepare("UPDATE media_albums SET cover_image = ? WHERE id = ?")->execute([$newName, $albumId]);
                     }
                 }
-                
-                echo json_encode(['ok'=>true, 'url' => UPLOAD_URL . $newName, 'filename'=>$newName, 'id'=>$mediaId, 'folder'=>$folder, 'webp'=>$ext !== 'webp' && $ext !== 'svg' && $ext !== 'gif']); exit;
+
+                echo json_encode(['ok'=>true, 'url' => UPLOAD_URL . $newName, 'filename'=>$newName, 'id'=>$mediaId, 'folder'=>$folder, 'webp'=>$realExt !== 'gif']); exit;
 
             // ── SAVE UNIT ──
             case 'save_unit':
@@ -324,7 +382,9 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 if (!$postId || empty($platforms) || !$scheduledAt) {
                     echo json_encode(['ok'=>false, 'error'=>'post_id, platforms, and scheduled_at required']); exit;
                 }
-                $post = $db->prepare("SELECT title FROM resources WHERE id = ?")->execute([$postId])->fetch();
+                $postSt = $db->prepare("SELECT title FROM resources WHERE id = ?");
+                $postSt->execute([$postId]);
+                $post = $postSt->fetch();
                 $title = $post ? $post['title'] : 'Unknown';
                 $ins = $db->prepare("INSERT INTO distro_schedule (post_id, title, platforms, scheduled_at, status) VALUES (?,?,?,?,'pending')");
                 $ins->execute([$postId, $title, json_encode($platforms), $scheduledAt]);
@@ -344,7 +404,9 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 if (!$postId || empty($platforms)) {
                     echo json_encode(['ok'=>false, 'error'=>'post_id and platforms required']); exit;
                 }
-                $post = $db->prepare("SELECT * FROM resources WHERE id = ?")->execute([$postId])->fetch();
+                $postSt = $db->prepare("SELECT * FROM resources WHERE id = ?");
+                $postSt->execute([$postId]);
+                $post = $postSt->fetch();
                 if (!$post) { echo json_encode(['ok'=>false, 'error'=>'Post not found']); exit; }
                 $results = [];
                 foreach ($platforms as $pf) {
@@ -379,14 +441,15 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 curl_close($ch);
                 $results['intsolcom'] = ['ok'=>$code===200, 'code'=>$code, 'ms'=>$ms, 'endpoint'=>'GET /api/blog'];
 
-                // Check LinkedIn tokens
+                // Check LinkedIn tokens (decrypt at rest values)
                 foreach (['linkedin_me','linkedin_co'] as $pf) {
                     $tok = $db->prepare("SELECT access_token, expires_at FROM distro_tokens WHERE platform=? AND status='active' LIMIT 1");
                     $tok->execute([$pf]); $t = $tok->fetch();
                     if ($t && $t['access_token']) {
+                        $accessTok = bytDecrypt($t['access_token']);
                         $start = microtime(true);
                         $ch = curl_init('https://api.linkedin.com/v2/userinfo');
-                        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_TIMEOUT=>8, CURLOPT_HTTPHEADER=>['Authorization: Bearer '.$t['access_token']]]);
+                        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_TIMEOUT=>8, CURLOPT_HTTPHEADER=>['Authorization: Bearer '.$accessTok]]);
                         curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                         $ms = round((microtime(true)-$start)*1000);
                         curl_close($ch);
@@ -408,15 +471,17 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 $allOk = !in_array(false, array_column($results, 'ok'));
                 echo json_encode(['ok'=>true, 'all_ok'=>$allOk, 'results'=>$results]); exit;
 
-            // ── DISTRO: SAVE TOKEN ──
+            // ── DISTRO: SAVE TOKEN (encrypted at rest) ──
             case 'distro_save_token':
                 $platform = $_POST['platform'] ?? '';
                 $accessToken = $_POST['access_token'] ?? '';
                 $refreshToken = $_POST['refresh_token'] ?? '';
                 $expiresAt = $_POST['expires_at'] ?? null;
                 if (!$platform || !$accessToken) { echo json_encode(['ok'=>false,'error'=>'platform and access_token required']); exit; }
+                $encAccess  = bytEncrypt($accessToken);
+                $encRefresh = $refreshToken !== '' ? bytEncrypt($refreshToken) : '';
                 $db->prepare("INSERT INTO distro_tokens (platform, access_token, refresh_token, expires_at, status) VALUES (?,?,?,?,'active') ON DUPLICATE KEY UPDATE access_token=?, refresh_token=?, expires_at=?, status='active'")
-                   ->execute([$platform, $accessToken, $refreshToken, $expiresAt, $accessToken, $refreshToken, $expiresAt]);
+                   ->execute([$platform, $encAccess, $encRefresh, $expiresAt, $encAccess, $encRefresh, $expiresAt]);
                 echo json_encode(['ok'=>true]); exit;
 
             // ── GET TABLE DATA ──
@@ -444,7 +509,9 @@ if ($isLoggedIn && isset($_GET['action'])) {
             case 'delete_media':
                 $id = (int)($_POST['id'] ?? 0);
                 if ($id <= 0) { echo json_encode(['ok'=>false,'error'=>'Invalid id']); exit; }
-                $row = $db->prepare("SELECT filename FROM media WHERE id = ?")->execute([$id])->fetch();
+                $rowSt = $db->prepare("SELECT filename FROM media WHERE id = ?");
+                $rowSt->execute([$id]);
+                $row = $rowSt->fetch();
                 if ($row) @unlink(UPLOAD_DIR . $row['filename']);
                 $db->prepare("DELETE FROM media WHERE id = ?")->execute([$id]);
                 echo json_encode(['ok'=>true]); exit;
@@ -538,8 +605,9 @@ if (!$isLoggedIn) {
     </head><body>
     <form method="post" class="login-box"><h1>INTSOL<span>COM</span></h1><div class="sub">Administration Panel</div>
     <?php if (!empty($loginError)): ?><div class="error"><?=h($loginError)?></div><?php endif; ?>
-    <div class="field"><label>Username</label><input type="text" name="username" required autofocus></div>
-    <div class="field"><label>Password</label><input type="password" name="password" required></div>
+    <div class="field"><label>Username</label><input type="text" name="username" required autofocus autocomplete="username"></div>
+    <div class="field"><label>Password</label><input type="password" name="password" required autocomplete="current-password"></div>
+    <input type="hidden" name="csrf" value="<?=h($csrfToken)?>">
     <button type="submit" class="btn">Sign In</button></form>
     </body></html><?php
     exit;
@@ -617,7 +685,28 @@ function sectionTypeLabel($t) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="csrf-token" content="<?=h($csrfToken)?>">
 <title>INTSOLCOM — Admin Panel</title>
+<script>
+// CSRF: every same-origin fetch gets the session token automatically
+// (cross-origin requests like Unsplash are left untouched to avoid CORS preflight issues)
+(function(){
+  var t = document.querySelector('meta[name="csrf-token"]');
+  var token = t ? t.content : '';
+  var _f = window.fetch;
+  window.fetch = function(input, init) {
+    init = init || {};
+    var url = typeof input === 'string' ? input : (input && input.url ? input.url : '');
+    var sameOrigin = url.indexOf('http') !== 0 || url.indexOf(location.origin) === 0;
+    if (sameOrigin && token) {
+      var h = new Headers(init.headers || {});
+      if (!h.has('X-CSRF-Token')) h.set('X-CSRF-Token', token);
+      init.headers = h;
+    }
+    return _f(input, init);
+  };
+})();
+</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#0F172A;color:#E2E8F0;display:flex;min-height:100vh}

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
 
 $page     = getPage('contact');
 $sections = $page ? getSections($page['id']) : [];
@@ -25,15 +26,26 @@ $success  = false;
 $formData = ['name' => '', 'email' => '', 'company' => '', 'phone' => '', 'country' => '', 'service_interest' => '', 'message' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // Honeypot: bots fill hidden field — pretend success, store nothing
+  if (!empty($_POST['website'])) {
+    $success = true;
+  } else {
   $formData = [
-    'name'             => trim($_POST['name']             ?? ''),
-    'email'            => trim($_POST['email']            ?? ''),
-    'company'          => trim($_POST['company']          ?? ''),
-    'phone'            => trim($_POST['phone']            ?? ''),
-    'country'          => trim($_POST['country']          ?? ''),
-    'service_interest' => trim($_POST['service_interest'] ?? ''),
-    'message'          => trim($_POST['message']          ?? ''),
+    'name'             => mb_substr(trim($_POST['name']             ?? ''), 0, 120),
+    'email'            => mb_substr(trim($_POST['email']            ?? ''), 0, 190),
+    'company'          => mb_substr(trim($_POST['company']          ?? ''), 0, 190),
+    'phone'            => mb_substr(trim($_POST['phone']            ?? ''), 0, 40),
+    'country'          => mb_substr(trim($_POST['country']          ?? ''), 0, 120),
+    'service_interest' => mb_substr(trim($_POST['service_interest'] ?? ''), 0, 120),
+    'message'          => mb_substr(trim($_POST['message']          ?? ''), 0, 3000),
   ];
+
+  // Rate limit: max 3 submissions per 10 minutes per session
+  $now = time();
+  $_SESSION['contact_submits'] = array_values(array_filter(
+    (array)($_SESSION['contact_submits'] ?? []),
+    fn($t) => ($now - (int)$t) < 600
+  ));
 
   if ($formData['name'] === '')            $errors['name']             = t('Name is required.');
   if ($formData['email'] === '')           $errors['email']            = t('Email is required.');
@@ -43,6 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($formData['message'] === '')          $errors['message']          = t('Message is required.');
   if (!empty($formData['phone']) && !preg_match('/^[+\d\s\-().]{7,20}$/', $formData['phone']))
                                             $errors['phone']            = t('Please enter a valid phone number.');
+  if (count($_SESSION['contact_submits']) >= 3)
+                                            $errors['_general']         = t('Too many submissions. Please try again in a few minutes.');
 
   if (empty($errors)) {
     try {
@@ -57,11 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $formData['message'],
         'contact_page',
       ]);
+      $_SESSION['contact_submits'][] = $now;
       $success = true;
       $formData = ['name' => '', 'email' => '', 'company' => '', 'phone' => '', 'country' => '', 'service_interest' => '', 'message' => ''];
     } catch (Exception $e) {
       $errors['general'] = t('Something went wrong. Please try again or email us directly.');
     }
+  }
   }
 }
 
@@ -162,10 +178,14 @@ $serviceOptions = [
               <p><?= t('Your message has been received. Our team will get back to you within 24 hours.') ?></p>
             </div>
           <?php else: ?>
-              <?php if (!empty($errors['general'])): ?>
-                <div class="form-error-msg" style="margin-bottom:var(--space-4);"><?= ht($errors['general']) ?></div>
+              <?php if (!empty($errors['general']) || !empty($errors['_general'])): ?>
+                <div class="form-error-msg" style="margin-bottom:var(--space-4);"><?= ht($errors['general'] ?? $errors['_general']) ?></div>
               <?php endif; ?>
               <form method="POST" action="">
+                <div style="position:absolute;left:-9999px;top:-9999px;height:1px;width:1px;overflow:hidden;" aria-hidden="true">
+                  <label for="website">Website</label>
+                  <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                </div>
                 <div class="form-group">
                   <label class="form-label" for="name"><?= t('Name') ?> *</label>
                   <input type="text" id="name" name="name" class="form-input <?= isset($errors['name']) ? 'error' : '' ?>" value="<?= h($formData['name']) ?>" placeholder="<?= t('Your full name') ?>" required>

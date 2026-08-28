@@ -792,9 +792,26 @@ const ROUTES = {
 };
 
 // ============================================================
+// SECURITY HEADERS
+// ============================================================
+const SEC_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://www.youtube.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://marcasbpo.com https://app.wontia.com; connect-src 'self' https://www.youtube.com",
+};
+if (process.env.NODE_ENV === 'production') {
+  SEC_HEADERS['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+}
+
+// ============================================================
 // HTTP SERVER
 // ============================================================
 const server = http.createServer((req, res) => {
+  for (const [k, v] of Object.entries(SEC_HEADERS)) {
+    res.setHeader(k, v);
+  }
   const url = new URL(req.url, 'http://localhost');
   let pathname = url.pathname.replace(/\/+$/, '') || '/';
 

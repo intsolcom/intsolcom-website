@@ -154,7 +154,14 @@ $shareTitle = urlencode($post['title']);
                 <p style="font-size:1.25rem;line-height:1.65;color:var(--color-mid);margin-bottom:var(--space-8);font-weight:500;"><?= ht($post['excerpt']) ?></p>
             <?php endif; ?>
             <div class="blog-content" style="line-height:1.75;font-size:1.0625rem;color:var(--color-mid);">
-                <?= $post['content'] ?>
+                <?php
+                // Defense in depth: strip dangerous tags/attrs from stored HTML
+                $allowed = '<p><br><h2><h3><h4><ul><ol><li><strong><b><em><i><a><img><blockquote><code><pre><span><table><thead><tbody><tr><th><td><hr><figure><figcaption>';
+                $safeContent = strip_tags((string)($post['content'] ?? ''), $allowed);
+                $safeContent = preg_replace('/\son\w+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $safeContent);
+                $safeContent = preg_replace('/(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/i', '$1="#"', $safeContent);
+                echo $safeContent;
+                ?>
             </div>
             <div style="margin-top:var(--space-10);padding-top:var(--space-8);border-top:1px solid var(--color-surface2);">
                 <a href="/blog" class="btn btn-ghost">← <?= ht('Back to Blog') ?></a>

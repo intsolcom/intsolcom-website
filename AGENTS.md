@@ -15,6 +15,15 @@
 - Wontia AIP = Applied Intelligence System (no CRM). INTSOLCOM solo da intro y linkea a wontia.com.
 - IA Annotation Manager linkea a iaam.com.
 
+## Seguridad (reglas duras)
+
+- Nunca commitear secretos: `config.php` (gitignoreado), API keys, tokens, `BYT_ENCRYPTION_KEY`. El ejemplo (`config.example.php`) solo con placeholders.
+- Admin: todo POST requiere header `X-CSRF-Token` (token en meta `csrf-token`, wrapper global de fetch). Login con rate-limit (5 fallos = 15 min lock) y `session_regenerate_id`.
+- Uploads: solo jpg/png/gif/webp/ico con MIME real (finfo); nunca SVG; fallback corrupto = error (no mover original). Tokens de redes (`distro_tokens`) SIEMPRE cifrados con `bytEncrypt`.
+- Headers: CSP, HSTS, nosniff, X-Frame-Options, Permissions-Policy vía `.htaccess` (Apache) y `SEC_HEADERS` (server.js). Mantener ambos al agregar dominios/scripts.
+- `assets/uploads/.htaccess` debe existir (PHP desactivado). `db-install.php` tiene guard anti-re-ejecución.
+- Si se sube la web por otro medio (FTP/panel), verificar que `config.php` y `.htaccess` (incluido el de uploads) lleguen al servidor.
+
 ## Verificación
 
 - `node --check "Sitio Web\server.js"` y `node --check "Sitio Web\assets\js\main.js"` después de cambiar JS.

@@ -67,7 +67,7 @@ docker compose -f docker-compose.prod.yml up -d
 2. Copy `includes/config.example.php` to `includes/config.php` and update DB credentials
 3. Run `https://intsolcom.com/includes/db-install.php` once
 4. Delete `db-install.php`
-5. Login at `/admin` (admin / IntsolcomAdmin2026!)
+5. Login at `/admin` (credentials in `includes/config.php` — change the default password immediately; prefer `ADMIN_PASS_HASH`)
 
 ## Pages
 

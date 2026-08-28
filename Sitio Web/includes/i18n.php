@@ -53,6 +53,21 @@ function ensureTranslationsTable(): void {
 }
 
 /**
+ * Secure cookie flags for the language cookie.
+ */
+function langCookieOptions(): array {
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+    return [
+        'expires'  => time() + 86400 * 365,
+        'path'     => '/',
+        'secure'   => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ];
+}
+
+/**
  * Detect current language: ?lang= override > cookie > default 'en'.
  * English is the site's source language and the default for all visitors.
  * Spanish is only shown if the visitor explicitly selects it.
@@ -65,7 +80,7 @@ function currentLang(): string {
 
     if (isset($_GET['lang']) && in_array($_GET['lang'], $supported, true)) {
         $lang = $_GET['lang'];
-        setcookie('intsolcom_lang', $lang, time() + 86400 * 365, '/');
+        setcookie('intsolcom_lang', $lang, langCookieOptions());
         return $lang;
     }
     if (isset($_COOKIE['intsolcom_lang']) && in_array($_COOKIE['intsolcom_lang'], $supported, true)) {
@@ -76,7 +91,7 @@ function currentLang(): string {
     $browser = detectBrowserLang();
     if ($browser !== null && in_array($browser, $supported, true)) {
         $lang = $browser;
-        setcookie('intsolcom_lang', $lang, time() + 86400 * 365, '/');
+        setcookie('intsolcom_lang', $lang, langCookieOptions());
         return $lang;
     }
 

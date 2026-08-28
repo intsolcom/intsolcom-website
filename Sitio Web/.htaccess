@@ -44,6 +44,9 @@ RewriteRule ^$                          index.php [L]
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-XSS-Protection "1; mode=block"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://www.youtube.com https://player.vimeo.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://marcasbpo.com https://app.wontia.com; connect-src 'self' https://api.deepseek.com https://www.youtube.com"
   Header unset X-Powered-By
   Header always unset X-Powered-By
 </IfModule>
@@ -53,6 +56,20 @@ RewriteRule ^$                          index.php [L]
   Order Allow,Deny
   Deny from all
 </FilesMatch>
+
+# Block config, installer, tests, docs and dotfiles from web access
+<FilesMatch "^(config\.php|db-install\.php|test_.*\.php|check_.*\.php|.*\.md|.*\.bak|\.git.*)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order Allow,Deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Deny direct access to internal includes
+RewriteRule ^includes/ - [F,L,NC]
 
 # ---- CACHE CONTROL ----
 # HTML y PHP: nunca cachear — siempre fresco

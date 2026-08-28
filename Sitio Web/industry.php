@@ -52,7 +52,9 @@ $lang            = currentLang();
 $benefits     = json_decode($industry['benefits']  ?? '[]', true) ?: [];
 $useCases     = json_decode($industry['use_cases']  ?? '[]', true) ?: [];
 
-$relatedUnits   = db()->query("SELECT bu.* FROM business_units bu WHERE JSON_CONTAINS(bu.industries, JSON_QUOTE('{$industry['name']}')) AND bu.status = 1 LIMIT 4")->fetchAll();
+$relatedUnitsSt = db()->prepare("SELECT bu.* FROM business_units bu WHERE JSON_CONTAINS(bu.industries, JSON_QUOTE(?)) AND bu.status = 1 LIMIT 4");
+$relatedUnitsSt->execute([$industry['name']]);
+$relatedUnits   = $relatedUnitsSt->fetchAll();
 $relatedProds   = db()->query("SELECT p.* FROM products p WHERE status = 1 ORDER BY p.order_num ASC LIMIT 3")->fetchAll();
 ?>
 <!DOCTYPE html>

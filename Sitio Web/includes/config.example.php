@@ -1,18 +1,27 @@
 <?php
 // ============================================================
-// INTSOLCOM — Database Configuration
+// INTSOLCOM — Database Configuration (EXAMPLE)
+// Copy to config.php and fill in real values.
+// NEVER commit config.php with real credentials.
 // ============================================================
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'u521293802_intsolcom');
-define('DB_USER', 'u521293802_intsolcom');
-define('DB_PASS', 'INTSOLcom2026$!');
+define('DB_NAME', 'CHANGE_ME');
+define('DB_USER', 'CHANGE_ME');
+define('DB_PASS', 'CHANGE_ME');
 define('DB_CHARSET', 'utf8mb4');
 
 define('SITE_URL',   'https://intsolcom.com');
 define('UPLOAD_DIR', __DIR__ . '/../assets/uploads/');
 define('UPLOAD_URL', SITE_URL . '/assets/uploads/');
 define('ADMIN_USER', 'admin');
-define('ADMIN_PASS', 'IntsolcomAdmin2026!');
+
+// ── Admin password ──
+// Option A (legacy): plaintext password in this file.
+define('ADMIN_PASS', 'CHANGE_ME_STRONG_PASSWORD');
+// Option B (recommended): hashed password — generate with:
+//   php -r "echo password_hash('YOUR_PASSWORD', PASSWORD_BCRYPT);"
+// If ADMIN_PASS_HASH is defined and non-empty, it takes priority over ADMIN_PASS.
+// define('ADMIN_PASS_HASH', '$2y$10$...');
 
 // ---- AI TRANSLATION ----
 // DeepSeek API (OpenAI-compatible) — used for on-the-fly EN→ES translation
@@ -27,8 +36,8 @@ define('API_BLOG_TOKEN', 'YOUR_API_BLOG_TOKEN');
 
 // ---- BYT — credential encryption ----
 // Used to encrypt third-party API keys before storing them in the database.
-// This key itself must NEVER be committed to a public repo.
-define('BYT_ENCRYPTION_KEY', 'fcfca098166116ce6dba01691e219f3da7f083c05e54af398b645d3cb932c5fe');
+// Generate with: php -r "echo bin2hex(random_bytes(32));"
+define('BYT_ENCRYPTION_KEY', 'CHANGE_ME_64_HEX_CHARS');
 
 function bytEncrypt(string $plaintext): string {
     $key = hex2bin(BYT_ENCRYPTION_KEY);
@@ -59,8 +68,9 @@ function db(): PDO {
             PDO::ATTR_EMULATE_PREPARES   => false,
         ]);
     } catch (PDOException $e) {
+        error_log('[INTSOLCOM] DB connection failed: ' . $e->getMessage());
         http_response_code(500);
-        die(json_encode(['error' => 'DB connection failed: ' . $e->getMessage()]));
+        die(json_encode(['error' => 'Database connection failed. Please try again later.']));
     }
     return $pdo;
 }

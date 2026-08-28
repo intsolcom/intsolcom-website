@@ -14,6 +14,24 @@ try {
     $db = db();
 
     // ============================================================
+    // GUARD: refuse to run if the site is already installed
+    // Prevents data reset / seeding abuse if this file is left online.
+    // ============================================================
+    try {
+        $installed = (int)$db->query("SELECT COUNT(*) FROM products")->fetchColumn();
+        if ($installed > 0 && !isset($_GET['force'])) {
+            http_response_code(403);
+            header('Content-Type: text/plain');
+            echo "Installer disabled: database already contains data.\n";
+            echo "Delete db-install.php from the server immediately.\n";
+            echo "(Only run with ?force=1 for a deliberate full re-seed.)\n";
+            exit;
+        }
+    } catch (PDOException $e) {
+        // products table missing — first install, continue
+    }
+
+    // ============================================================
     // SETTINGS
     // ============================================================
     $db->exec("CREATE TABLE IF NOT EXISTS settings (

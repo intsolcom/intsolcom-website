@@ -1,0 +1,37 @@
+# ============================================================
+# INTSOLCOM — Uploads directory hardening
+# No PHP execution, no directory listing, safe serving
+# ============================================================
+Options -Indexes -ExecCGI
+
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar .pl .py .cgi .asp .jsp
+RemoveType .php .phtml
+
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+  php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+  php_flag engine off
+</IfModule>
+
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phar|pl|py|cgi|asp|jsp)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order Allow,Deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Content-Disposition "inline"
+  # SVG served here can't run scripts in the parent origin
+  <FilesMatch "\.svg$">
+    Header set Content-Security-Policy "sandbox; default-src 'none'; img-src 'self' data:"
+  </FilesMatch>
+</IfModule>
