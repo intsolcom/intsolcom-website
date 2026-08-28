@@ -17,6 +17,7 @@
 
 ## Seguridad (reglas duras)
 
+- Protocolo de rotación de credenciales y checklist de servidor: ver `SECURITY.md`.
 - Nunca commitear secretos: `config.php` (gitignoreado), API keys, tokens, `BYT_ENCRYPTION_KEY`. El ejemplo (`config.example.php`) solo con placeholders.
 - Admin: todo POST requiere header `X-CSRF-Token` (token en meta `csrf-token`, wrapper global de fetch). Login con rate-limit (5 fallos = 15 min lock) y `session_regenerate_id`.
 - Uploads: solo jpg/png/gif/webp/ico con MIME real (finfo); nunca SVG; fallback corrupto = error (no mover original). Tokens de redes (`distro_tokens`) SIEMPRE cifrados con `bytEncrypt`.
