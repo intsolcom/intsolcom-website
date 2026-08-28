@@ -396,7 +396,7 @@ small {
 
 .nav.scrolled .nav__logo-accent,
 .nav--scrolled .nav__logo-accent {
-  color: var(--color-accent-dk);
+  color: var(--color-accent-dark);
 }
 
 /* Mobile menu open: always light-on-dark, even if nav is scrolled (light bg) */

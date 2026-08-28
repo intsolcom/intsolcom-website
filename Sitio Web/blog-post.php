@@ -95,7 +95,7 @@ $shareTitle = urlencode($post['title']);
 </head>
 <body>
 
-<nav class="nav nav--transparent" id="nav">
+<nav class="nav" id="nav">
     <div class="container">
         <a href="/" class="nav__logo">
             <span class="nav__logo-text"><?= h($logoText) ?></span><span class="nav__logo-accent"><?= h($logoAccent) ?></span>
