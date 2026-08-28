@@ -6,7 +6,7 @@ $siteTagline = 'Technology & Operations Ecosystem';
 $logoText    = setting('logo_text', 'INTSOL');
 $logoAccent  = setting('logo_accent', 'COM');
 
-$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 ORDER BY sort_order ASC")->fetchAll();
+$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 AND url != '/industries' ORDER BY sort_order ASC")->fetchAll();
 
 $metaTitle       = 'Nearshore Software Development — INTSOLCOM';
 $metaDescription = 'Dedicated development teams from Barranquilla, Colombia. EST timezone. Spec Driven Development. 60-70% cost savings vs US hiring. Bilingual engineers. Real product engineering.';

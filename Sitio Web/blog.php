@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
 
-$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 ORDER BY sort_order ASC")->fetchAll();
+$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 AND url != '/industries' ORDER BY sort_order ASC")->fetchAll();
 
 $siteName   = setting('site_name', 'INTSOLCOM');
 $logoText   = setting('logo_text', 'INTSOL');

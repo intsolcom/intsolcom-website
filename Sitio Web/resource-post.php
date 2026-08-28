@@ -13,7 +13,7 @@ $resource = $stmt->fetch();
 
 if (!$resource) {
   http_response_code(404);
-  $navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 ORDER BY sort_order ASC")->fetchAll();
+  $navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 AND url != '/industries' ORDER BY sort_order ASC")->fetchAll();
   $siteName = setting('site_name', 'INTSOLCOM');
   $logoText = setting('logo_text', 'INTSOL');
   $logoAccent = setting('logo_accent', 'COM');
@@ -38,7 +38,7 @@ if (!$resource) {
 </body></html>
 <?php exit; }
 
-$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 ORDER BY sort_order ASC")->fetchAll();
+$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 AND url != '/industries' ORDER BY sort_order ASC")->fetchAll();
 
 $siteName   = setting('site_name', 'INTSOLCOM');
 $logoText   = setting('logo_text', 'INTSOL');

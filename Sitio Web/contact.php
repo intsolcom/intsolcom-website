@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
 $page     = getPage('contact');
 $sections = $page ? getSections($page['id']) : [];
-$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 ORDER BY sort_order ASC")->fetchAll();
+$navItems = db()->query("SELECT * FROM nav_items WHERE visible = 1 AND url != '/industries' ORDER BY sort_order ASC")->fetchAll();
 
 $siteName   = setting('site_name', 'INTSOLCOM');
 $logoText   = setting('logo_text', 'INTSOL');
