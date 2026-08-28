@@ -32,7 +32,7 @@ $lang = currentLang();
 <div class="cursor-dot"></div><div class="cursor-ring"></div>
 <nav class="nav" id="nav">
   <div class="container">
-    <a href="/" class="nav__logo"><?= h(setting('logo_text','INTSOL')) ?><span style="color:#00C896"><?= h(setting('logo_accent','COM')) ?></span></a>
+    <a href="/" class="nav__logo"><span class="nav__logo-text"><?= h(setting('logo_text','INTSOL')) ?></span><span class="nav__logo-accent"><?= h(setting('logo_accent','COM')) ?></span></a>
     <div class="nav__links">
       <?php foreach($navItems as $ni): if(!$ni['is_cta']): ?>
         <a href="<?= h($ni['url']) ?>" class="nav__link"><?= ht($ni['text']) ?></a>

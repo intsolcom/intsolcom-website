@@ -375,13 +375,48 @@ small {
   z-index: var(--z-overlay);
 }
 
+/* Adaptive logo — CSS-driven, never relies on inline colors */
+.nav__logo-text { color: inherit; }
+.nav__logo-accent { color: var(--color-accent); }
+
 .nav--transparent .nav__logo {
   color: var(--color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.nav--transparent .nav__logo-accent {
+  color: var(--color-accent);
 }
 
 .nav.scrolled .nav__logo,
 .nav--scrolled .nav__logo {
   color: var(--color-dark);
+  text-shadow: none;
+}
+
+.nav.scrolled .nav__logo-accent,
+.nav--scrolled .nav__logo-accent {
+  color: var(--color-accent-dk);
+}
+
+/* Mobile menu open: always light-on-dark, even if nav is scrolled (light bg) */
+.nav.menu-open {
+  background: transparent;
+  box-shadow: none;
+  border-bottom-color: transparent;
+}
+
+.nav.menu-open .nav__logo {
+  color: var(--color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.nav.menu-open .nav__logo-accent {
+  color: var(--color-accent);
+}
+
+.nav.menu-open .nav__hamburger span {
+  background: var(--color-white);
 }
 
 .nav__logo-img { display:block; transition: opacity 0.3s ease; }
@@ -455,15 +490,18 @@ small {
   background: var(--color-dark);
 }
 
-.nav__hamburger.active span:nth-child(1) {
+.nav__hamburger.active span:nth-child(1),
+.nav-toggle.open span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
 
-.nav__hamburger.active span:nth-child(2) {
+.nav__hamburger.active span:nth-child(2),
+.nav-toggle.open span:nth-child(2) {
   opacity: 0;
 }
 
-.nav__hamburger.active span:nth-child(3) {
+.nav__hamburger.active span:nth-child(3),
+.nav-toggle.open span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
 
@@ -495,7 +533,8 @@ small {
     transition: opacity var(--duration-base) var(--ease-out);
   }
 
-  .nav__mobile.active {
+  .nav__mobile.active,
+  .nav__mobile.open {
     opacity: 1;
     pointer-events: auto;
   }
@@ -531,6 +570,7 @@ small {
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh; /* iOS Safari — evita salto por la barra de dirección */
   display: flex;
   align-items: center;
   background-color: var(--color-dark);
@@ -2119,7 +2159,10 @@ small {
     --grid-gap: 1.25rem;
   }
 
-  html { font-size: 15px; }
+  html {
+    font-size: 15px;
+    -webkit-tap-highlight-color: transparent;
+  }
 
   .grid-2,
   .grid-3,
@@ -2230,6 +2273,47 @@ small {
   .btn-lg {
     padding: 0.875rem 1.75rem;
     font-size: 0.9375rem;
+  }
+
+  /* iOS Safari: inputs < 16px disparan auto-zoom al enfocar — lo evitamos */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="search"],
+  input[type="url"],
+  input[type="number"],
+  input[type="password"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Video background: se oculta en móvil (rendimiento + datos móviles) */
+  .video-bg,
+  .video-bg iframe {
+    display: none !important;
+  }
+
+  /* Tap targets móviles */
+  .nav__mobile-link {
+    font-size: 1.375rem;
+    padding: 0.625rem 1rem;
+  }
+
+  .footer__links a {
+    display: inline-block;
+    padding: 0.375rem 0;
+  }
+
+  .faq__question {
+    min-height: 48px;
+  }
+
+  #scroll-top {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 48px;
+    height: 48px;
   }
 }
 

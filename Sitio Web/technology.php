@@ -11,7 +11,7 @@ $logoText    = setting('logo_text', 'INTSOL');
 $logoAccent  = setting('logo_accent', 'COM');
 
 $metaTitle       = $page['meta_title']       ?? 'Technology Portfolio — INTSOLCOM';
-$metaDescription = $page['meta_desc']         ?? 'Software platforms and AI products built for enterprise. Explore WONTIA CRM, MACROPONDER decision intelligence, and IA Annotation Manager.';
+$metaDescription = $page['meta_desc']         ?? 'Software platforms and AI products built for enterprise. Explore Wontia AIP, MACROPONDER decision intelligence, and IA Annotation Manager.';
 $currentUrl      = SITE_URL . '/technology';
 $lang            = currentLang();
 
@@ -57,10 +57,10 @@ $prodIcons = [
 </head>
 <body>
 
-<nav class="nav" id="nav">
+<nav class="nav nav--transparent" id="nav">
   <div class="container">
     <a href="/" class="nav__logo">
-      <span style="color:<?= h(setting('logo_text_color','#0F172A')) ?>"><?= h($logoText) ?></span><span style="color:<?= h(setting('logo_accent_color','#00C896')) ?>"><?= h($logoAccent) ?></span>
+      <span class="nav__logo-text"><?= h($logoText) ?></span><span class="nav__logo-accent"><?= h($logoAccent) ?></span>
     </a>
     <div class="nav__links">
       <?php foreach ($navItems as $ni): ?>
@@ -125,6 +125,51 @@ $prodIcons = [
           <?php endforeach; ?>
         </div>
       <?php endif; ?>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Wontia AIP</span>
+        <h2 class="section-title">One intelligence. <em>Multiple domains.</em></h2>
+        <p class="section-subtitle" style="max-width:640px;margin:0 auto;">
+          <?= ht('Wontia is an Applied Intelligence System (AIS) powered by TIA — Technology of Applied Intelligence. Not a CRM: a single intelligence core that understands context, makes decisions, and executes actions across a growing ecosystem of domain applications.') ?>
+        </p>
+      </div>
+      <div class="grid-3" style="margin-top:var(--space-10);">
+        <div class="card card-hover reveal">
+          <div class="card__icon">💼</div>
+          <span class="eco-card__badge" style="color:#00C896;background:rgba(0,200,150,.08);"><?= ht('Available') ?></span>
+          <h3 style="margin-top:var(--space-3);"><?= ht('Wontia Business') ?></h3>
+          <p><?= ht('Business operations powered by TIA: customer intelligence, sales intelligence, operations intelligence, decision support, AI agents, and task orchestration.') ?></p>
+          <a href="https://wontia.com/#business" target="_blank" rel="noopener" style="color:#00C896;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Explore Wontia Business') ?> ↗</a>
+        </div>
+        <div class="card card-hover reveal" style="transition-delay:.05s;">
+          <div class="card__icon card__icon--blue">🌐</div>
+          <span class="eco-card__badge" style="color:#2563EB;background:rgba(37,99,235,.08);"><?= ht('Available') ?></span>
+          <h3 style="margin-top:var(--space-3);"><?= ht('Wontia Web Intelligence') ?></h3>
+          <p><?= ht('Intelligent web operations: understand digital context, automate web intelligence, and operate your online presence with the same TIA core.') ?></p>
+          <a href="https://wontia.com/#domain-arch" target="_blank" rel="noopener" style="color:#2563EB;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Explore Web Intelligence') ?> ↗</a>
+        </div>
+        <div class="card card-hover reveal" style="transition-delay:.1s;">
+          <div class="card__icon card__icon--purple">📦</div>
+          <span class="eco-card__badge" style="color:#8B5CF6;background:rgba(139,92,246,.08);"><?= ht('In Development') ?></span>
+          <h3 style="margin-top:var(--space-3);"><?= ht('Wontia Food Security') ?></h3>
+          <p><?= ht('Applied intelligence for food security: detect risk, prioritize response, coordinate action, and measure impact — the same architecture, extended into domains that impact lives.') ?></p>
+          <a href="https://wontia.com/#food-security" target="_blank" rel="noopener" style="color:#8B5CF6;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Learn more') ?> ↗</a>
+        </div>
+        <div class="card reveal" style="transition-delay:.15s;">
+          <div class="card__icon">➕</div>
+          <span class="eco-card__badge" style="color:#94A3B8;background:rgba(148,163,184,.1);"><?= ht('Future Domains') ?></span>
+          <h3 style="margin-top:var(--space-3);"><?= ht('More domains') ?></h3>
+          <p><?= ht('Health, Agriculture, Industry, Logistics, and Education — each with its own tools, workflows, and actions, all running on the same WONTIA + TIA intelligence core.') ?></p>
+          <a href="https://wontia.com/#domain-arch" target="_blank" rel="noopener" style="color:#00C896;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('See the architecture') ?> ↗</a>
+        </div>
+      </div>
+      <div class="text-center reveal" style="margin-top:var(--space-10);">
+        <a href="https://wontia.com" target="_blank" rel="noopener" class="btn btn-accent btn-lg"><?= ht('Visit wontia.com') ?> ↗</a>
+      </div>
     </div>
   </section>
 

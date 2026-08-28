@@ -44,12 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navToggle && navMobile) {
     navToggle.addEventListener('click', () => {
       navToggle.classList.toggle('open');
+      navToggle.classList.toggle('active');
       navMobile.classList.toggle('open');
+      navMobile.classList.toggle('active');
+      if (nav) nav.classList.toggle('menu-open');
       document.body.classList.toggle('no-scroll');
     });
     navMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
       navToggle.classList.remove('open');
+      navToggle.classList.remove('active');
       navMobile.classList.remove('open');
+      navMobile.classList.remove('active');
+      if (nav) nav.classList.remove('menu-open');
       document.body.classList.remove('no-scroll');
     }));
   }

@@ -74,10 +74,10 @@ $activeTypes = db()->query("SELECT type, COUNT(*) as cnt FROM resources WHERE st
 </head>
 <body>
 
-<nav class="nav" id="nav">
+<nav class="nav nav--transparent" id="nav">
   <div class="container">
     <a href="/" class="nav__logo">
-      <span style="color:<?= h(setting('logo_text_color','#0F172A')) ?>"><?= h($logoText) ?></span><span style="color:<?= h(setting('logo_accent_color','#00C896')) ?>"><?= h($logoAccent) ?></span>
+      <span class="nav__logo-text"><?= h($logoText) ?></span><span class="nav__logo-accent"><?= h($logoAccent) ?></span>
     </a>
     <div class="nav__links">
       <?php foreach ($navItems as $ni): ?>

@@ -74,7 +74,7 @@ docker compose -f docker-compose.prod.yml up -d
 - `/` — Home (hero, ecosystem, products, capabilities, industries, comparison, testimonials, FAQ)
 - `/holding` — Corporate structure, mission, vision, governance
 - `/business-units` — Business unit cards
-- `/technology` — Product portfolio (WONTIA, MACROPONDER, IA Annotation Manager)
+- `/technology` — Product portfolio (Wontia AIP, MACROPONDER, IA Annotation Manager)
 - `/industries` — 10 industry sectors
 - `/resources` — Articles, whitepapers, guides
 - `/contact` — Minimalist form + office locations

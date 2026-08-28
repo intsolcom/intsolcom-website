@@ -28,7 +28,7 @@ if (!$product) {
 </head>
 <body>
 <nav class="nav" id="nav"><div class="container">
-  <a href="/" class="nav__logo"><span style="color:<?= h(setting('logo_text_color','#0F172A')) ?>"><?= h($logoText) ?></span><span style="color:<?= h(setting('logo_accent_color','#00C896')) ?>"><?= h($logoAccent) ?></span></a>
+  <a href="/" class="nav__logo"><span class="nav__logo-text"><?= h($logoText) ?></span><span class="nav__logo-accent"><?= h($logoAccent) ?></span></a>
   <div class="nav__links"><?php foreach ($navItems as $ni): ?><?php if ($ni['is_cta']): ?><a href="<?= h($ni['url']) ?>" class="btn btn-accent btn-sm nav__cta"><?= ht($ni['text']) ?></a><?php else: ?><a href="<?= h($ni['url']) ?>" class="nav__link"><?= ht($ni['text']) ?></a><?php endif; ?><?php endforeach; ?></div>
   <button class="nav__hamburger nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
 </div><div class="nav__mobile nav-mobile"><div class="nav__mobile-links"><?php foreach ($navItems as $ni): ?><a href="<?= h($ni['url']) ?>" class="nav__mobile-link"><?= ht($ni['text']) ?></a><?php endforeach; ?></div></div></nav>
@@ -94,10 +94,10 @@ $iconChar  = $prodIcons[$iconKey] ?? '⚙️';
 </head>
 <body>
 
-<nav class="nav" id="nav">
+<nav class="nav nav--transparent" id="nav">
   <div class="container">
     <a href="/" class="nav__logo">
-      <span style="color:<?= h(setting('logo_text_color','#0F172A')) ?>"><?= h($logoText) ?></span><span style="color:<?= h(setting('logo_accent_color','#00C896')) ?>"><?= h($logoAccent) ?></span>
+      <span class="nav__logo-text"><?= h($logoText) ?></span><span class="nav__logo-accent"><?= h($logoAccent) ?></span>
     </a>
     <div class="nav__links">
       <?php foreach ($navItems as $ni): ?>

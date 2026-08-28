@@ -225,7 +225,7 @@ body.no-scroll { overflow: hidden; }
         <img src="<?= h($logoDark) ?>" alt="INTSOLCOM" class="nav__logo-img nav__logo-img--dark" style="height:var(--nav-logo-h,36px);width:auto;">
         <?php endif; ?>
       <?php else: ?>
-        <span><?= h($s('logo_text','INTSOL')) ?><span style="color:var(--accent)"><?= h($s('logo_accent','COM')) ?></span></span>
+        <span class="nav__logo-text"><?= h($s('logo_text','INTSOL')) ?></span><span class="nav__logo-accent"><?= h($s('logo_accent','COM')) ?></span>
       <?php endif; ?>
     </a>
     <div class="nav__links">
@@ -381,9 +381,9 @@ body.no-scroll { overflow: hidden; }
             <div class="eco-card-tag"><?= t('Product Division') ?></div>
             <div class="card__icon" style="font-size:1.5rem;margin:0 auto .75rem;">&#9881;</div>
             <h3><?= t('Technology & Products') ?></h3>
-            <p style="font-size:.875rem;color:#475569;"><?= t('WONTIA CRM, MACROPONDER, and IA Annotation Manager — software products developed and operated within the ecosystem.') ?></p>
+            <p style="font-size:.875rem;color:#475569;"><?= t('Wontia AIP, MACROPONDER, and IA Annotation Manager — software products developed and operated within the ecosystem.') ?></p>
             <div class="eco-card-capabilities">
-              <span class="eco-card-cap">WONTIA CRM</span>
+              <span class="eco-card-cap">Wontia AIP</span>
               <span class="eco-card-cap">MACROPONDER</span>
               <span class="eco-card-cap"><?= t('IA Annotation Manager') ?></span>
             </div>
@@ -541,9 +541,9 @@ body.no-scroll { overflow: hidden; }
     <div class="grid-3">
       <?php
       $productDefaults = [
-        ['icon' => '&#128101;', 'cat' => 'CRM', 'name' => 'WONTIA CRM', 'desc' => 'Intelligent CRM platform for service-based businesses. Contact management, pipeline tracking, and AI-powered insights.', 'url' => '/technology/wontia-crm', 'gradient' => ''],
+        ['icon' => '&#129504;', 'cat' => 'AI Platform', 'name' => 'Wontia AIP', 'desc' => 'Applied Intelligence System (AIS) powered by TIA — one intelligence core with a growing ecosystem of domain apps for Business, Web, Food Security and more.', 'url' => '/technology/wontia-aip', 'gradient' => ''],
         ['icon' => '&#129504;', 'cat' => 'AI Platform', 'name' => 'MACROPONDER', 'desc' => 'Decision intelligence platform. Scenario modeling, bias detection, and collaborative strategic analysis powered by AI.', 'url' => '/technology/macroponder', 'gradient' => '--purple'],
-        ['icon' => '&#127991;', 'cat' => 'AI Platform', 'name' => 'IA Annotation Manager', 'desc' => 'End-to-end annotation management platform. Project management, quality control, and workforce analytics at scale.', 'url' => '/technology/ia-annotation-manager', 'gradient' => '--blue'],
+        ['icon' => '&#127991;', 'cat' => 'AI Platform', 'name' => 'IA Annotation Manager', 'desc' => 'End-to-end annotation management platform. Project management, quality control, and workforce analytics at scale. Landing page coming soon at iaam.com.', 'url' => '/technology/ia-annotation-manager', 'gradient' => '--blue'],
       ];
       $displayProducts = $products ?: $productDefaults;
       foreach ($displayProducts as $idx => $prd):
@@ -600,7 +600,7 @@ body.no-scroll { overflow: hidden; }
         ['icon' => '&#129302;', 'title' => t('AI & Automation'), 'desc' => t('Custom AI solutions including LLM integration, computer vision, NLP pipelines, and business process automation.')],
         ['icon' => '&#128200;', 'title' => t('Business Intelligence'), 'desc' => t('Data warehousing, analytics dashboards, and predictive modeling to drive data-informed strategic decisions.')],
         ['icon' => '&#127991;', 'title' => t('Data Annotation'), 'desc' => t('Multi-modal data labeling at scale: images, video, text, audio, and 3D point clouds with structured QC workflow.')],
-        ['icon' => '&#128188;', 'title' => t('Sales Operations'), 'desc' => t('CRM management, lead qualification, pipeline analytics, and sales enablement powered by WONTIA CRM.')],
+        ['icon' => '&#128188;', 'title' => t('Sales Operations'), 'desc' => t('CRM management, lead qualification, pipeline analytics, and sales enablement powered by Wontia AIP.')],
         ['icon' => '&#128222;', 'title' => t('Customer Operations'), 'desc' => t('Bilingual customer support, ticket management, NPS tracking, and multi-channel service desks.')],
         ['icon' => '&#128203;', 'title' => t('Executive Support'), 'desc' => t('Dedicated virtual assistants for calendar management, travel coordination, research, and executive communications.')],
         ['icon' => '&#128269;', 'title' => t('Recruiting'), 'desc' => t('End-to-end talent acquisition: sourcing, screening, technical assessments, and onboarding for global teams.')],
@@ -727,7 +727,7 @@ body.no-scroll { overflow: hidden; }
       <?php
       $placeholderTestimonials = [
         ['name' => 'Marcus D.', 'role' => 'CTO', 'company' => 'HealthTech Innovations', 'content' => 'INTSOLCOM built our entire AI annotation pipeline in 14 days. The quality control processes and workforce management alone saved us 6 months of internal development. Truly a technology partner, not just a vendor.', 'rating' => 5],
-        ['name' => 'Elena R.', 'role' => 'VP Operations', 'company' => 'Meridian Financial', 'content' => 'We moved our entire customer operations to INTSOLCOM SAS and saw a 60% cost reduction while improving CSAT scores by 12 points. Their WONTIA CRM platform gave us visibility we never had before.', 'rating' => 5],
+        ['name' => 'Elena R.', 'role' => 'VP Operations', 'company' => 'Meridian Financial', 'content' => 'We moved our entire customer operations to INTSOLCOM SAS and saw a 60% cost reduction while improving CSAT scores by 12 points. Their WONTIA platform gave us visibility we never had before.', 'rating' => 5],
         ['name' => 'David K.', 'role' => 'Founder', 'company' => 'Stack AI Labs', 'content' => 'As a startup, we needed a partner who could scale with us. INTSOLCOM provided nearshore engineering teams that felt like our own employees. The ecosystem approach — technology plus operations — is the real differentiator.', 'rating' => 5],
       ];
       $displayTestimonials = $testimonials ?: $placeholderTestimonials;
@@ -805,10 +805,10 @@ body.no-scroll { overflow: hidden; }
       $faqs = [
         [t('What is INTSOLCOM?'), t('The Intsolcom business ecosystem combines two entities working together: Intsolcom, LLC in the United States (strategic and commercial hub) and INTSOLCOM SAS in Colombia (operational delivery center). We build proprietary technology products and operate business services at scale. Unlike traditional outsourcing firms, the Intsolcom ecosystem integrates proprietary technology with operational excellence to deliver superior outcomes.')],
         [t('Where are you located?'), t('Our holding company is registered in Delaware, USA. Our primary operations hub — INTSOLCOM SAS — is located in Barranquilla, Colombia with a satellite office in Bogotá. This dual presence gives us U.S. corporate governance with nearshore delivery capabilities in the EST time zone.')],
-        [t('What makes you different from BPO companies?'), t('We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From WONTIA CRM to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage. Our integrated ecosystem — technology + operations + R&D — creates compounding value over time.')],
+        [t('What makes you different from BPO companies?'), t('We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From Wontia AIP to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage. Our integrated ecosystem — technology + operations + R&D — creates compounding value over time.')],
         [t('What industries do you serve?'), t('We serve clients across Healthcare, Technology, Financial Services, AI & Data, Retail, Logistics, Real Estate, Professional Services, Manufacturing, and Hospitality. Our solutions are industry-agnostic by design, with customization layers for sector-specific requirements.')],
         [t('How do I partner with INTSOLCOM?'), t('The process is straightforward: fill out our contact form or reach out via WhatsApp. We will schedule a 30-minute discovery call to understand your needs, map the right solution from our ecosystem, and prepare a tailored proposal. There is no commitment required for the initial consultation.')],
-        [t('Can I license your software products independently?'), t('Yes. WONTIA CRM, MACROPONDER, and IA Annotation Manager are available as standalone SaaS products. You can license them independently of our managed services. Visit the Technology page for details or contact us for a demo.')],
+        [t('Can I license your software products independently?'), t('Yes. Wontia AIP, MACROPONDER, and IA Annotation Manager are available as standalone SaaS products. You can license them independently of our managed services. Visit the Technology page for details or contact us for a demo.')],
         [t('Do you offer staff augmentation or managed teams?'), t('Both. Through INTSOLCOM SAS, we provide dedicated nearshore teams (software engineers, AI specialists, QA, support) that work as an extension of your organization. We also offer fully managed service packages where we handle end-to-end delivery of specific functions using our technology stack.')],
       ];
       foreach ($faqs as $fidx => $faq):
@@ -862,7 +862,7 @@ body.no-scroll { overflow: hidden; }
       <div>
         <h4 class="footer__heading"><?= t('Products') ?></h4>
         <div class="footer__links">
-          <a href="/technology/wontia-crm">WONTIA CRM</a>
+          <a href="/technology/wontia-aip">Wontia AIP</a>
           <a href="/technology/macroponder">MACROPONDER</a>
           <a href="/technology/ia-annotation-manager"><?= t('IA Annotation Manager') ?></a>
           <a href="/technology"><?= t('All Products') ?></a>

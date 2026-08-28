@@ -277,7 +277,7 @@ body.no-scroll { overflow: hidden; }
 <nav class="nav nav--transparent" id="nav">
   <div class="container">
     <a href="/" class="nav__logo">
-      <?= h($logoText) ?><span style="color:#00C896;"><?= h($logoAccent) ?></span>
+      <span class="nav__logo-text"><?= h($logoText) ?></span><span class="nav__logo-accent"><?= h($logoAccent) ?></span>
     </a>
     <div class="nav__links">
       <?php foreach ($navItems as $item): ?>

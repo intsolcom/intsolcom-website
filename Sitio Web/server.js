@@ -58,14 +58,19 @@ const S = {
 };
 
 const PRODUCTS = [
-  {name:'WONTIA CRM',slug:'wontia-crm',short_desc:'AI-powered CRM for service businesses \u2014 manage contacts, track deals, and automate workflows.',category:'CRM',icon:'\u{1F465}'},
+  {name:'Wontia AIP',slug:'wontia-aip',short_desc:'Applied Intelligence System (AIS) powered by TIA \u2014 one intelligence core with a growing ecosystem of domain apps: Business, Web Intelligence, Food Security, and more.',category:'AI Platform',icon:'\u{1F9E0}'},
   {name:'MACROPONDER',slug:'macroponder',short_desc:'AI-powered decision intelligence \u2014 model scenarios, detect bias, and make better strategic choices.',category:'AI Platform',icon:'\u{1F9E0}'},
-  {name:'IA Annotation Manager',slug:'ia-annotation-manager',short_desc:'End-to-end platform for AI data annotation \u2014 manage projects, QC, and annotator performance.',category:'AI Platform',icon:'\u{1F3F7}\uFE0F'},
+  {name:'IA Annotation Manager',slug:'ia-annotation-manager',short_desc:'End-to-end platform for AI data annotation \u2014 manage projects, QC, and annotator performance. Landing page coming soon at iaam.com.',category:'AI Platform',icon:'\u{1F3F7}\uFE0F'},
 ];
+
+const PRODUCT_EXTERNAL = {
+  'wontia-aip': { url: 'https://wontia.com', label: 'Visit wontia.com' },
+  'ia-annotation-manager': { url: 'https://iaam.com', label: 'Visit iaam.com' },
+};
 
 const UNITS = [
   {name:'INTSOLCOM SAS',slug:'intsolcom-sas',desc:'Operations & Delivery hub in Barranquilla, Colombia. Nearshore technology services for global clients.',icon:'\u{1F1E8}\u{1F1F4}',tag:'Colombia',caps:'Software Dev,AI Ops,QA Testing,IT Support'},
-  {name:'Technology Division',slug:'technology-division',desc:'WONTIA CRM, MACROPONDER, and IA Annotation Manager \u2014 owned and operated software platforms.',icon:'\u2699\uFE0F',tag:'Product Division',caps:'WONTIA CRM,MACROPONDER,Annotation Manager'},
+  {name:'Technology Division',slug:'technology-division',desc:'Wontia AIP, MACROPONDER, and IA Annotation Manager \u2014 owned and operated software platforms.',icon:'\u2699\uFE0F',tag:'Product Division',caps:'Wontia AIP,MACROPONDER,Annotation Manager'},
   {name:'Innovation Lab',slug:'innovation-lab',desc:'Research, development, and venture incubation. Exploring AI frontiers, automation, and emerging technologies.',icon:'\u{1F9EA}',tag:'R&D Lab',caps:'AI Research,Prototyping,Ventures'},
 ];
 
@@ -79,7 +84,7 @@ const NAV = [
 
 const TESTIMONIALS = [
   {name:'Marcus D.',role:'CTO',company:'HealthTech Innovations',content:'INTSOLCOM built our entire AI annotation pipeline in 14 days. The quality control processes and workforce management alone saved us 6 months of internal development. Truly a technology partner, not just a vendor.',rating:5},
-  {name:'Elena R.',role:'VP Operations',company:'Meridian Financial',content:'We moved our entire customer operations to INTSOLCOM SAS and saw a 60% cost reduction while improving CSAT scores by 12 points. Their WONTIA CRM platform gave us visibility we never had before.',rating:5},
+  {name:'Elena R.',role:'VP Operations',company:'Meridian Financial',content:'We moved our entire customer operations to INTSOLCOM SAS and saw a 60% cost reduction while improving CSAT scores by 12 points. Their WONTIA platform gave us visibility we never had before.',rating:5},
   {name:'David K.',role:'Founder',company:'Stack AI Labs',content:'As a startup, we needed a partner who could scale with us. INTSOLCOM provided nearshore engineering teams that felt like our own employees. The ecosystem approach \u2014 technology plus operations \u2014 is the real differentiator.',rating:5},
 ];
 
@@ -129,7 +134,7 @@ function footerHTML() {
       <div>
         <h4 class="footer__heading">Products</h4>
         <div class="footer__links">
-          <a href="/technology/wontia-crm">WONTIA CRM</a>
+          <a href="/technology/wontia-aip">Wontia AIP</a>
           <a href="/technology/macroponder">MACROPONDER</a>
           <a href="/technology/ia-annotation-manager">IA Annotation Manager</a>
           <a href="/technology">All Products</a>
@@ -195,6 +200,9 @@ ${extraMeta}
 .nav.scrolled .nav__logo { color: #0F172A; }
 .nav.scrolled .nav__link { color: #475569; }
 .nav.scrolled .nav__hamburger span { background: #0F172A; }
+.nav.menu-open { background: transparent; box-shadow: none; }
+.nav.menu-open .nav__logo { color: #fff; }
+.nav.menu-open .nav__hamburger span { background: #fff; }
 .nav-mobile.open { opacity: 1; pointer-events: auto; }
 .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
@@ -293,7 +301,7 @@ function buildCapabilities() {
     'Custom AI solutions including LLM integration, computer vision, and business process automation.',
     'Data warehousing, analytics dashboards, and predictive modeling for strategic decisions.',
     'Multi-modal data labeling at scale: images, video, text, audio, and 3D point clouds.',
-    'CRM management, lead qualification, pipeline analytics powered by WONTIA CRM.',
+    'CRM management, lead qualification, pipeline analytics powered by Wontia AIP.',
     'Bilingual customer support, ticket management, NPS tracking, and multi-channel service desks.',
     'Dedicated virtual assistants for calendar management, research, and executive communications.',
     'End-to-end talent acquisition: sourcing, screening, assessments, and onboarding.',
@@ -310,7 +318,7 @@ function buildCapabilities() {
 function buildUnitsDiagram() {
   const units = [
     {name:'INTSOLCOM SAS',desc:'Operational delivery hub in Barranquilla, Colombia. Nearshore BPO, AI annotation, QA, and talent solutions.',icon:'\u{1F1E8}\u{1F1F4}',tag:'Operational Delivery',caps:'BPO,AI Annotation,QA,Talent'},
-    {name:'Technology & Products',desc:'WONTIA CRM, MACROPONDER, and IA Annotation Manager \u2014 owned and operated software platforms.',icon:'\u2699\uFE0F',tag:'Product Division',caps:'WONTIA CRM,MACROPONDER,Annotation Manager'},
+    {name:'Technology & Products',desc:'Wontia AIP, MACROPONDER, and IA Annotation Manager \u2014 owned and operated software platforms.',icon:'\u2699\uFE0F',tag:'Product Division',caps:'Wontia AIP,MACROPONDER,Annotation Manager'},
     {name:'Business Development \u2014 USA',desc:'Strategic commercial presence in the United States \u2014 client relationships, partnerships, and market expansion.',icon:'\u{1F1FA}\u{1F1F8}',tag:'Commercial & Strategy',caps:'Sales,Partnerships,Strategy'},
   ];
   let html = '';
@@ -331,7 +339,7 @@ function buildUnitsDiagram() {
 
 function buildProductsGrid() {
   const prods = [
-    {icon:'\u{1F465}',cat:'CRM',name:'WONTIA CRM',desc:'Intelligent CRM platform for service-based businesses. Contact management, pipeline tracking, and AI-powered insights.',slug:'wontia-crm',grad:''},
+    {icon:'\u{1F9E0}',cat:'AI Platform',name:'Wontia AIP',desc:'Applied Intelligence System powered by TIA. One intelligence core with domain apps for Business, Web, Food Security, and more.',slug:'wontia-aip',grad:''},
     {icon:'\u{1F9E0}',cat:'AI Platform',name:'MACROPONDER',desc:'Decision intelligence platform. Scenario modeling, bias detection, and collaborative strategic analysis powered by AI.',slug:'macroponder',grad:'--purple'},
     {icon:'\u{1F3F7}\uFE0F',cat:'AI Platform',name:'IA Annotation Manager',desc:'End-to-end annotation management platform. Project management, quality control, and workforce analytics at scale.',slug:'ia-annotation-manager',grad:'--blue'},
   ];
@@ -352,7 +360,7 @@ function buildProductsGrid() {
 function buildTestimonials() {
   const testimonials = [
     {name:'Marcus D.',role:'CTO',company:'HealthTech Innovations',content:'INTSOLCOM built our entire AI annotation pipeline in 14 days. The quality control processes and workforce management alone saved us 6 months of internal development. Truly a technology partner, not just a vendor.',rating:5},
-    {name:'Elena R.',role:'VP Operations',company:'Meridian Financial',content:'We moved our entire customer operations to INTSOLCOM SAS and saw a 60% cost reduction while improving CSAT scores by 12 points. Their WONTIA CRM platform gave us visibility we never had before.',rating:5},
+    {name:'Elena R.',role:'VP Operations',company:'Meridian Financial',content:'We moved our entire customer operations to INTSOLCOM SAS and saw a 60% cost reduction while improving CSAT scores by 12 points. Their WONTIA platform gave us visibility we never had before.',rating:5},
     {name:'David K.',role:'Founder',company:'Stack AI Labs',content:'As a startup, we needed a partner who could scale with us. INTSOLCOM provided nearshore engineering teams that felt like our own employees. The ecosystem approach \u2014 technology plus operations \u2014 is the real differentiator.',rating:5},
   ];
   const colors = ['#00C896','#8B5CF6','#2563EB'];
@@ -376,7 +384,7 @@ function buildFAQs() {
   const faqs = [
     ['What is INTSOLCOM?','The Intsolcom business ecosystem combines strategic presence in the United States with specialized operational delivery capabilities in Colombia. We own and operate software platforms and business services. Unlike traditional outsourcing firms, we build proprietary technology and integrate it with operational excellence to deliver superior outcomes for our clients.'],
     ['Where are you located?','Our strategic operations are managed from the United States, and our primary delivery hub \u2014 INTSOLCOM SAS \u2014 is located in Barranquilla, Colombia. This dual presence gives us U.S. business development and governance with nearshore delivery capabilities in the EST time zone.'],
-    ['What makes you different from BPO companies?','We are a business ecosystem, not a BPO. The key difference: we own the technology we deploy. From WONTIA CRM to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage.'],
+    ['What makes you different from BPO companies?','We are a business ecosystem, not a BPO. The key difference: we own the technology we deploy. From Wontia AIP to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage.'],
     ['What industries do you serve?','We serve clients across Healthcare, Technology, Financial Services, AI & Data, Retail, Logistics, Real Estate, Professional Services, Manufacturing, and Hospitality.'],
     ['How do I partner with INTSOLCOM?','Fill out our contact form or reach out via WhatsApp. We will schedule a 30-minute discovery call to understand your needs and prepare a tailored proposal.'],
   ];
@@ -599,7 +607,7 @@ function renderHolding() {
     <p style="color:rgba(255,255,255,.6);margin-bottom:1.25rem;font-size:.9rem;">Proprietary software platforms built, owned, and operated by the Intsolcom ecosystem.</p>
     <div style="background:rgba(139,92,246,.08);padding:1rem;border-radius:8px;">
       <div style="font-weight:600;font-size:.85rem;color:#8B5CF6;margin-bottom:.25rem;">\u{1F4E6} Product Portfolio</div>
-      <p style="font-size:.8rem;color:rgba(255,255,255,.5);">WONTIA CRM, MACROPONDER, and IA Annotation Manager \u2014 continuously developed and deployed at enterprise scale.</p>
+      <p style="font-size:.8rem;color:rgba(255,255,255,.5);">Wontia AIP, MACROPONDER, and IA Annotation Manager \u2014 continuously developed and deployed at enterprise scale.</p>
     </div>
   </div>
 </div></div></section>
@@ -609,7 +617,7 @@ function renderHolding() {
 
 function renderTechnology() {
   let cards = '';
-  const cats = {CRM:['#00C896','rgba(0,200,150,.08)'],'AI Platform':['#8B5CF6','rgba(139,92,246,.08)']};
+  const cats = {'AI Platform':['#8B5CF6','rgba(139,92,246,.08)']};
   for (const p of PRODUCTS) {
     const [cColor,cBg] = cats[p.category]||['#00C896','rgba(0,200,150,.08)'];
     cards += `
@@ -623,10 +631,25 @@ function renderTechnology() {
       </div>
     </div>`;
   }
-  return pageHead('Technology Portfolio \u2014 INTSOLCOM','Software platforms and AI products built for enterprise. Explore WONTIA CRM, MACROPONDER decision intelligence, and IA Annotation Manager.','https://intsolcom.com/technology') + navBar('/technology') + `
+
+  const wontiaDomains = [
+    {icon:'\u{1F4BC}',status:'AVAILABLE',color:'#00C896',name:'Wontia Business',desc:'Business operations powered by TIA: customer intelligence, sales intelligence, operations intelligence, decision support, AI agents, and task orchestration.',href:'https://wontia.com/#business'},
+    {icon:'\u{1F310}',status:'AVAILABLE',color:'#2563EB',name:'Wontia Web Intelligence',desc:'Intelligent web operations: understand digital context, automate web intelligence, and operate your online presence with the same TIA core.',href:'https://wontia.com/#domain-arch'},
+    {icon:'\u{1F4E6}',status:'IN DEVELOPMENT',color:'#8B5CF6',name:'Wontia Food Security',desc:'Applied intelligence for food security: detect risk, prioritize response, coordinate action, and measure impact across communities.',href:'https://wontia.com/#food-security'},
+    {icon:'\u2795',status:'FUTURE',color:'#94A3B8',name:'More Domains',desc:'Health, Agriculture, Industry, Logistics, and Education \u2014 each with its own tools, workflows, and actions on the same WONTIA + TIA core.',href:'https://wontia.com/#domain-arch'},
+  ];
+
+  let domainCards = '';
+  for (let i = 0; i < wontiaDomains.length; i++) {
+    const d = wontiaDomains[i];
+    domainCards += '<div class="card card-hover reveal" style="transition-delay:' + (i*0.05) + 's;"><div class="card__icon">' + d.icon + '</div><span style="display:inline-block;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:' + d.color + ';margin-bottom:.5rem;">' + esc(d.status) + '</span><h3>' + esc(d.name) + '</h3><p>' + esc(d.desc) + '</p><a href="' + d.href + '" target="_blank" rel="noopener" style="color:' + d.color + ';font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:.5rem;">' + esc(d.name.split(' ')[1] === 'Domains' ? 'See the architecture' : 'Explore') + ' \u2197</a></div>';
+  }
+
+  return pageHead('Technology Portfolio \u2014 INTSOLCOM','Software platforms and AI products built for enterprise. Explore Wontia AIP, MACROPONDER decision intelligence, and IA Annotation Manager.','https://intsolcom.com/technology') + navBar('/technology') + `
 <section class="page-hero"><div class="container"><h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;position:relative;z-index:1;">Technology <em style="font-style:normal;color:#00C896;">Portfolio</em></h1><p style="font-size:1.15rem;color:rgba(255,255,255,.55);max-width:600px;margin:1rem auto 0;position:relative;z-index:1;">Software platforms and AI products built for enterprise.</p></div></section>
 <section class="section"><div class="container"><div class="grid-3">${cards}</div></div></section>
-<section class="section section-surface"><div class="container"><div class="section-header reveal"><span class="section-label">Future Products</span><h2 class="section-title">The architecture allows <em>unlimited expansion</em></h2><p class="section-subtitle">Our technology ecosystem is designed for growth. New products are continuously developed, acquired, and integrated into the INTSOLCOM portfolio.</p></div></div></section>
+<section class="section section-surface"><div class="container"><div class="section-header reveal"><span class="section-label">Wontia AIP</span><h2 class="section-title">One intelligence. <em>Multiple domains.</em></h2><p class="section-subtitle">Wontia is an Applied Intelligence System (AIS) powered by TIA \u2014 Technology of Applied Intelligence. Not a CRM: a single intelligence core that understands context, makes decisions, and executes actions across a growing ecosystem of domain applications.</p></div><div class="grid-3">${domainCards}</div><div class="text-center reveal" style="margin-top:2.5rem;"><a href="https://wontia.com" target="_blank" rel="noopener" class="btn btn-accent btn-lg">Visit wontia.com \u2197</a></div></div></section>
+<section class="section"><div class="container"><div class="section-header reveal"><span class="section-label">Future Products</span><h2 class="section-title">The architecture allows <em>unlimited expansion</em></h2><p class="section-subtitle">Our technology ecosystem is designed for growth. New products are continuously developed, acquired, and integrated into the INTSOLCOM portfolio.</p></div></div></section>
 ` + pageEnd('/technology');
 }
 
@@ -813,7 +836,7 @@ const server = http.createServer((req, res) => {
 
   // Sitemap
   if (pathname === '/sitemap.xml') {
-    const urls = ['','/holding','/technology','/nearshore-development','/business-units','/industries','/resources','/contact','/technology/wontia-crm','/technology/macroponder','/technology/ia-annotation-manager'];
+    const urls = ['','/holding','/technology','/nearshore-development','/business-units','/industries','/resources','/contact','/technology/wontia-aip','/technology/macroponder','/technology/ia-annotation-manager'];
     const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls.map(u => `  <url><loc>https://intsolcom.com${u}</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>${u===''?'1.0':'0.8'}</priority></url>`).join('\n') + '\n</urlset>';
     res.writeHead(200, {'Content-Type':'application/xml; charset=utf-8','Cache-Control':'public, max-age=3600'});
     return res.end(xml);
@@ -825,11 +848,15 @@ const server = http.createServer((req, res) => {
     const slug = techMatch[1];
     const prod = PRODUCTS.find(p => p.slug === slug);
     if (prod) {
+      const ext = PRODUCT_EXTERNAL[slug];
+      const cta = ext
+        ? `<div class="cta-section__actions"><a href="${ext.url}" target="_blank" rel="noopener" class="btn btn-accent btn-lg">${esc(ext.label)} \u2197</a></div>`
+        : `<div class="cta-section__actions"><a href="/contact" class="btn btn-accent btn-lg">Request a Demo \u2192</a></div>`;
       res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
       return res.end(pageHead(`${esc(prod.name)} \u2014 INTSOLCOM Technology`,prod.short_desc,`https://intsolcom.com/technology/${slug}`) + navBar('/technology') + `
 <section class="page-hero"><div class="container"><h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;position:relative;z-index:1;">${esc(prod.name)}</h1><span style="display:inline-block;background:rgba(0,200,150,.12);color:#00C896;padding:4px 14px;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem;position:relative;z-index:1;">${esc(prod.category)}</span><p style="font-size:1.15rem;color:rgba(255,255,255,.55);max-width:600px;margin:1rem auto 0;position:relative;z-index:1;">${esc(prod.short_desc)}</p></div></section>
 <section class="section"><div class="container"><div class="section-header reveal"><span class="section-label">Overview</span><h2 class="section-title">Built for <em>enterprise scale</em></h2></div><p style="max-width:720px;margin:0 auto;font-size:1.05rem;color:#475569;line-height:1.8;">${esc(prod.short_desc)} INTSOLCOM develops and maintains this platform as part of its technology portfolio, continuously investing in features, performance, and integrations.</p></div></section>
-<section class="cta-section"><div class="cta-section__glow"></div><div class="container-sm reveal"><h2>Interested in ${esc(prod.name)}?</h2><p>Schedule a demo with our product team to see how it can transform your operations.</p><div class="cta-section__actions"><a href="/contact" class="btn btn-accent btn-lg">Request a Demo \u2192</a></div></div></section>
+<section class="cta-section"><div class="cta-section__glow"></div><div class="container-sm reveal"><h2>Interested in ${esc(prod.name)}?</h2><p>${ext ? 'The official product website has everything: features, demos, and access.' : 'Schedule a demo with our product team to see how it can transform your operations.'}</p>${cta}</div></section>
 ` + pageEnd('/technology'));
     }
   }
