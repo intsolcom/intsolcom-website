@@ -194,3 +194,8 @@ WHERE slug = 'building-crm-that-works-wontia-lessons';
 UPDATE resources SET
   content = REPLACE(content, 'Our WONTIA CRM uses AI to score deals.', 'Our Wontia AIS (Applied Intelligence System) powers decisions and actions across business operations.')
 WHERE slug = 'ai-business-operations-2026';
+
+-- ============================================================
+-- v4: Remove Industries from main navigation
+-- ============================================================
+DELETE FROM nav_items WHERE url = '/industries';

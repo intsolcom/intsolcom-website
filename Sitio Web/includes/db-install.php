@@ -274,7 +274,6 @@ try {
     $nav = [
         ['Technology',      '/technology',      0, 1, 10],
         ['Business Units',  '/business-units',  0, 1, 20],
-        ['Industries',      '/industries',      0, 1, 30],
         ['Resources',       '/resources',       0, 1, 40],
         ['Contact',         '/contact',         1, 1, 50],
     ];
@@ -282,7 +281,7 @@ try {
     foreach ($nav as $item) {
         $sn->execute($item);
     }
-    $ok[] = '✓ Nav items seeded (5)';
+    $ok[] = '✓ Nav items seeded (' . count($nav) . ')';
 
     // ============================================================
     // SEED: SETTINGS
