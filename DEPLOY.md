@@ -1,5 +1,8 @@
 # INTSOLCOM Website — Deployment Guide
 
+Producción: **Contabo VPS** (nginx + PHP-FPM + MySQL + certbot).
+Hostinger está fuera de la ecuación.
+
 ## 1. Local (ya funciona)
 
 ```bash
@@ -16,57 +19,58 @@ gh auth login
 git push -u origin master
 ```
 
-## 3. Dokploy (recomendado)
-
-1. En Dokploy: New Application → From GitHub
-2. Selecciona `intsolcom/intsolcom-website`
-3. Dokploy lee `dokploy.json` automaticamente
-4. Dominios: `intsolcom.com`, `www.intsolcom.com`
-5. SSL: Let's Encrypt automatico
-6. Deploy
-
-## 4. Docker Manual
-
-```bash
-# En el servidor VPS
-git clone https://github.com/intsolcom/intsolcom-website.git
-cd intsolcom-website
-docker compose -f docker-compose.prod.yml up -d
-```
-
-## 5. PM2 + Nginx
+## 3. Contabo VPS — nginx + PHP-FPM (producción)
 
 ```bash
 # En el servidor
-git clone https://github.com/intsolcom/intsolcom-website.git /var/www/intsolcom
-cd /var/www/intsolcom
-npm install -g pm2
-pm2 start "Sitio Web/server.js" --name intsolcom-website
-pm2 save && pm2 startup
+cd /var/www
+git clone https://github.com/intsolcom/intsolcom-website.git intsolcom
+cd intsolcom
 
-# Nginx config:
-# server {
-#     listen 80;
-#     server_name intsolcom.com www.intsolcom.com;
-#     location / {
-#         proxy_pass http://localhost:3000;
-#         proxy_http_version 1.1;
-#         proxy_set_header Upgrade $http_upgrade;
-#         proxy_set_header Connection 'upgrade';
-#         proxy_set_header Host $host;
-#         proxy_cache_bypass $http_upgrade;
-#     }
-# }
+# PHP + MySQL + nginx
+sudo apt install nginx php8.3-fpm php8.3-mysql php8.3-curl php8.3-gd php8.3-mbstring php8.3-xml mysql-server certbot python3-certbot-nginx
+
+# Base de datos (coincide con includes/config.php)
+sudo mysql <<'SQL'
+CREATE DATABASE IF NOT EXISTS intsolcom CHARACTER SET utf8mb4;
+CREATE USER IF NOT EXISTS 'intsolcom'@'localhost' IDENTIFIED BY 'AHCgbDRqohTZJ=@+4-W2cLPi';
+GRANT ALL PRIVILEGES ON intsolcom.* TO 'intsolcom'@'localhost';
+FLUSH PRIVILEGES;
+SQL
+
+# Schema + seed: ejecutar UNA vez https://intsolcom.com/includes/db-install.php
+# (o importar dump de la BD anterior), luego ELIMINAR db-install.php
+
+# nginx (los headers de seguridad viven aquí — nginx ignora .htaccess)
+sudo cp nginx-site.conf /etc/nginx/sites-available/intsolcom
+sudo ln -s /etc/nginx/sites-available/intsolcom /etc/nginx/sites-enabled/intsolcom
+sudo nginx -t && sudo systemctl reload nginx
+
+# SSL
+sudo certbot --nginx -d intsolcom.com -d www.intsolcom.com
 ```
 
-## 6. Hostinger (PHP + MySQL)
+### Despliegue de cambios (cada vez)
 
 ```bash
-# 1. FTP: Subir contenido de Sitio Web/ a public_html/
-# 2. Renombrar includes/config.example.php → config.php
-# 3. Editar credenciales MySQL en config.php
-# 4. Navegador: https://intsolcom.com/includes/db-install.php
-# 5. ELIMINAR db-install.php del servidor
-# 6. Admin: https://intsolcom.com/admin
-#    User: admin / Pass: IntsolcomAdmin2026!
+cd /var/www/intsolcom
+git pull origin master
+sudo systemctl reload php8.3-fpm   # limpia OPcache
+```
+
+## 4. Dokploy (opcional — preview Node)
+
+1. En Dokploy: New Application → From GitHub
+2. Selecciona `intsolcom/intsolcom-website`
+3. Dokploy lee `dokploy.json` automáticamente
+4. Dominios: `intsolcom.com`, `www.intsolcom.com`
+5. SSL: Let's Encrypt automático
+6. Deploy
+
+## 5. Docker Manual (opcional)
+
+```bash
+git clone https://github.com/intsolcom/intsolcom-website.git
+cd intsolcom-website
+docker compose -f docker-compose.prod.yml up -d
 ```

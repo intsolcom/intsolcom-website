@@ -24,7 +24,7 @@ if (!$industry) {
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 — <?= h($siteName) ?></title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/main.css?v=1">
+  <link rel="stylesheet" href="/assets/css/main.css?v=2">
 </head>
 <body>
 <nav class="nav" id="nav"><div class="container">
@@ -34,7 +34,7 @@ if (!$industry) {
 </div><div class="nav__mobile nav-mobile"><div class="nav__mobile-links"><?php foreach ($navItems as $ni): ?><a href="<?= h($ni['url']) ?>" class="nav__mobile-link"><?= ht($ni['text']) ?></a><?php endforeach; ?></div></div></nav>
 <main><section class="section" style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;"><div><h1><?= ht('Industry Not Found') ?></h1><p style="margin-top:1rem;"><?= ht('The industry page you are looking for does not exist.') ?></p><a href="/industries" class="btn btn-accent" style="margin-top:2rem;"><?= ht('View All Industries') ?></a></div></section></main>
 <footer class="footer"><div class="container"><div class="footer__bottom"><span><?= ht(setting('footer_copyright','© 2026 INTSOLCOM LLC')) ?></span></div></div></footer>
-<script src="/assets/js/main.js?v=1"></script>
+<script src="/assets/js/main.js?v=2"></script>
 </body></html>
 <?php exit; }
 
@@ -75,7 +75,7 @@ $relatedProds   = db()->query("SELECT p.* FROM products p WHERE status = 1 ORDER
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/main.css?v=1">
+  <link rel="stylesheet" href="/assets/css/main.css?v=2">
   <link rel="canonical" href="<?= h($currentUrl) ?>">
 </head>
 <body>
@@ -260,6 +260,6 @@ $relatedProds   = db()->query("SELECT p.* FROM products p WHERE status = 1 ORDER
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
 
-<script src="/assets/js/main.js?v=1"></script>
+<script src="/assets/js/main.js?v=2"></script>
 </body>
 </html>

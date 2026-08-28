@@ -1,5 +1,12 @@
 # Agent Instructions — INTSOLCOM Website
 
+## Entorno de producción
+
+- Producción: **Contabo VPS** — nginx + PHP-FPM + MySQL (páginas servidas por PHP). Hostinger está fuera.
+- nginx IGNORA `.htaccess`: los headers de seguridad y bloqueos viven en `nginx-site.conf` (mantener sincronizado con `.htaccess`).
+- Despliegue de cambios: `git pull` en `/var/www/intsolcom` + `sudo systemctl reload php8.3-fpm` (OPcache).
+- El Node (`server.js`) es versión preview/dev (start.bat o Dokploy), no la producción.
+
 ## Git / GitHub
 
 - Después de hacer commit, SIEMPRE ejecutar `git push` al repositorio remoto de GitHub (`origin`, rama `master`). El usuario lo pidió explícitamente.

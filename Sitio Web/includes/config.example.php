@@ -5,9 +5,9 @@
 // NEVER commit config.php with real credentials.
 // ============================================================
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'CHANGE_ME');
-define('DB_USER', 'CHANGE_ME');
-define('DB_PASS', 'CHANGE_ME');
+define('DB_NAME', 'intsolcom');
+define('DB_USER', 'intsolcom');
+define('DB_PASS', 'CHANGE_ME_STRONG_PASSWORD');
 define('DB_CHARSET', 'utf8mb4');
 
 define('SITE_URL',   'https://intsolcom.com');

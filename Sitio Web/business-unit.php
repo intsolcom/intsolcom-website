@@ -92,7 +92,7 @@ if (!$unit) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/main.css?v=1">
+  <link rel="stylesheet" href="/assets/css/main.css?v=2">
 </head>
 <body>
 
@@ -128,7 +128,7 @@ if (!$unit) {
 <footer class="footer">
   <div class="container"><div class="footer__bottom"><span><?= ht(setting('footer_copyright','© 2026 INTSOLCOM LLC')) ?></span></div></div>
 </footer>
-<script src="/assets/js/main.js?v=1"></script>
+<script src="/assets/js/main.js?v=2"></script>
 </body></html>
 <?php exit; }
 
@@ -159,7 +159,7 @@ $hasNote     = !empty($unit['note']);
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/main.css?v=1">
+  <link rel="stylesheet" href="/assets/css/main.css?v=2">
   <link rel="canonical" href="<?= h($currentUrl) ?>">
   <script type="application/ld+json">
   {
@@ -553,6 +553,6 @@ $hasNote     = !empty($unit['note']);
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
 
-<script src="/assets/js/main.js?v=1"></script>
+<script src="/assets/js/main.js?v=2"></script>
 </body>
 </html>

@@ -47,7 +47,7 @@ if ($pageNum === 1) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/main.css?v=1">
+    <link rel="stylesheet" href="/assets/css/main.css?v=2">
     <link rel="canonical" href="<?= h($currentUrl) ?>">
 </head>
 <body>
@@ -196,6 +196,6 @@ if ($pageNum === 1) {
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
 
-<script src="/assets/js/main.js?v=1"></script>
+<script src="/assets/js/main.js?v=2"></script>
 </body>
 </html>

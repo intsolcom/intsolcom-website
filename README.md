@@ -49,25 +49,51 @@ intsolcom-website/
 
 ## Deploy to intsolcom.com
 
-### Via Dokploy
+Production: **Contabo VPS** (nginx + PHP-FPM + MySQL + certbot). Hostinger is out of the equation.
+
+### Initial VPS setup
+
+```bash
+# 1. Clone the repo
+cd /var/www && git clone https://github.com/intsolcom/intsolcom-website.git intsolcom
+cd intsolcom && git pull origin master
+
+# 2. PHP + MySQL
+sudo apt install nginx php8.3-fpm php8.3-mysql php8.3-curl php8.3-gd php8.3-mbstring php8.3-xml mysql-server
+
+# 3. Database (match includes/config.php)
+sudo mysql <<'SQL'
+CREATE DATABASE IF NOT EXISTS intsolcom CHARACTER SET utf8mb4;
+CREATE USER IF NOT EXISTS 'intsolcom'@'localhost' IDENTIFIED BY 'AHCgbDRqohTZJ=@+4-W2cLPi';
+GRANT ALL PRIVILEGES ON intsolcom.* TO 'intsolcom'@'localhost';
+FLUSH PRIVILEGES;
+SQL
+
+# 4. Import schema + data (from Hostinger dump or run installer once)
+#    Run https://intsolcom.com/includes/db-install.php ONCE, then DELETE db-install.php
+
+# 5. nginx site config
+sudo cp nginx-site.conf /etc/nginx/sites-available/intsolcom
+sudo ln -s /etc/nginx/sites-available/intsolcom /etc/nginx/sites-enabled/intsolcom
+sudo nginx -t && sudo systemctl reload nginx
+
+# 6. SSL
+sudo certbot --nginx -d intsolcom.com -d www.intsolcom.com
+```
+
+### Every deploy (VPS)
+
+```bash
+cd /var/www/intsolcom
+git pull origin master
+sudo systemctl reload php8.3-fpm   # clears OPcache (or: php -r 'opcache_reset();')
+```
+
+### Via Dokploy (Node preview)
 
 1. Connect Dokploy to this GitHub repo
 2. Set domains: `intsolcom.com`, `www.intsolcom.com`
 3. Deploy — Dokploy reads `dokploy.json` automatically
-
-### Via Docker + Traefik
-
-```bash
-docker compose -f docker-compose.prod.yml up -d
-```
-
-### Via Hostinger (PHP + Apache)
-
-1. Upload `Sitio Web/` contents to `public_html/`
-2. Copy `includes/config.example.php` to `includes/config.php` and update DB credentials
-3. Run `https://intsolcom.com/includes/db-install.php` once
-4. Delete `db-install.php`
-5. Login at `/admin` (credentials in `includes/config.php` — change the default password immediately; prefer `ADMIN_PASS_HASH`)
 
 ## Pages
 

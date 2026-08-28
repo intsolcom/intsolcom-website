@@ -186,7 +186,7 @@ function pageHead(title, desc, url, extraMeta = '') {
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
 <link rel="canonical" href="${esc(url)}">
-<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/main.css?v=2">
 ${extraMeta}
 <style>
 :root {
@@ -247,7 +247,7 @@ ${footerHTML()}
 window.MBPO_VIDEO={mute:1,autoplay:1,loop:1,controls:0,rel:0,modestbranding:1,showinfo:0,iv_load_policy:3,disablekb:1,playsinline:1,speed:1,layout:'cover',voffset:0};
 window.MBPO_FX={revealThreshold:0.08,counterDuration:1800,parallaxSpeed:0.15};
 </script>
-<script src="/assets/js/main.js"></script>
+<script src="/assets/js/main.js?v=2"></script>
 <script>
 function toggleFaq(btn){
   var c=btn.nextElementSibling,i=btn.querySelector('.faq__icon');
@@ -275,12 +275,13 @@ document.querySelectorAll('.faq__question').forEach(function(b){b.addEventListen
 </html>`;
 }
 
-function navBar(currentPath) {
+function navBar(currentPath, transparent = true) {
   const {links,mobile} = navHTML(currentPath);
+  const navCls = transparent ? 'nav nav--transparent' : 'nav';
   return `
-<nav class="nav nav--transparent" id="nav">
+<nav class="${navCls}" id="nav">
   <div class="container">
-    <a href="/" class="nav__logo">${esc(S.logo_text)}<span style="color:${S.color_accent}">${esc(S.logo_accent)}</span></a>
+    <a href="/" class="nav__logo">${esc(S.logo_text)}<span class="nav__logo-accent" style="color:${S.color_accent}">${esc(S.logo_accent)}</span></a>
     <div class="nav__links">${links}</div>
     <div class="nav__hamburger nav-toggle"><span></span><span></span><span></span></div>
   </div>
@@ -771,7 +772,7 @@ function renderNearshore() {
 }
 
 function render404(pathname) {
-  return pageHead('404 \u2014 INTSOLCOM','Page not found','https://intsolcom.com'+pathname) + navBar(pathname) + `
+  return pageHead('404 \u2014 INTSOLCOM','Page not found','https://intsolcom.com'+pathname) + navBar(pathname, false) + `
 <section class="section" style="min-height:60vh;display:flex;align-items:center;text-align:center;">
   <div class="container"><h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:800;color:#0F172A;">404</h1><p style="font-size:1.2rem;color:#475569;margin:1rem 0 2rem;">Page not found.</p><a href="/" class="btn btn-accent btn-lg">Back to Home \u2192</a></div>
 </section>` + pageEnd(pathname);
