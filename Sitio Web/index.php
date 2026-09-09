@@ -71,11 +71,11 @@ $industryNames = [
     'Manufacturing', 'Hospitality'
 ];
 $industryIcons = [
-    'Healthcare' => '\2665', 'Technology' => '\25CB',
-    'Financial Services' => '\0024', 'AI & Data' => '\2601',
-    'Retail' => '\263C', 'Logistics' => '\2192',
-    'Real Estate' => '\2302', 'Professional Services' => '\25A0',
-    'Manufacturing' => '\2699', 'Hospitality' => '\2605'
+    'Healthcare' => '&#9829;', 'Technology' => '&#9675;',
+    'Financial Services' => '&#36;', 'AI & Data' => '&#9729;',
+    'Retail' => '&#9788;', 'Logistics' => '&#8594;',
+    'Real Estate' => '&#8962;', 'Professional Services' => '&#9632;',
+    'Manufacturing' => '&#9881;', 'Hospitality' => '&#9733;'
 ];
 ?><!DOCTYPE html>
 <html lang="<?= $curLang ?>">
