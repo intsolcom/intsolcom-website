@@ -107,6 +107,11 @@ function t(string $text): string {
     $text = trim($text);
     if ($text === '') return $text;
 
+    // Brand names / acronyms / all-caps strings are NEVER translated
+    if (preg_match('/^[A-Z0-9&.\s()\x{2014}-]+$/u', $text) && preg_match('/[A-Z]{2,}/', $text)) {
+        return $text;
+    }
+
     $lang = currentLang();
     if ($lang === 'en') return $text; // source language, no translation needed
 
@@ -192,7 +197,13 @@ function mbpoTranslateViaClaude(string $text, string $targetLang): ?string {
 
         // DeepSeek (OpenAI-compatible) format
         $translated = $data['choices'][0]['message']['content'] ?? null;
-        return $translated !== null ? trim($translated) : null;
+        if ($translated === null) return null;
+        $translated = trim($translated);
+        // Reject model refusals / non-translations
+        if (preg_match('/no puedo traducir|lo siento|cannot translate|no se puede traducir|como modelo de lenguaje/i', $translated)) {
+            return null;
+        }
+        return $translated;
     } catch (\Throwable $e) {
         return null;
     }
