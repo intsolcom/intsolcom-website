@@ -177,7 +177,7 @@ function pageHead(title, desc, url, extraMeta = '') {
 <meta name="author" content="INTSOLCOM LLC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="INTSOLCOM LLC">
 <meta property="og:title" content="${esc(title)}">
@@ -194,7 +194,7 @@ ${extraMeta}
   --bg:#FFFFFF;--surface:#F8FAFC;--surface2:#E2E8F0;--dark:#0F172A;--mid:#475569;
   --light:#94A3B8;--accent:#00C896;--accent-dk:#00A67D;--accent-bg:rgba(0,200,150,0.07);
   --accent-brd:rgba(0,200,150,0.18);--secondary:#2563EB;--purple:#8B5CF6;--white:#FFFFFF;
-  --font-display:'Inter',sans-serif;--font-body:'Inter',sans-serif;
+  --font-display:'Space Grotesk','Inter',sans-serif;--font-body:'Inter',sans-serif;
 }
 .nav.scrolled { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 1px 2px rgba(15,23,42,.04); padding: .75rem 0; }
 .nav.scrolled .nav__logo { color: #0F172A; }

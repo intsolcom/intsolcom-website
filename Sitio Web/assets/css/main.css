@@ -2444,3 +2444,77 @@ small {
     scroll-behavior: auto;
   }
 }
+
+
+/* ===================================================================
+   36. MINIMAL & DENSE OVERRIDES — friendly AI-tech look
+   Corporate tech font + tighter vertical rhythm so more
+   information fits above the fold on every screen.
+   =================================================================== */
+:root {
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --section-pad:    4.25rem;
+  --section-pad-sm: 3rem;
+  --grid-gap:       1.5rem;
+  --container-pad:  1.5rem;
+}
+
+/* Tighter typography */
+.section-label { letter-spacing: 0.1em; font-size: 0.78rem; }
+.section-title {
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+}
+.section-subtitle { font-size: 1rem; line-height: 1.6; }
+.section-header { margin-bottom: var(--space-10); }
+
+/* Denser cards & grids */
+.card,
+.testimonial-card {
+  padding: var(--space-6);
+}
+.product-card__header { padding: var(--space-6) var(--space-6) var(--space-3); }
+.product-card__body   { padding: 0 var(--space-6) var(--space-6); }
+.capability-card      { padding: var(--space-5) var(--space-6); }
+.industry-card        { padding: var(--space-5) var(--space-6); }
+.comparison__col      { padding: var(--space-6); }
+
+/* Hero: slightly shorter, still impactful */
+.hero {
+  min-height: 90svh;
+  padding-top: var(--space-32);
+  padding-bottom: var(--space-20);
+}
+.hero__description { font-size: 1.0625rem; max-width: 540px; }
+
+/* Stats band */
+.stats-band { padding: var(--space-8) 0; gap: var(--space-10); }
+.stats-band__value { font-size: 2.5rem; }
+.stats-band__divider { min-height: 56px; }
+
+/* CTA */
+.cta-section { padding: var(--space-20) 0; }
+.cta-section h2 { font-size: clamp(1.6rem, 3vw, 2.25rem); }
+.cta-section p  { font-size: 1rem; }
+
+/* Footer & FAQ */
+.footer { padding: var(--space-12) 0 var(--space-8); }
+.faq__question { padding: var(--space-4) 0; }
+
+/* Ecosystem diagram */
+.eco-diagram { padding: var(--space-6) 0; }
+
+/* Buttons: slightly more compact but still ≥44px tap targets */
+.btn { padding: 0.75rem 1.5rem; }
+.btn-lg { padding: 0.9375rem 2rem; }
+
+/* Page hero (interior pages) — desktop only */
+@media (min-width: 769px) {
+  .hero[style] {
+    padding-top: 7rem !important;
+    padding-bottom: var(--space-12) !important;
+  }
+}
+

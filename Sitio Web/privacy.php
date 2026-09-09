@@ -16,7 +16,7 @@ $lang = currentLang();
 <meta property="og:url" content="<?= SITE_URL ?>/privacy">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/main.css?v=<?= filemtime(__DIR__.'/assets/css/main.css') ?>">
 <link rel="canonical" href="<?= SITE_URL ?>/privacy">
 <style>
