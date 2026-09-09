@@ -1278,7 +1278,7 @@ function loadSections() {
     var pageId = document.getElementById('pageSelect').value;
     var container = document.getElementById('sectionsList');
     container.innerHTML = '<div class="empty">Loading...</div>';
-    fetch('index.php?action=get_sections&page_id=' + pageId).then(r => r.json()).then(function(resp) {
+    fetch('?action=get_sections&page_id=' + pageId).then(r => r.json()).then(function(resp) {
         if (!resp.ok || !resp.sections || !resp.sections.length) { container.innerHTML = '<div class="empty">No sections found</div>'; return; }
         var html = '<table><thead><tr><th>Type</th><th>Sort</th><th>Status</th><th></th></tr></thead><tbody>';
         resp.sections.forEach(function(sec) {
@@ -1312,7 +1312,7 @@ function deleteSection(id) {
 }
 
 function openSectionModal(id) {
-    fetch('index.php?action=get_table_data&table=sections&id=' + id).then(r => r.json()).then(function(resp) {
+    fetch('?action=get_table_data&table=sections&id=' + id).then(r => r.json()).then(function(resp) {
         if (!resp.ok) { toast(resp.error); return; }
         var sec = resp.data;
         var fields = sec.fields || {};
