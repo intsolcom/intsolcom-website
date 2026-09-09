@@ -58,7 +58,7 @@ $lang = currentLang();
 
       <h2>3. Intellectual Property</h2>
       <p>All content on this website, including text, graphics, logos, images, and software, is the property of INTSOLCOM or its licensors and is protected by United States and international intellectual property laws.</p>
-      <p>WONTIA, MACROPONDER, IA Annotation Manager, and Marcas BPO are trademarks of INTSOLCOM. All rights reserved.</p>
+      <p>WONTIA AIP, WONTIA Food Security, WONTIA IA Annotation Suite, and Marcas BPO are trademarks of INTSOLCOM. All rights reserved.</p>
 
       <h2>4. Use of Website</h2>
       <p>You agree not to:</p>

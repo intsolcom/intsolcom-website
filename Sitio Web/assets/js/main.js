@@ -556,24 +556,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================================
-     15. PRODUCT CARD TILT — subtle 3D hover effect
+     15. PRODUCT CARD — flat design: no 3D tilt
      ========================================================== */
-  document.querySelectorAll('.product-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect   = card.getBoundingClientRect();
-      const x      = e.clientX - rect.left;
-      const y      = e.clientY - rect.top;
-      const cx     = rect.width  / 2;
-      const cy     = rect.height / 2;
-      const tiltX  = ((y - cy) / cy) * -8;
-      const tiltY  = ((x - cx) / cx) *  8;
-      card.style.transform = `perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02,1.02,1.02)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale3d(1,1,1)';
-    });
-    card.style.transition = 'transform 0.1s ease-out';
-  });
+  // Tilt effect removed (flat, minimalist design directive)
 
   /* ==========================================================
      SUBTLE PARALLAX

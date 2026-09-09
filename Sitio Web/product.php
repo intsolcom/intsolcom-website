@@ -54,7 +54,7 @@ $features  = json_decode($product['features']  ?? '[]', true) ?: [];
 $benefits  = json_decode($product['benefits']  ?? '[]', true) ?: [];
 $useCases  = json_decode($product['use_cases'] ?? '[]', true) ?: [];
 
-$catColors = ['CRM' => ['#00C896','rgba(0,200,150,.08)'], 'AI Platform' => ['#8B5CF6','rgba(139,92,246,.08)']];
+$catColors = ['AI Platform' => ['#00C896','rgba(0,200,150,.08)'], 'Food Security' => ['#F59E0B','rgba(245,158,11,.08)'], 'AI Data' => ['#2563EB','rgba(37,99,235,.08)']];
 $catStyle  = $catColors[$cat] ?? ['#00C896','rgba(0,200,150,.08)'];
 $prodIcons = ['users'=>'👥','brain'=>'🧠','tags'=>'🏷️','chart'=>'📊','shield'=>'🛡️','globe'=>'🌐','cpu'=>'⚙️'];
 $iconKey   = $product['icon'] ?? 'cpu';

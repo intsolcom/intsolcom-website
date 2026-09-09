@@ -20,8 +20,8 @@
 - Páginas con hero oscuro usan `nav--transparent`; páginas con top claro usan `nav` simple.
 - El tema del nav se auto-corrige en runtime vía `autoNavTheme()` en main.js (detecta si el primer bloque es oscuro). No quitar esa lógica.
 - El menú móvil se togglea con clases `open` y `active` (JS) — mantener ambas en CSS.
-- Wontia AIP = Applied Intelligence System (no CRM). INTSOLCOM solo da intro y linkea a wontia.com.
-- IA Annotation Manager linkea a iaam.com.
+- Portafolio de productos (ver `PRODUCTS_MASTER_PROMPT.md`): WONTIA AIP, WONTIA FOOD SECURITY, WONTIA IA ANNOTATION SUITE. INTSOLCOM solo da intro y linkea a wontia.com / iaam.com.
+- MACROPONDER está FUERA del portafolio (status 0). Cards de producto en diseño flat (sin gradientes ni tilt 3D).
 
 ## Seguridad (reglas duras)
 

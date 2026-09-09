@@ -100,7 +100,7 @@ sudo systemctl reload php8.3-fpm   # clears OPcache (or: php -r 'opcache_reset()
 - `/` — Home (hero, ecosystem, products, capabilities, industries, comparison, testimonials, FAQ)
 - `/holding` — Corporate structure, mission, vision, governance
 - `/business-units` — Business unit cards
-- `/technology` — Product portfolio (Wontia AIP, MACROPONDER, IA Annotation Manager)
+- `/technology` — Product portfolio (WONTIA AIP, WONTIA Food Security, WONTIA IA Annotation Suite)
 - `/industries` — 10 industry sectors
 - `/resources` — Articles, whitepapers, guides
 - `/contact` — Minimalist form + office locations

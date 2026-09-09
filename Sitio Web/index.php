@@ -381,11 +381,11 @@ body.no-scroll { overflow: hidden; }
             <div class="eco-card-tag"><?= t('Product Division') ?></div>
             <div class="card__icon" style="font-size:1.5rem;margin:0 auto .75rem;">&#9881;</div>
             <h3><?= t('Technology & Products') ?></h3>
-            <p style="font-size:.875rem;color:#475569;"><?= t('Wontia AIP, MACROPONDER, and IA Annotation Manager — software products developed and operated within the ecosystem.') ?></p>
+            <p style="font-size:.875rem;color:#475569;"><?= t('WONTIA AIP, WONTIA Food Security, and WONTIA IA Annotation Suite — software products developed and operated within the ecosystem.') ?></p>
             <div class="eco-card-capabilities">
-              <span class="eco-card-cap">Wontia AIP</span>
-              <span class="eco-card-cap">MACROPONDER</span>
-              <span class="eco-card-cap"><?= t('IA Annotation Manager') ?></span>
+              <span class="eco-card-cap">WONTIA AIP</span>
+              <span class="eco-card-cap">WONTIA Food Security</span>
+              <span class="eco-card-cap"><?= t('WONTIA IA Annotation Suite') ?></span>
             </div>
           </div>
         </div>
@@ -541,9 +541,9 @@ body.no-scroll { overflow: hidden; }
     <div class="grid-3">
       <?php
       $productDefaults = [
-        ['icon' => '&#129504;', 'cat' => 'AI Platform', 'name' => 'Wontia AIP', 'desc' => 'Applied Intelligence System (AIS) powered by TIA — one intelligence core with a growing ecosystem of domain apps for Business, Web, Food Security and more.', 'url' => '/technology/wontia-aip', 'gradient' => ''],
-        ['icon' => '&#129504;', 'cat' => 'AI Platform', 'name' => 'MACROPONDER', 'desc' => 'Decision intelligence platform. Scenario modeling, bias detection, and collaborative strategic analysis powered by AI.', 'url' => '/technology/macroponder', 'gradient' => '--purple'],
-        ['icon' => '&#127991;', 'cat' => 'AI Platform', 'name' => 'IA Annotation Manager', 'desc' => 'End-to-end annotation management platform. Project management, quality control, and workforce analytics at scale. Landing page coming soon at iaam.com.', 'url' => '/technology/ia-annotation-manager', 'gradient' => '--blue'],
+        ['icon' => '&#129504;', 'cat' => 'AI Platform', 'name' => 'WONTIA AIP', 'desc' => 'Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA — Technology of Applied Intelligence. Understand context, make decisions, execute actions.', 'url' => '/technology/wontia-aip', 'gradient' => ''],
+        ['icon' => '&#127806;', 'cat' => 'Food Security', 'name' => 'WONTIA FOOD SECURITY', 'desc' => 'Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact.', 'url' => '/technology/wontia-food-security', 'gradient' => ''],
+        ['icon' => '&#127991;', 'cat' => 'AI Data', 'name' => 'WONTIA IA ANNOTATION SUITE', 'desc' => 'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.', 'url' => '/technology/wontia-ia-annotation-suite', 'gradient' => ''],
       ];
       $displayProducts = $products ?: $productDefaults;
       foreach ($displayProducts as $idx => $prd):
@@ -556,7 +556,7 @@ body.no-scroll { overflow: hidden; }
         $pGrad = $idx === 0 ? '' : ($idx === 1 ? '--purple' : '--blue');
 
         // Map icon strings to emoji
-        $iconMap = ['users' => '&#128101;', 'brain' => '&#129504;', 'tags' => '&#127991;', 'building' => '&#127970;'];
+        $iconMap = ['brain' => '&#129504;', 'wheat' => '&#127806;', 'tags' => '&#127991;', 'building' => '&#127970;'];
         $iconDisplay = $iconMap[$pIcon] ?? $productDefaults[$idx]['icon'] ?? '&#9881;';
       ?>
       <div class="product-card reveal" data-delay="<?= $idx * 100 ?>">
@@ -805,10 +805,10 @@ body.no-scroll { overflow: hidden; }
       $faqs = [
         [t('What is INTSOLCOM?'), t('The Intsolcom business ecosystem combines two entities working together: Intsolcom, LLC in the United States (strategic and commercial hub) and INTSOLCOM SAS in Colombia (operational delivery center). We build proprietary technology products and operate business services at scale. Unlike traditional outsourcing firms, the Intsolcom ecosystem integrates proprietary technology with operational excellence to deliver superior outcomes.')],
         [t('Where are you located?'), t('Our holding company is registered in Delaware, USA. Our primary operations hub — INTSOLCOM SAS — is located in Barranquilla, Colombia with a satellite office in Bogotá. This dual presence gives us U.S. corporate governance with nearshore delivery capabilities in the EST time zone.')],
-        [t('What makes you different from BPO companies?'), t('We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From Wontia AIP to the IA Annotation Manager, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage. Our integrated ecosystem — technology + operations + R&D — creates compounding value over time.')],
+        [t('What makes you different from BPO companies?'), t('We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From WONTIA AIP to the WONTIA IA Annotation Suite, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage. Our integrated ecosystem — technology + operations + R&D — creates compounding value over time.')],
         [t('What industries do you serve?'), t('We serve clients across Healthcare, Technology, Financial Services, AI & Data, Retail, Logistics, Real Estate, Professional Services, Manufacturing, and Hospitality. Our solutions are industry-agnostic by design, with customization layers for sector-specific requirements.')],
         [t('How do I partner with INTSOLCOM?'), t('The process is straightforward: fill out our contact form or reach out via WhatsApp. We will schedule a 30-minute discovery call to understand your needs, map the right solution from our ecosystem, and prepare a tailored proposal. There is no commitment required for the initial consultation.')],
-        [t('Can I license your software products independently?'), t('Yes. Wontia AIP, MACROPONDER, and IA Annotation Manager are available as standalone SaaS products. You can license them independently of our managed services. Visit the Technology page for details or contact us for a demo.')],
+        [t('Can I license your software products independently?'), t('Yes. WONTIA AIP, WONTIA Food Security, and WONTIA IA Annotation Suite are available as standalone products. You can license them independently of our managed services. Visit the Technology page for details or contact us for a demo.')],
         [t('Do you offer staff augmentation or managed teams?'), t('Both. Through INTSOLCOM SAS, we provide dedicated nearshore teams (software engineers, AI specialists, QA, support) that work as an extension of your organization. We also offer fully managed service packages where we handle end-to-end delivery of specific functions using our technology stack.')],
       ];
       foreach ($faqs as $fidx => $faq):
@@ -862,9 +862,9 @@ body.no-scroll { overflow: hidden; }
       <div>
         <h4 class="footer__heading"><?= t('Products') ?></h4>
         <div class="footer__links">
-          <a href="/technology/wontia-aip">Wontia AIP</a>
-          <a href="/technology/macroponder">MACROPONDER</a>
-          <a href="/technology/ia-annotation-manager"><?= t('IA Annotation Manager') ?></a>
+          <a href="/technology/wontia-aip">WONTIA AIP</a>
+          <a href="/technology/wontia-food-security">WONTIA Food Security</a>
+          <a href="/technology/wontia-ia-annotation-suite">WONTIA IA Annotation Suite</a>
           <a href="/technology"><?= t('All Products') ?></a>
         </div>
       </div>

@@ -967,35 +967,31 @@ small {
   font-size: 0.875rem;
 }
 
-/* --- Product Card --- */
+/* --- Product Card (flat, minimalist, friendly) --- */
 .product-card {
   background: var(--color-white);
   border: 1px solid var(--color-surface2);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: all var(--duration-base) var(--ease-out);
+  box-shadow: none;
+  transition: border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out);
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: none;
+  box-shadow: var(--shadow-sm);
+  border-color: rgba(0, 200, 150, 0.25);
 }
 
 .product-card__header {
   padding: var(--space-8) var(--space-8) var(--space-4);
 }
 
-.product-card__gradient {
-  height: 6px;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-secondary));
-}
-
-.product-card__gradient--purple {
-  background: linear-gradient(90deg, var(--color-purple), var(--color-accent));
-}
-
+/* Flat design: gradient bars removed */
+.product-card__gradient,
+.product-card__gradient--purple,
 .product-card__gradient--blue {
-  background: linear-gradient(90deg, var(--color-secondary), var(--color-purple));
+  display: none;
 }
 
 .product-card__body {

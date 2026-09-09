@@ -47,3 +47,49 @@ UPDATE testimonials SET content = REPLACE(content, 'WONTIA CRM', 'WONTIA') WHERE
 UPDATE section_fields SET field_value = REPLACE(field_value, 'WONTIA CRM', 'Wontia AIP') WHERE field_value LIKE '%WONTIA CRM%';
 UPDATE settings SET value = REPLACE(value, 'WONTIA CRM', 'Wontia AIP') WHERE value LIKE '%WONTIA CRM%';
 UPDATE resources SET content = REPLACE(content, 'WONTIA CRM', 'WONTIA') WHERE content LIKE '%WONTIA CRM%';
+
+-- ============================================================
+-- v5: WONTIA product portfolio (3 products)
+--     WONTIA AIP · WONTIA FOOD SECURITY · WONTIA IA ANNOTATION SUITE
+-- ============================================================
+
+-- Rename IA Annotation Manager -> WONTIA IA ANNOTATION SUITE
+UPDATE products SET
+  name          = 'WONTIA IA ANNOTATION SUITE',
+  slug          = 'wontia-ia-annotation-suite',
+  category      = 'AI Data',
+  short_desc    = 'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.',
+  hero_title    = 'Annotation at Scale',
+  hero_subtitle = 'Built by annotation professionals, for annotation professionals. Projects, quality, and teams in one place.',
+  description   = 'WONTIA IA Annotation Suite is a comprehensive platform for managing AI data annotation projects at scale. Project management, quality control, and workforce optimization for annotation teams. Its dedicated landing page lives at iaam.com.',
+  demo_cta_url  = 'https://iaam.com',
+  demo_cta_text = 'Visit iaam.com'
+WHERE slug = 'ia-annotation-manager';
+
+-- Add WONTIA FOOD SECURITY (idempotent)
+DELETE FROM products WHERE slug = 'wontia-food-security';
+INSERT INTO products (name, slug, description, short_desc, hero_title, hero_subtitle, icon, category, order_num, overview, problem, solution, features, benefits, use_cases, architecture, roadmap, demo_cta_url, demo_cta_text, status)
+VALUES (
+  'WONTIA FOOD SECURITY',
+  'wontia-food-security',
+  'WONTIA Food Security applies the WONTIA + TIA intelligence core to food security: detect risk, prioritize response, coordinate action, and measure impact.',
+  'Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact.',
+  'Food Security Intelligence',
+  'The same WONTIA intelligence, applied to feeding people better.',
+  'wheat', 'Food Security', 20,
+  '<p>WONTIA Food Security proves that the same architecture can extend beyond business into domains that impact lives. It combines detection, understanding, prioritization, coordination, and action into one measurable response engine.</p><p>From food at risk to communities served, every decision is measured and every outcome feeds back into the system.</p>',
+  '<p>Food at risk is lost every day because responses are slow, uncoordinated, and hard to measure. Teams work with disconnected data, manual prioritization, and no clear view of impact.</p>',
+  '<p>WONTIA Food Security gives you one engine to detect risk, understand context, prioritize response, coordinate action, and measure impact — with TIA recommending, humans approving, and the platform executing.</p>',
+  '[{"title":"Detect","desc":"Identify food at risk before it is lost"},{"title":"Understand","desc":"Context and severity scoring for every situation"},{"title":"Prioritize","desc":"TIA ranks responses by impact and urgency"},{"title":"Coordinate","desc":"Align teams, logistics, and communities in one plan"},{"title":"Act","desc":"Execute approved actions with a full audit trail"},{"title":"Measure Impact","desc":"Meals enabled, food saved, communities served"}]',
+  '[{"title":"Less Food Lost","desc":"Faster detection and response protect at-risk food"},{"title":"More Meals Enabled","desc":"Prioritized coordination turns food into meals"},{"title":"Measurable Outcomes","desc":"Every action tracked from detection to impact"}]',
+  '[{"title":"Redistribution Networks","desc":"Route at-risk food to communities that need it most"},{"title":"Emergency Response","desc":"Coordinate food response across organizations"},{"title":"Food Programs","desc":"Measure and optimize food security programs"}]',
+  '<p>WONTIA Food Security runs on the unified WONTIA AIS architecture: AIS Core, TIA intelligence engine, domain knowledge bases, decision engine, action orchestration, and measurable outcomes — with a continuous feedback loop.</p>',
+  '<ul><li><strong>In development:</strong> Food Security Response Engine</li><li><strong>Next:</strong> More domains on the same core (Health, Agriculture, Industry)</li></ul>',
+  'https://wontia.com/#food-security',
+  'Visit wontia.com',
+  1
+);
+
+-- MACROPONDER leaves the portfolio (hidden, reversible)
+UPDATE products SET status = 0 WHERE slug = 'macroponder';
+UPDATE business_units SET status = 0 WHERE slug = 'macroponder';
