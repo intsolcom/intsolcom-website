@@ -56,7 +56,7 @@ $useCases  = json_decode($product['use_cases'] ?? '[]', true) ?: [];
 
 $catColors = ['AI Platform' => ['#00C896','rgba(0,200,150,.08)'], 'Food Security' => ['#F59E0B','rgba(245,158,11,.08)'], 'AI Data' => ['#2563EB','rgba(37,99,235,.08)']];
 $catStyle  = $catColors[$cat] ?? ['#00C896','rgba(0,200,150,.08)'];
-$prodIcons = ['users'=>'👥','brain'=>'🧠','tags'=>'🏷️','chart'=>'📊','shield'=>'🛡️','globe'=>'🌐','cpu'=>'⚙️'];
+$prodIcons = ['users'=>'👥','brain'=>'🧠','tags'=>'🏷️','chart'=>'📊','shield'=>'🛡️','globe'=>'🌐','cpu'=>'⚙️','wheat'=>'🌾'];
 $iconKey   = $product['icon'] ?? 'cpu';
 $iconChar  = $prodIcons[$iconKey] ?? '⚙️';
 ?>

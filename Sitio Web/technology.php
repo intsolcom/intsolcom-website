@@ -23,6 +23,7 @@ $catColors = [
 $prodIcons = [
   'users' => '👥', 'brain' => '🧠', 'tags' => '🏷️',
   'chart' => '📊', 'shield' => '🛡️', 'globe' => '🌐', 'cpu' => '⚙️',
+  'wheat' => '🌾',
 ];
 ?>
 <!DOCTYPE html>
@@ -140,25 +141,25 @@ $prodIcons = [
       </div>
       <div class="grid-3" style="margin-top:var(--space-10);">
         <div class="card card-hover reveal">
+          <div class="card__icon card__icon--blue">🏷️</div>
+          <span class="eco-card__badge" style="color:#2563EB;background:rgba(37,99,235,.08);"><?= ht('AI Data') ?></span>
+          <h3 style="margin-top:var(--space-3);"><?= ht('WONTIA IA ANNOTATION SUITE') ?></h3>
+          <p><?= ht('AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams — with its own landing page at iaam.com.') ?></p>
+          <a href="https://iaam.com" target="_blank" rel="noopener" style="color:#2563EB;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Visit iaam.com') ?> ↗</a>
+        </div>
+        <div class="card card-hover reveal" style="transition-delay:.05s;">
           <div class="card__icon">🧠</div>
           <span class="eco-card__badge" style="color:#00C896;background:rgba(0,200,150,.08);"><?= ht('AI Platform') ?></span>
           <h3 style="margin-top:var(--space-3);"><?= ht('WONTIA AIP') ?></h3>
           <p><?= ht('Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA — Technology of Applied Intelligence. Understand context, make decisions, execute actions.') ?></p>
           <a href="https://wontia.com" target="_blank" rel="noopener" style="color:#00C896;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Visit wontia.com') ?> ↗</a>
         </div>
-        <div class="card card-hover reveal" style="transition-delay:.05s;">
+        <div class="card card-hover reveal" style="transition-delay:.1s;">
           <div class="card__icon" style="background:rgba(245,158,11,.08);">🌾</div>
           <span class="eco-card__badge" style="color:#F59E0B;background:rgba(245,158,11,.08);"><?= ht('Food Security') ?></span>
           <h3 style="margin-top:var(--space-3);"><?= ht('WONTIA FOOD SECURITY') ?></h3>
           <p><?= ht('Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact — the same WONTIA intelligence, feeding people better.') ?></p>
           <a href="https://wontia.com/#food-security" target="_blank" rel="noopener" style="color:#F59E0B;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Learn more') ?> ↗</a>
-        </div>
-        <div class="card card-hover reveal" style="transition-delay:.1s;">
-          <div class="card__icon card__icon--blue">🏷️</div>
-          <span class="eco-card__badge" style="color:#2563EB;background:rgba(37,99,235,.08);"><?= ht('AI Data') ?></span>
-          <h3 style="margin-top:var(--space-3);"><?= ht('WONTIA IA ANNOTATION SUITE') ?></h3>
-          <p><?= ht('AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams — with its own landing page at iaam.com.') ?></p>
-          <a href="https://iaam.com" target="_blank" rel="noopener" style="color:#2563EB;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Visit iaam.com') ?> ↗</a>
         </div>
       </div>
       <div class="text-center reveal" style="margin-top:var(--space-10);">

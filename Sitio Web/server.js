@@ -58,9 +58,9 @@ const S = {
 };
 
 const PRODUCTS = [
+  {name:'WONTIA IA ANNOTATION SUITE',slug:'wontia-ia-annotation-suite',short_desc:'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.',category:'AI Data',icon:'\u{1F3F7}\uFE0F'},
   {name:'WONTIA AIP',slug:'wontia-aip',short_desc:'Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA \u2014 Technology of Applied Intelligence. Understand context, make decisions, execute actions.',category:'AI Platform',icon:'\u{1F9E0}'},
   {name:'WONTIA FOOD SECURITY',slug:'wontia-food-security',short_desc:'Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact.',category:'Food Security',icon:'\u{1F33E}'},
-  {name:'WONTIA IA ANNOTATION SUITE',slug:'wontia-ia-annotation-suite',short_desc:'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.',category:'AI Data',icon:'\u{1F3F7}\uFE0F'},
 ];
 
 const PRODUCT_EXTERNAL = {
@@ -340,9 +340,9 @@ function buildUnitsDiagram() {
 
 function buildProductsGrid() {
   const prods = [
+    {icon:'\u{1F3F7}\uFE0F',cat:'AI Data',name:'WONTIA IA ANNOTATION SUITE',desc:'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.',slug:'wontia-ia-annotation-suite',grad:''},
     {icon:'\u{1F9E0}',cat:'AI Platform',name:'WONTIA AIP',desc:'Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA \u2014 Technology of Applied Intelligence.',slug:'wontia-aip',grad:''},
     {icon:'\u{1F33E}',cat:'Food Security',name:'WONTIA FOOD SECURITY',desc:'Applied intelligence for food security. Detect risk, prioritize response, coordinate action, measure impact.',slug:'wontia-food-security',grad:''},
-    {icon:'\u{1F3F7}\uFE0F',cat:'AI Data',name:'WONTIA IA ANNOTATION SUITE',desc:'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.',slug:'wontia-ia-annotation-suite',grad:''},
   ];
   let html = '';
   for (let i = 0; i < prods.length; i++) {
@@ -634,9 +634,9 @@ function renderTechnology() {
   }
 
   const ecosystem = [
+    {icon:'\u{1F3F7}\uFE0F',cat:'AI Data',color:'#2563EB',bg:'rgba(37,99,235,.08)',name:'WONTIA IA ANNOTATION SUITE',desc:'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams \u2014 with its own landing page at iaam.com.',href:'https://iaam.com',cta:'Visit iaam.com'},
     {icon:'\u{1F9E0}',cat:'AI Platform',color:'#00C896',bg:'rgba(0,200,150,.08)',name:'WONTIA AIP',desc:'Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA \u2014 Technology of Applied Intelligence. Understand context, make decisions, execute actions.',href:'https://wontia.com',cta:'Visit wontia.com'},
     {icon:'\u{1F33E}',cat:'Food Security',color:'#F59E0B',bg:'rgba(245,158,11,.08)',name:'WONTIA FOOD SECURITY',desc:'Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact \u2014 the same WONTIA intelligence, feeding people better.',href:'https://wontia.com/#food-security',cta:'Learn more'},
-    {icon:'\u{1F3F7}\uFE0F',cat:'AI Data',color:'#2563EB',bg:'rgba(37,99,235,.08)',name:'WONTIA IA ANNOTATION SUITE',desc:'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams \u2014 with its own landing page at iaam.com.',href:'https://iaam.com',cta:'Visit iaam.com'},
   ];
 
   let ecosystemCards = '';

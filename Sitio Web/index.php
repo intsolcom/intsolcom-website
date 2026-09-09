@@ -541,9 +541,9 @@ body.no-scroll { overflow: hidden; }
     <div class="grid-3">
       <?php
       $productDefaults = [
+        ['icon' => '&#127991;', 'cat' => 'AI Data', 'name' => 'WONTIA IA ANNOTATION SUITE', 'desc' => 'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.', 'url' => '/technology/wontia-ia-annotation-suite', 'gradient' => ''],
         ['icon' => '&#129504;', 'cat' => 'AI Platform', 'name' => 'WONTIA AIP', 'desc' => 'Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA — Technology of Applied Intelligence. Understand context, make decisions, execute actions.', 'url' => '/technology/wontia-aip', 'gradient' => ''],
         ['icon' => '&#127806;', 'cat' => 'Food Security', 'name' => 'WONTIA FOOD SECURITY', 'desc' => 'Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact.', 'url' => '/technology/wontia-food-security', 'gradient' => ''],
-        ['icon' => '&#127991;', 'cat' => 'AI Data', 'name' => 'WONTIA IA ANNOTATION SUITE', 'desc' => 'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams.', 'url' => '/technology/wontia-ia-annotation-suite', 'gradient' => ''],
       ];
       $displayProducts = $products ?: $productDefaults;
       foreach ($displayProducts as $idx => $prd):
