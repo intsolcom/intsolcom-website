@@ -242,6 +242,36 @@ try {
     $ok[] = '✓ translations';
 
     // ============================================================
+    // CMS COLLECTIONS (universal content manager)
+    // ============================================================
+    $db->exec("CREATE TABLE IF NOT EXISTS cms_collections (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        collection_key VARCHAR(100) NOT NULL,
+        name VARCHAR(255),
+        items_json LONGTEXT,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY uniq_collection (collection_key)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $ok[] = '✓ cms_collections';
+
+    $db->exec("CREATE TABLE IF NOT EXISTS cms_history (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        collection_key VARCHAR(100),
+        items_json LONGTEXT,
+        changed_by VARCHAR(100),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $ok[] = '✓ cms_history';
+
+    $db->exec("CREATE TABLE IF NOT EXISTS cms_activity (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        action VARCHAR(255),
+        detail VARCHAR(500),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $ok[] = '✓ cms_activity';
+
+    // ============================================================
     // LEAD CONTACTS
     // ============================================================
     $db->exec("CREATE TABLE IF NOT EXISTS lead_contacts (

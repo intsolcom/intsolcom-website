@@ -81,14 +81,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 
-$serviceOptions = [
-  'technology'        => t('Technology / Software'),
-  'ai_data'           => t('AI & Data Operations'),
-  'business_services' => t('Business Services'),
-  'consulting'        => t('Consulting'),
-  'partnership'       => t('Partnership / Investment'),
-  'other'             => t('Other'),
-];
+$serviceOptions = cmsItems('contact_services', [
+  ['value' => 'technology', 'label' => t('Technology / Software')],
+  ['value' => 'ai_data', 'label' => t('AI & Data Operations')],
+  ['value' => 'business_services', 'label' => t('Business Services')],
+  ['value' => 'consulting', 'label' => t('Consulting')],
+  ['value' => 'partnership', 'label' => t('Partnership / Investment')],
+  ['value' => 'other', 'label' => t('Other')],
+]);
+$serviceOptions = array_column($serviceOptions, 'label', 'value') ?: [];
 ?>
 <!DOCTYPE html>
 <html lang="<?= h($lang) ?>">
@@ -216,7 +217,7 @@ $serviceOptions = [
                   <select id="service_interest" name="service_interest" class="form-input <?= isset($errors['service_interest']) ? 'error' : '' ?>" required>
                     <option value=""><?= t('Select an option...') ?></option>
                     <?php foreach ($serviceOptions as $val => $label): ?>
-                      <option value="<?= h($val) ?>" <?= $formData['service_interest'] === $val ? 'selected' : '' ?>><?= $label ?></option>
+                      <option value="<?= h($val) ?>" <?= $formData['service_interest'] === $val ? 'selected' : '' ?>><?= h($label) ?></option>
                     <?php endforeach; ?>
                   </select>
                   <?php if (isset($errors['service_interest'])): ?><div class="form-error-msg"><?= ht($errors['service_interest']) ?></div><?php endif; ?>

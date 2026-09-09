@@ -488,43 +488,34 @@ body.no-scroll { overflow: hidden; }
 
 <?php elseif ($type === 'stats'): ?>
 <!-- STATS BAND -->
+<?php
+$homeStats = cmsItems('home_stats', [
+  ['value' => '65', 'suffix' => '%', 'accent' => true, 'label' => t('Average Cost Savings')],
+  ['value' => '14', 'suffix' => 'd', 'accent' => false, 'label' => t('Deployment Time')],
+  ['value' => '98.4', 'suffix' => '%', 'accent' => true, 'decimals' => 1, 'label' => t('Annotation Accuracy')],
+  ['value' => '500', 'suffix' => '+', 'accent' => false, 'label' => t('Projects Delivered')],
+  ['value' => '300', 'suffix' => '+', 'accent' => true, 'label' => t('Professionals Worldwide')],
+]);
+?>
 <section class="section section-dark" id="stats" data-nav-section="stats">
   <div class="container">
     <div class="stats-band">
-      <div class="stats-band__item reveal">
-        <div class="stats-band__value stats-band__value--accent">
-          <span data-count="65" data-suffix="%"></span>
+      <?php foreach ($homeStats as $i => $st):
+        if (is_array($st) && isset($st['visible']) && $st['visible'] === false) continue;
+        $stValue = is_array($st) ? ($st['value'] ?? '') : $st;
+        $stSuffix = is_array($st) ? ($st['suffix'] ?? '') : '';
+        $stLabel = is_array($st) ? ($st['label'] ?? '') : '';
+        $stAccent = is_array($st) && !empty($st['accent']);
+        $stDecimals = is_array($st) && !empty($st['decimals']) ? ' data-decimals="1"' : '';
+      ?>
+      <div class="stats-band__item reveal" data-delay="<?= $i * 100 ?>">
+        <div class="stats-band__value<?= $stAccent ? ' stats-band__value--accent' : '' ?>">
+          <span data-count="<?= h($stValue) ?>"<?= $stDecimals ?> data-suffix="<?= h($stSuffix) ?>"></span><?php if ($stSuffix === 'd'): ?><span class="stats-band__suffix">d</span><?php endif; ?>
         </div>
-        <div class="stats-band__label"><?= t('Average Cost Savings') ?></div>
+        <div class="stats-band__label"><?= ht($stLabel) ?></div>
       </div>
-      <div class="stats-band__divider"></div>
-      <div class="stats-band__item reveal" data-delay="100">
-        <div class="stats-band__value">
-          <span data-count="14"></span><span class="stats-band__suffix">d</span>
-        </div>
-        <div class="stats-band__label"><?= t('Deployment Time') ?></div>
-      </div>
-      <div class="stats-band__divider"></div>
-      <div class="stats-band__item reveal" data-delay="200">
-        <div class="stats-band__value stats-band__value--accent">
-          <span data-count="98.4" data-decimals="1" data-suffix="%"></span>
-        </div>
-        <div class="stats-band__label"><?= t('Annotation Accuracy') ?></div>
-      </div>
-      <div class="stats-band__divider"></div>
-      <div class="stats-band__item reveal" data-delay="300">
-        <div class="stats-band__value">
-          <span data-count="500" data-suffix="+"></span>
-        </div>
-        <div class="stats-band__label"><?= t('Projects Delivered') ?></div>
-      </div>
-      <div class="stats-band__divider"></div>
-      <div class="stats-band__item reveal" data-delay="400">
-        <div class="stats-band__value stats-band__value--accent">
-          <span data-count="300" data-suffix="+"></span>
-        </div>
-        <div class="stats-band__label"><?= t('Professionals Worldwide') ?></div>
-      </div>
+      <?php if ($i < count($homeStats) - 1): ?><div class="stats-band__divider"></div><?php endif; ?>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
@@ -595,7 +586,7 @@ body.no-scroll { overflow: hidden; }
     </div>
     <div class="grid-4">
       <?php
-      $capabilities = [
+      $capabilities = cmsItems('home_capabilities', [
         ['icon' => '&#127758;', 'title' => t('Nearshore Teams'), 'desc' => t('Full-stack engineering and operations teams in Colombia, time-zone aligned with North America. Bilingual, pre-vetted, and managed.')],
         ['icon' => '&#129302;', 'title' => t('AI & Automation'), 'desc' => t('Custom AI solutions including LLM integration, computer vision, NLP pipelines, and business process automation.')],
         ['icon' => '&#128200;', 'title' => t('Business Intelligence'), 'desc' => t('Data warehousing, analytics dashboards, and predictive modeling to drive data-informed strategic decisions.')],
@@ -604,8 +595,9 @@ body.no-scroll { overflow: hidden; }
         ['icon' => '&#128222;', 'title' => t('Customer Operations'), 'desc' => t('Bilingual customer support, ticket management, NPS tracking, and multi-channel service desks.')],
         ['icon' => '&#128203;', 'title' => t('Executive Support'), 'desc' => t('Dedicated virtual assistants for calendar management, travel coordination, research, and executive communications.')],
         ['icon' => '&#128269;', 'title' => t('Recruiting'), 'desc' => t('End-to-end talent acquisition: sourcing, screening, technical assessments, and onboarding for global teams.')],
-      ];
+      ]);
       foreach ($capabilities as $idx => $cap):
+        if (is_array($cap) && isset($cap['visible']) && $cap['visible'] === false) continue;
       ?>
       <div class="capability-card reveal" data-delay="<?= $idx * 80 ?>">
         <div class="capability-card__icon"><?= $cap['icon'] ?></div>
@@ -656,15 +648,16 @@ body.no-scroll { overflow: hidden; }
           <h3><?= t('Traditional Service Providers') ?></h3>
         </div>
         <div class="comparison__list">
-          <?php foreach ([
-            t('Transactional vendor relationships'),
-            t('Siloed teams with no integration'),
-            t('Manual, repetitive processes'),
-            t('Generic, one-size-fits-all approach'),
-            t('Opaque operations and reporting'),
-            t('Limited technology capabilities'),
-          ] as $item): ?>
-            <div class="comparison__item"><?= $item ?></div>
+          <?php
+          $comp = cmsItems('home_comparison', [
+            'left' => [t('Transactional vendor relationships'), t('Siloed teams with no integration'), t('Manual, repetitive processes'), t('Generic, one-size-fits-all approach'), t('Opaque operations and reporting'), t('Limited technology capabilities')],
+            'right' => [t('Collaborative ecosystem partnership'), t('Integrated technology & operations'), t('AI-enabled, automated workflows'), t('Solutions tailored to your business'), t('Transparent, real-time dashboards'), t('Unified technology & ops delivery')],
+          ]);
+          foreach (($comp['left'] ?? []) as $item):
+            $itemText = is_array($item) ? ($item['text'] ?? '') : $item;
+            if ($itemText === '' || (is_array($item) && isset($item['visible']) && $item['visible'] === false)) continue;
+          ?>
+            <div class="comparison__item"><?= is_array($item) ? ht($item['text']) : $item ?></div>
           <?php endforeach; ?>
         </div>
       </div>
@@ -674,15 +667,10 @@ body.no-scroll { overflow: hidden; }
           <h3><?= t('The Intsolcom Ecosystem') ?></h3>
         </div>
         <div class="comparison__list">
-          <?php foreach ([
-            t('Collaborative ecosystem partnership'),
-            t('Integrated technology & operations'),
-            t('AI-enabled, automated workflows'),
-            t('Solutions tailored to your business'),
-            t('Transparent, real-time dashboards'),
-            t('Unified technology & ops delivery'),
-          ] as $item): ?>
-            <div class="comparison__item"><?= $item ?></div>
+          <?php foreach (($comp['right'] ?? []) as $item):
+            if (is_array($item) && isset($item['visible']) && $item['visible'] === false) continue;
+          ?>
+            <div class="comparison__item"><?= is_array($item) ? ht($item['text'] ?? '') : $item ?></div>
           <?php endforeach; ?>
         </div>
       </div>
@@ -695,17 +683,26 @@ body.no-scroll { overflow: hidden; }
 
 <?php elseif ($type === 'cta'): ?>
 <!-- CTA SECTION -->
+<?php
+$homeCta = cmsItems('home_cta', [
+  'h2' => t('Ready to work with the Intsolcom ecosystem?'),
+  'desc' => t("Let's discuss how INTSOLCOM can accelerate your growth through technology and operational excellence."),
+  'btn1_text' => t('Start a Conversation'), 'btn1_url' => '/contact',
+  'btn2_text' => t('Explore Products'), 'btn2_url' => '/technology',
+  'note' => t('No commitment. Strategic consultation.'),
+]);
+?>
 <section class="cta-section" id="cta" data-nav-section="cta">
   <div class="cta-section__glow"></div>
   <div class="cta-section__glow cta-section__glow--right"></div>
   <div class="container-sm reveal">
-    <h2><?= t('Ready to work with the Intsolcom ecosystem?') ?></h2>
-    <p><?= t("Let's discuss how INTSOLCOM can accelerate your growth through technology and operational excellence.") ?></p>
+    <h2><?= ht($homeCta['h2'] ?? '') ?></h2>
+    <p><?= ht($homeCta['desc'] ?? '') ?></p>
     <div class="cta-section__actions">
-      <a href="/contact" class="btn btn-accent btn-lg"><?= t('Start a Conversation') ?> →</a>
-      <a href="/technology" class="btn btn-outline-white btn-lg"><?= t('Explore Products') ?></a>
+      <a href="<?= h($homeCta['btn1_url'] ?? '/contact') ?>" class="btn btn-accent btn-lg"><?= ht($homeCta['btn1_text'] ?? '') ?> →</a>
+      <a href="<?= h($homeCta['btn2_url'] ?? '/technology') ?>" class="btn btn-outline-white btn-lg"><?= ht($homeCta['btn2_text'] ?? '') ?></a>
     </div>
-    <p style="margin-top:var(--space-6); font-size:.8125rem; color:rgba(255,255,255,.35);"><?= t('No commitment. Strategic consultation.') ?></p>
+    <p style="margin-top:var(--space-6); font-size:.8125rem; color:rgba(255,255,255,.35);"><?= ht($homeCta['note'] ?? '') ?></p>
   </div>
   <!-- Particles -->
   <div class="particles">
@@ -802,24 +799,27 @@ body.no-scroll { overflow: hidden; }
     </div>
     <div class="faq">
       <?php
-      $faqs = [
-        [t('What is INTSOLCOM?'), t('The Intsolcom business ecosystem combines two entities working together: Intsolcom, LLC in the United States (strategic and commercial hub) and INTSOLCOM SAS in Colombia (operational delivery center). We build proprietary technology products and operate business services at scale. Unlike traditional outsourcing firms, the Intsolcom ecosystem integrates proprietary technology with operational excellence to deliver superior outcomes.')],
-        [t('Where are you located?'), t('Our holding company is registered in Delaware, USA. Our primary operations hub — INTSOLCOM SAS — is located in Barranquilla, Colombia with a satellite office in Bogotá. This dual presence gives us U.S. corporate governance with nearshore delivery capabilities in the EST time zone.')],
-        [t('What makes you different from BPO companies?'), t('We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From WONTIA AIP to the WONTIA IA Annotation Suite, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage. Our integrated ecosystem — technology + operations + R&D — creates compounding value over time.')],
-        [t('What industries do you serve?'), t('We serve clients across Healthcare, Technology, Financial Services, AI & Data, Retail, Logistics, Real Estate, Professional Services, Manufacturing, and Hospitality. Our solutions are industry-agnostic by design, with customization layers for sector-specific requirements.')],
-        [t('How do I partner with INTSOLCOM?'), t('The process is straightforward: fill out our contact form or reach out via WhatsApp. We will schedule a 30-minute discovery call to understand your needs, map the right solution from our ecosystem, and prepare a tailored proposal. There is no commitment required for the initial consultation.')],
-        [t('Can I license your software products independently?'), t('Yes. WONTIA AIP, WONTIA Food Security, and WONTIA IA Annotation Suite are available as standalone products. You can license them independently of our managed services. Visit the Technology page for details or contact us for a demo.')],
-        [t('Do you offer staff augmentation or managed teams?'), t('Both. Through INTSOLCOM SAS, we provide dedicated nearshore teams (software engineers, AI specialists, QA, support) that work as an extension of your organization. We also offer fully managed service packages where we handle end-to-end delivery of specific functions using our technology stack.')],
-      ];
+      $faqs = cmsItems('home_faqs', [
+        ['title' => t('What is INTSOLCOM?'), 'text' => t('The Intsolcom business ecosystem combines two entities working together: Intsolcom, LLC in the United States (strategic and commercial hub) and INTSOLCOM SAS in Colombia (operational delivery center). We build proprietary technology products and operate business services at scale. Unlike traditional outsourcing firms, the Intsolcom ecosystem integrates proprietary technology with operational excellence to deliver superior outcomes.')],
+        ['title' => t('Where are you located?'), 'text' => t('Our holding company is registered in Delaware, USA. Our primary operations hub — INTSOLCOM SAS — is located in Barranquilla, Colombia with a satellite office in Bogotá. This dual presence gives us U.S. corporate governance with nearshore delivery capabilities in the EST time zone.')],
+        ['title' => t('What makes you different from BPO companies?'), 'text' => t('We are a technology holding company, not a BPO. The key difference: we own the technology we deploy. From WONTIA AIP to the WONTIA IA Annotation Suite, we build and continuously improve our own platforms. This means clients benefit from technology-driven efficiency, not just labor arbitrage. Our integrated ecosystem — technology + operations + R&D — creates compounding value over time.')],
+        ['title' => t('What industries do you serve?'), 'text' => t('We serve clients across Healthcare, Technology, Financial Services, AI & Data, Retail, Logistics, Real Estate, Professional Services, Manufacturing, and Hospitality. Our solutions are industry-agnostic by design, with customization layers for sector-specific requirements.')],
+        ['title' => t('How do I partner with INTSOLCOM?'), 'text' => t('The process is straightforward: fill out our contact form or reach out via WhatsApp. We will schedule a 30-minute discovery call to understand your needs, map the right solution from our ecosystem, and prepare a tailored proposal. There is no commitment required for the initial consultation.')],
+        ['title' => t('Can I license your software products independently?'), 'text' => t('Yes. WONTIA AIP, WONTIA Food Security, and WONTIA IA Annotation Suite are available as standalone products. You can license them independently of our managed services. Visit the Technology page for details or contact us for a demo.')],
+        ['title' => t('Do you offer staff augmentation or managed teams?'), 'text' => t('Both. Through INTSOLCOM SAS, we provide dedicated nearshore teams (software engineers, AI specialists, QA, support) that work as an extension of your organization. We also offer fully managed service packages where we handle end-to-end delivery of specific functions using our technology stack.')],
+      ]);
       foreach ($faqs as $fidx => $faq):
+        $faqQ = is_array($faq) ? ($faq['title'] ?? ($faq[0] ?? '')) : ($faq[0] ?? '');
+        $faqA = is_array($faq) ? ($faq['text'] ?? ($faq[1] ?? '')) : ($faq[1] ?? '');
+        if (is_array($faq) && isset($faq['visible']) && $faq['visible'] === false) continue;
       ?>
       <div class="faq__item reveal" data-delay="<?= $fidx * 60 ?>">
         <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
-          <span><?= $faq[0] ?></span>
+          <span><?= ht($faqQ) ?></span>
           <span class="faq__icon">+</span>
         </button>
         <div class="faq__answer" style="display:none;">
-          <div class="faq__answer-inner"><?= $faq[1] ?></div>
+          <div class="faq__answer-inner"><?= ht($faqA) ?></div>
         </div>
       </div>
       <?php endforeach; ?>

@@ -93,3 +93,30 @@ VALUES (
 -- MACROPONDER leaves the portfolio (hidden, reversible)
 UPDATE products SET status = 0 WHERE slug = 'macroponder';
 UPDATE business_units SET status = 0 WHERE slug = 'macroponder';
+
+-- ============================================================
+-- v6: CMS collections (universal content manager)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS cms_collections (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    collection_key VARCHAR(100) NOT NULL,
+    name VARCHAR(255),
+    items_json LONGTEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_collection (collection_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS cms_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    collection_key VARCHAR(100),
+    items_json LONGTEXT,
+    changed_by VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS cms_activity (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    action VARCHAR(255),
+    detail VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

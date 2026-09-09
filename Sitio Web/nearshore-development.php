@@ -377,21 +377,26 @@ body.no-scroll { overflow: hidden; }
 
     <div class="grid-3">
       <?php
-      $steps = [
+      $steps = cmsItems('nearshore_sdd_steps', [
         ['num' => '1', 'icon' => '&#128203;', 'title' => t('SPEC'), 'desc' => t('We define together EXACTLY what you need. Zero ambiguity. You approve before any code is written.')],
         ['num' => '2', 'icon' => '&#127912;', 'title' => t('DESIGN'), 'desc' => t('Architecture, UX, UI — everything designed first. You see mockups, not promises.')],
         ['num' => '3', 'icon' => '&#9000;', 'title' => t('DEVELOP'), 'desc' => t('The team builds against the specification. No scope creep. No surprises.')],
         ['num' => '4', 'icon' => '&#9881;', 'title' => t('TEST'), 'desc' => t('Every feature validated against what you approved. Nothing ships without testing.')],
         ['num' => '5', 'icon' => '&#128640;', 'title' => t('DEPLOY'), 'desc' => t('Published on your infrastructure or ours. You decide.')],
         ['num' => '6', 'icon' => '&#128200;', 'title' => t('OPTIMIZE'), 'desc' => t("Continuous improvement based on real usage data. We don't disappear after launch.")],
-      ];
+      ]);
       foreach ($steps as $idx => $s):
+        if (is_array($s) && isset($s['visible']) && $s['visible'] === false) continue;
+        $sNum = is_array($s) ? ($s['num'] ?? ($idx + 1)) : ($idx + 1);
+        $sIcon = is_array($s) ? ($s['icon'] ?? '') : '';
+        $sTitle = is_array($s) ? ($s['title'] ?? '') : '';
+        $sDesc = is_array($s) ? ($s['desc'] ?? ($s['text'] ?? '')) : '';
       ?>
       <div class="meth-card reveal" style="transition-delay:<?= $idx * 80 ?>ms;">
-        <div class="meth-card__num"><?= $s['num'] ?></div>
-        <div class="meth-card__icon"><?= $s['icon'] ?></div>
-        <h4><?= $s['title'] ?></h4>
-        <p><?= $s['desc'] ?></p>
+        <div class="meth-card__num"><?= h($sNum) ?></div>
+        <div class="meth-card__icon"><?= h($sIcon) ?></div>
+        <h4><?= ht($sTitle) ?></h4>
+        <p><?= ht($sDesc) ?></p>
       </div>
       <?php endforeach; ?>
     </div>
@@ -415,20 +420,24 @@ body.no-scroll { overflow: hidden; }
 
     <div class="grid-3">
       <?php
-      $reasons = [
+      $reasons = cmsItems('nearshore_why', [
         ['icon' => '&#127464;&#127476;', 'title' => t('EST Timezone'), 'desc' => t('Your team works when you work. Daily standups at 9 AM your time. No 5 AM calls. No midnight handoffs.')],
         ['icon' => '&#128172;', 'title' => t('Truly Bilingual'), 'desc' => t("C1-C2 English. Not 'technical English'. Real communication with your stakeholders.")],
         ['icon' => '&#9989;', 'title' => t('Pre-Vetted Talent'), 'desc' => t("We don't forward resumes. We present engineers who passed our technical assessment.")],
         ['icon' => '&#129309;', 'title' => t('Cultural Fit'), 'desc' => t('Colombia shares a work culture with the US. Zero cultural friction. Just results.')],
         ['icon' => '&#128176;', 'title' => t('Cost Efficient'), 'desc' => t('60-70% less than equivalent US-based teams. Same quality, better economics.')],
         ['icon' => '&#9992;', 'title' => t('3 Hours from Miami'), 'desc' => t("Direct flights. Visit your team whenever you want. They're not on the other side of the world.")],
-      ];
+      ]);
       foreach ($reasons as $idx => $r):
+        if (is_array($r) && isset($r['visible']) && $r['visible'] === false) continue;
+        $rIcon = is_array($r) ? ($r['icon'] ?? '') : '';
+        $rTitle = is_array($r) ? ($r['title'] ?? '') : '';
+        $rDesc = is_array($r) ? ($r['desc'] ?? ($r['text'] ?? '')) : '';
       ?>
       <div class="feature-card reveal" style="transition-delay:<?= $idx * 60 ?>ms;">
-        <div class="feature-card__icon"><?= $r['icon'] ?></div>
-        <h4><?= $r['title'] ?></h4>
-        <p><?= $r['desc'] ?></p>
+        <div class="feature-card__icon"><?= h($rIcon) ?></div>
+        <h4><?= ht($rTitle) ?></h4>
+        <p><?= ht($rDesc) ?></p>
       </div>
       <?php endforeach; ?>
     </div>

@@ -140,27 +140,31 @@ $prodIcons = [
         </p>
       </div>
       <div class="grid-3" style="margin-top:var(--space-10);">
-        <div class="card card-hover reveal">
-          <div class="card__icon card__icon--blue">🏷️</div>
-          <span class="eco-card__badge" style="color:#2563EB;background:rgba(37,99,235,.08);"><?= ht('AI Data') ?></span>
-          <h3 style="margin-top:var(--space-3);"><?= ht('WONTIA IA ANNOTATION SUITE') ?></h3>
-          <p><?= ht('AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams — with its own landing page at iaam.com.') ?></p>
-          <a href="https://iaam.com" target="_blank" rel="noopener" style="color:#2563EB;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Visit iaam.com') ?> ↗</a>
+        <?php
+        $techEcosystem = cmsItems('tech_ecosystem', [
+          ['icon' => '🏷️', 'color' => '#2563EB', 'bg' => 'rgba(37,99,235,.08)', 'tag' => 'AI Data', 'title' => 'WONTIA IA ANNOTATION SUITE', 'text' => 'AI data annotation at scale. Manage projects, verify quality, and measure your annotation teams — with its own landing page at iaam.com.', 'url' => 'https://iaam.com', 'cta' => 'Visit iaam.com'],
+          ['icon' => '🧠', 'color' => '#00C896', 'bg' => 'rgba(0,200,150,.08)', 'tag' => 'AI Platform', 'title' => 'WONTIA AIP', 'text' => 'Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA — Technology of Applied Intelligence. Understand context, make decisions, execute actions.', 'url' => 'https://wontia.com', 'cta' => 'Visit wontia.com'],
+          ['icon' => '🌾', 'color' => '#F59E0B', 'bg' => 'rgba(245,158,11,.08)', 'tag' => 'Food Security', 'title' => 'WONTIA FOOD SECURITY', 'text' => 'Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact — the same WONTIA intelligence, feeding people better.', 'url' => 'https://wontia.com/#food-security', 'cta' => 'Learn more'],
+        ]);
+        foreach ($techEcosystem as $eidx => $eco):
+          if (is_array($eco) && isset($eco['visible']) && $eco['visible'] === false) continue;
+          $ecoIcon = is_array($eco) ? ($eco['icon'] ?? '') : '';
+          $ecoColor = is_array($eco) ? ($eco['color'] ?? '#00C896') : '#00C896';
+          $ecoBg = is_array($eco) ? ($eco['bg'] ?? 'rgba(0,200,150,.08)') : 'rgba(0,200,150,.08)';
+          $ecoTag = is_array($eco) ? ($eco['tag'] ?? '') : '';
+          $ecoTitle = is_array($eco) ? ($eco['title'] ?? '') : '';
+          $ecoText = is_array($eco) ? ($eco['text'] ?? '') : '';
+          $ecoUrl = is_array($eco) ? ($eco['url'] ?? '#') : '#';
+          $ecoCta = is_array($eco) ? ($eco['cta'] ?? '') : '';
+        ?>
+        <div class="card card-hover reveal" style="transition-delay:<?= $eidx * 0.05 ?>s;">
+          <div class="card__icon" style="background:<?= h($ecoBg) ?>;"><?= h($ecoIcon) ?></div>
+          <span class="eco-card__badge" style="color:<?= h($ecoColor) ?>;background:<?= h($ecoBg) ?>;"><?= ht($ecoTag) ?></span>
+          <h3 style="margin-top:var(--space-3);"><?= ht($ecoTitle) ?></h3>
+          <p><?= ht($ecoText) ?></p>
+          <a href="<?= h($ecoUrl) ?>" target="_blank" rel="noopener" style="color:<?= h($ecoColor) ?>;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht($ecoCta) ?> ↗</a>
         </div>
-        <div class="card card-hover reveal" style="transition-delay:.05s;">
-          <div class="card__icon">🧠</div>
-          <span class="eco-card__badge" style="color:#00C896;background:rgba(0,200,150,.08);"><?= ht('AI Platform') ?></span>
-          <h3 style="margin-top:var(--space-3);"><?= ht('WONTIA AIP') ?></h3>
-          <p><?= ht('Your intelligence layer. WONTIA AIP powers every WONTIA product with TIA — Technology of Applied Intelligence. Understand context, make decisions, execute actions.') ?></p>
-          <a href="https://wontia.com" target="_blank" rel="noopener" style="color:#00C896;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Visit wontia.com') ?> ↗</a>
-        </div>
-        <div class="card card-hover reveal" style="transition-delay:.1s;">
-          <div class="card__icon" style="background:rgba(245,158,11,.08);">🌾</div>
-          <span class="eco-card__badge" style="color:#F59E0B;background:rgba(245,158,11,.08);"><?= ht('Food Security') ?></span>
-          <h3 style="margin-top:var(--space-3);"><?= ht('WONTIA FOOD SECURITY') ?></h3>
-          <p><?= ht('Applied intelligence for food security. Detect risk, prioritize response, coordinate action, and measure impact — the same WONTIA intelligence, feeding people better.') ?></p>
-          <a href="https://wontia.com/#food-security" target="_blank" rel="noopener" style="color:#F59E0B;font-weight:600;font-size:.875rem;display:inline-flex;align-items:center;gap:.35rem;margin-top:var(--space-4);"><?= ht('Learn more') ?> ↗</a>
-        </div>
+        <?php endforeach; ?>
       </div>
       <div class="text-center reveal" style="margin-top:var(--space-10);">
         <a href="https://wontia.com" target="_blank" rel="noopener" class="btn btn-accent btn-lg"><?= ht('Explore the WONTIA ecosystem') ?> ↗</a>
@@ -174,21 +178,24 @@ $prodIcons = [
       <h2 class="section-title reveal"><?= ht('Future Products') ?></h2>
       <p class="section-subtitle reveal" style="margin:0 auto var(--space-8);"><?= ht('Our technology roadmap is always expanding. New platforms and AI products are in development to address emerging enterprise challenges.') ?></p>
       <div class="grid-auto-sm" style="margin-top:var(--space-10);">
-        <div class="card reveal" style="text-align:center;border-style:dashed;border-color:var(--color-surface2);">
-          <div class="card__icon card__icon--blue" style="margin:0 auto var(--space-4);">🔮</div>
-          <h3 style="font-size:1rem;"><?= ht('AI Governance Suite') ?></h3>
-          <p style="font-size:0.875rem;"><?= ht('Enterprise-grade AI governance, compliance, and monitoring platform.') ?></p>
+        <?php
+        $techFuture = cmsItems('tech_future', [
+          ['icon' => '🔮', 'title' => 'AI Governance Suite', 'text' => 'Enterprise-grade AI governance, compliance, and monitoring platform.'],
+          ['icon' => '🚀', 'title' => 'Supply Chain AI', 'text' => 'Predictive logistics and intelligent supply chain orchestration.'],
+          ['icon' => '💡', 'title' => 'Your Idea Here', 'text' => 'Have a product vision? Partner with INTSOLCOM to bring it to life.'],
+        ]);
+        foreach ($techFuture as $fidx => $fut):
+          if (is_array($fut) && isset($fut['visible']) && $fut['visible'] === false) continue;
+          $futIcon = is_array($fut) ? ($fut['icon'] ?? '') : '';
+          $futTitle = is_array($fut) ? ($fut['title'] ?? '') : '';
+          $futText = is_array($fut) ? ($fut['text'] ?? '') : '';
+        ?>
+        <div class="card reveal" style="text-align:center;border-style:dashed;border-color:var(--color-surface2);transition-delay:<?= $fidx * 0.1 ?>s;">
+          <div class="card__icon" style="margin:0 auto var(--space-4);"><?= h($futIcon) ?></div>
+          <h3 style="font-size:1rem;"><?= ht($futTitle) ?></h3>
+          <p style="font-size:0.875rem;"><?= ht($futText) ?></p>
         </div>
-        <div class="card reveal" style="text-align:center;border-style:dashed;border-color:var(--color-surface2);transition-delay:.1s;">
-          <div class="card__icon card__icon--purple" style="margin:0 auto var(--space-4);">🚀</div>
-          <h3 style="font-size:1rem;"><?= ht('Supply Chain AI') ?></h3>
-          <p style="font-size:0.875rem;"><?= ht('Predictive logistics and intelligent supply chain orchestration.') ?></p>
-        </div>
-        <div class="card reveal" style="text-align:center;border-style:dashed;border-color:var(--color-surface2);transition-delay:.2s;">
-          <div class="card__icon" style="margin:0 auto var(--space-4);">💡</div>
-          <h3 style="font-size:1rem;"><?= ht('Your Idea Here') ?></h3>
-          <p style="font-size:0.875rem;"><?= ht('Have a product vision? Partner with INTSOLCOM to bring it to life.') ?></p>
-        </div>
+        <?php endforeach; ?>
       </div>
     </div>
   </section>

@@ -575,6 +575,67 @@ if ($isLoggedIn && isset($_GET['action'])) {
                 }
                 echo json_encode(['ok'=>true, 'sections'=>$sections]); exit;
 
+            // ── CMS: GET COLLECTIONS ──
+            case 'cms_get_collections':
+                $cols = $db->query("SELECT * FROM cms_collections ORDER BY name")->fetchAll();
+                foreach ($cols as &$c) { $c['items'] = json_decode($c['items_json'] ?? '[]', true) ?: []; unset($c['items_json']); }
+                echo json_encode(['ok'=>true, 'collections'=>$cols]); exit;
+
+            // ── CMS: SAVE COLLECTION (with history + activity) ──
+            case 'cms_save_collection':
+                $key = trim($_POST['key'] ?? '');
+                $name = trim($_POST['name'] ?? $key);
+                $items = json_decode($_POST['items'] ?? '[]', true);
+                if ($key === '' || !is_array($items)) { echo json_encode(['ok'=>false,'error'=>'key and items required']); exit; }
+                $prev = $db->prepare("SELECT items_json FROM cms_collections WHERE collection_key = ? LIMIT 1");
+                $prev->execute([$key]);
+                $prevRow = $prev->fetch();
+                if ($prevRow) {
+                    $db->prepare("INSERT INTO cms_history (collection_key, items_json, changed_by) VALUES (?, ?, ?)")
+                       ->execute([$key, $prevRow['items_json'], $_SESSION['intsolcom_admin'] ? 'admin' : 'admin']);
+                }
+                $itemsJson = json_encode($items, JSON_UNESCAPED_UNICODE);
+                $db->prepare("INSERT INTO cms_collections (collection_key, name, items_json) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = ?, items_json = ?")
+                   ->execute([$key, $name, $itemsJson, $name, $itemsJson]);
+                $db->prepare("INSERT INTO cms_activity (action, detail) VALUES (?, ?)")
+                   ->execute(['collection_saved', $key . ' (' . count($items) . ' items)']);
+                echo json_encode(['ok'=>true]); exit;
+
+            // ── CMS: HISTORY ──
+            case 'cms_history':
+                $key = $_POST['key'] ?? '';
+                if ($key === '') { echo json_encode(['ok'=>false,'error'=>'key required']); exit; }
+                $h = $db->prepare("SELECT * FROM cms_history WHERE collection_key = ? ORDER BY id DESC LIMIT 30");
+                $h->execute([$key]);
+                echo json_encode(['ok'=>true, 'history'=>$h->fetchAll()]); exit;
+
+            // ── CMS: RESTORE HISTORY (undo) ──
+            case 'cms_restore':
+                $hid = (int)($_POST['history_id'] ?? 0);
+                if ($hid <= 0) { echo json_encode(['ok'=>false,'error'=>'history_id required']); exit; }
+                $h = $db->prepare("SELECT * FROM cms_history WHERE id = ?");
+                $h->execute([$hid]);
+                $row = $h->fetch();
+                if (!$row) { echo json_encode(['ok'=>false,'error'=>'Not found']); exit; }
+                $db->prepare("UPDATE cms_collections SET items_json = ? WHERE collection_key = ?")
+                   ->execute([$row['items_json'], $row['collection_key']]);
+                $db->prepare("INSERT INTO cms_activity (action, detail) VALUES (?, ?)")
+                   ->execute(['collection_restored', $row['collection_key'] . ' from history #' . $hid]);
+                echo json_encode(['ok'=>true]); exit;
+
+            // ── CMS: ACTIVITY LOG ──
+            case 'cms_activity':
+                $log = $db->query("SELECT * FROM cms_activity ORDER BY id DESC LIMIT 100")->fetchAll();
+                echo json_encode(['ok'=>true, 'activity'=>$log]); exit;
+
+            // ── CMS: DELETE COLLECTION (back to fallback content) ──
+            case 'cms_delete_collection':
+                $key = $_POST['key'] ?? '';
+                if ($key === '') { echo json_encode(['ok'=>false,'error'=>'key required']); exit; }
+                $db->prepare("INSERT INTO cms_activity (action, detail) VALUES (?, ?)")->execute(['collection_deleted', $key]);
+                $db->prepare("DELETE FROM cms_collections WHERE collection_key = ?")->execute([$key]);
+                echo json_encode(['ok'=>true]); exit;
+
             default:
                 echo json_encode(['ok'=>false,'error'=>'Unknown action']);
         }
@@ -818,6 +879,7 @@ td{color:#CBD5E1}
   <nav class="sidebar-nav">
     <a data-tab="dashboard" class="active" href="javascript:switchTab('dashboard')">Dashboard</a>
     <a data-tab="pages" href="javascript:switchTab('pages')">Pages &amp; Sections</a>
+    <a data-tab="content" href="javascript:switchTab('content')">Content Manager</a>
     <a data-tab="nav" href="javascript:switchTab('nav')">Navigation</a>
     <a data-tab="units" href="javascript:switchTab('units')">Business Units</a>
     <a data-tab="products" href="javascript:switchTab('products')">Products</a>
@@ -877,6 +939,29 @@ td{color:#CBD5E1}
     <div id="sectionsList"><div class="empty">Select a page to view sections</div></div>
   </div>
 </div>
+
+<!-- ============ CONTENT MANAGER TAB ============ -->
+<div class="tab-content" id="tab-content">
+  <div class="header"><h2>Content Manager</h2></div>
+  <div class="panel">
+    <div class="h3-row">
+      <h3>Site Content Collections</h3>
+      <div style="display:flex;gap:10px;align-items:center">
+        <input id="cmsSearch" placeholder="Search collections..." oninput="cmsFilter()" style="padding:6px 10px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#E2E8F0;font-size:.82rem;width:220px">
+        <button class="btn btn-outline btn-sm" onclick="cmsExportAll()">Export All</button>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('cmsImportInput').click()">Import</button>
+        <input type="file" id="cmsImportInput" accept=".json" style="display:none" onchange="cmsImportAll(this)">
+        <button class="btn btn-outline btn-sm" onclick="cmsLoadActivity()">Activity</button>
+      </div>
+    </div>
+    <div id="cmsCollectionsList"><div class="empty">Loading collections...</div></div>
+    <div id="cmsActivityPanel" style="display:none;margin-top:16px">
+      <div class="h3-row"><h3>Activity Log</h3><button class="btn btn-outline btn-sm" onclick="document.getElementById('cmsActivityPanel').style.display='none'">Close</button></div>
+      <div id="cmsActivityList"></div>
+    </div>
+  </div>
+</div>
+
 
 <!-- ============ NAVIGATION TAB ============ -->
 <div class="tab-content" id="tab-nav">
@@ -2035,6 +2120,240 @@ function mediaImportUnsplash(url, author) {
     <div id="unsplash-results" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px"></div>
   </div>
 </div>
+
+<!-- CMS EDIT MODAL -->
+<div class="modal-overlay" id="cms-modal" style="display:none" onclick="if(event.target===this)cmsCloseModal()">
+  <div class="modal" style="max-width:860px;max-height:92vh;overflow-y:auto">
+    <button class="modal-close" onclick="cmsCloseModal()">✕</button>
+    <h3 id="cms-modal-title">Edit Collection</h3>
+    <div class="form-row" style="margin:12px 0">
+      <div class="form-group" style="flex:1"><label>Collection Key (slug)</label><input type="text" id="cms-key" style="width:100%;padding:8px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.82rem"></div>
+      <div class="form-group" style="flex:1"><label>Name</label><input type="text" id="cms-name" style="width:100%;padding:8px 12px;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#E2E8F0;font-size:.82rem"></div>
+    </div>
+    <div id="cms-items-editor" style="display:flex;flex-direction:column;gap:10px"></div>
+    <button class="btn btn-outline btn-sm" onclick="cmsAddItem()" style="margin-top:12px">+ Add Item</button>
+    <div class="btn-row" style="margin-top:16px;justify-content:space-between">
+      <div class="btn-row">
+        <button class="btn btn-outline btn-sm" onclick="cmsLoadHistory()">History</button>
+        <button class="btn btn-outline btn-sm" onclick="cmsExportOne()">Export</button>
+        <button class="btn btn-danger btn-sm" onclick="cmsDeleteCollection()">Reset to default</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="cmsCloseModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="cmsSave()" id="cms-save-btn">💾 Save</button>
+      </div>
+    </div>
+    <div id="cms-history-list" style="display:none;margin-top:14px;border-top:1px solid rgba(255,255,255,.08);padding-top:12px"></div>
+  </div>
+</div>
+
+<script>
+// ─── CONTENT MANAGER ───
+var CMS_COLS = [];
+var CMS_EDITING = null; // current key being edited
+var CMS_ITEMS = [];     // items being edited in modal
+
+function cmsLoadCollections() {
+  apiFetch('cms_get_collections', {}).then(function(r) { return r.json(); }).then(function(resp) {
+    if (!resp.ok) return;
+    CMS_COLS = resp.collections || [];
+    cmsRenderList();
+  }).catch(function(){});
+}
+
+function cmsRenderList() {
+  var box = document.getElementById('cmsCollectionsList');
+  var q = (document.getElementById('cmsSearch').value || '').toLowerCase();
+  var rows = CMS_COLS.filter(function(c) {
+    return !q || (c.collection_key + ' ' + (c.name||'')).toLowerCase().indexOf(q) > -1;
+  });
+  if (!rows.length) { box.innerHTML = '<div class="empty">No collections' + (q ? ' matching search' : ' yet — create one') + '</div>'; return; }
+  var html = '<table><thead><tr><th>Name</th><th>Key</th><th>Items</th><th>Updated</th><th></th></tr></thead><tbody>';
+  rows.forEach(function(c) {
+    html += '<tr><td><strong>' + esc(c.name || c.collection_key) + '</strong></td><td><code>' + esc(c.collection_key) + '</code></td><td>' + (c.items ? c.items.length : 0) + '</td><td class="meta">' + esc(String(c.updated_at||'').replace('T',' ').slice(0,16)) + '</td>' +
+      '<td><button class="btn btn-outline btn-sm" onclick="cmsOpen(\'' + esc(c.collection_key) + '\')">Edit</button></td></tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div style="margin-top:12px"><button class="btn btn-outline btn-sm" onclick="cmsCreateNew()">+ New Collection</button></div>';
+  box.innerHTML = html;
+}
+
+function cmsFilter() { cmsRenderList(); }
+
+function cmsCreateNew() {
+  var key = prompt('Collection key (slug, e.g. home_faqs):');
+  if (!key) return;
+  cmsOpen(key, true);
+}
+
+function cmsOpen(key, isNew) {
+  var col = null;
+  CMS_COLS.forEach(function(c){ if (c.collection_key === key) col = c; });
+  CMS_EDITING = key;
+  CMS_ITEMS = col ? JSON.parse(JSON.stringify(col.items || [])) : [];
+  if (isNew || !col) CMS_ITEMS = CMS_ITEMS.length ? CMS_ITEMS : [];
+  document.getElementById('cms-key').value = key;
+  document.getElementById('cms-name').value = col ? (col.name || key) : key;
+  document.getElementById('cms-modal-title').textContent = 'Edit: ' + key;
+  document.getElementById('cms-history-list').style.display = 'none';
+  cmsRenderItems();
+  document.getElementById('cms-modal').style.display = 'flex';
+}
+
+function cmsRenderItems() {
+  var box = document.getElementById('cms-items-editor');
+  if (!CMS_ITEMS.length) { box.innerHTML = '<div class="empty">No items — click "Add Item"</div>'; return; }
+  var html = '';
+  CMS_ITEMS.forEach(function(item, i) {
+    html += '<div class="cms-item-card" data-idx="' + i + '" style="background:#0F172A;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px">';
+    html += '<div class="form-row" style="margin-bottom:6px">';
+    html += '<input type="text" placeholder="Title" value="' + esc(item.title || '') + '" oninput="CMS_ITEMS[' + i + '].title = this.value" style="flex:1;padding:6px 10px;background:#1E293B;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#E2E8F0;font-size:.8rem">';
+    html += '<input type="text" placeholder="Tag / category (optional)" value="' + esc(item.tag || '') + '" oninput="CMS_ITEMS[' + i + '].tag = this.value" style="width:150px;padding:6px 10px;background:#1E293B;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#E2E8F0;font-size:.8rem">';
+    html += '</div>';
+    html += '<textarea rows="2" placeholder="Description / text" oninput="CMS_ITEMS[' + i + '].text = this.value" style="width:100%;padding:6px 10px;background:#1E293B;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#E2E8F0;font-size:.8rem;resize:vertical">' + esc(item.text || '') + '</textarea>';
+    html += '<div class="form-row" style="margin-top:6px">';
+    html += '<input type="text" placeholder="Link / URL (optional)" value="' + esc(item.url || '') + '" oninput="CMS_ITEMS[' + i + '].url = this.value" style="flex:1;padding:6px 10px;background:#1E293B;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#E2E8F0;font-size:.8rem">';
+    html += '<input type="text" placeholder="Icon (emoji, optional)" value="' + esc(item.icon || '') + '" oninput="CMS_ITEMS[' + i + '].icon = this.value" style="width:120px;padding:6px 10px;background:#1E293B;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#E2E8F0;font-size:.8rem">';
+    html += '<label class="inline-check" style="margin-left:8px"><input type="checkbox" ' + (item.visible === false ? '' : 'checked') + ' onchange="CMS_ITEMS[' + i + '].visible = this.checked"> Visible</label>';
+    html += '</div>';
+    html += '<div class="btn-row" style="margin-top:6px;justify-content:flex-end">';
+    html += '<button class="btn btn-outline btn-sm" onclick="cmsMoveItem(' + i + ',-1)">↑</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="cmsMoveItem(' + i + ',1)">↓</button>';
+    html += '<button class="btn btn-outline btn-sm" onclick="cmsDuplicateItem(' + i + ')">⧉</button>';
+    html += '<button class="btn btn-danger btn-sm" onclick="cmsRemoveItem(' + i + ')">✕</button>';
+    html += '</div></div>';
+  });
+  box.innerHTML = html;
+}
+
+function cmsAddItem() { CMS_ITEMS.push({title:'', tag:'', text:'', url:'', icon:'', visible:true}); cmsRenderItems(); }
+function cmsRemoveItem(i) { CMS_ITEMS.splice(i, 1); cmsRenderItems(); }
+function cmsDuplicateItem(i) { CMS_ITEMS.splice(i + 1, 0, JSON.parse(JSON.stringify(CMS_ITEMS[i]))); cmsRenderItems(); }
+function cmsMoveItem(i, dir) {
+  var j = i + dir;
+  if (j < 0 || j >= CMS_ITEMS.length) return;
+  var t = CMS_ITEMS[i]; CMS_ITEMS[i] = CMS_ITEMS[j]; CMS_ITEMS[j] = t;
+  cmsRenderItems();
+}
+
+function cmsSave() {
+  var key = document.getElementById('cms-key').value.trim();
+  var name = document.getElementById('cms-name').value.trim();
+  if (!key) { toast('Key required'); return; }
+  var btn = document.getElementById('cms-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  var fd = new FormData();
+  fd.append('key', key);
+  fd.append('name', name || key);
+  fd.append('items', JSON.stringify(CMS_ITEMS));
+  fetch('?action=cms_save_collection', {method:'POST', body: fd}).then(function(r){ return r.json(); }).then(function(resp) {
+    btn.disabled = false; btn.textContent = '💾 Save';
+    if (resp.ok) { toast('Saved ✔'); cmsCloseModal(); cmsLoadCollections(); }
+    else toast(resp.error || 'Error');
+  });
+}
+
+function cmsCloseModal() { document.getElementById('cms-modal').style.display = 'none'; }
+
+function cmsLoadHistory() {
+  var box = document.getElementById('cms-history-list');
+  var fd = new FormData(); fd.append('key', CMS_EDITING);
+  fetch('?action=cms_history', {method:'POST', body: fd}).then(function(r){ return r.json(); }).then(function(resp) {
+    box.style.display = 'block';
+    if (!resp.ok || !resp.history.length) { box.innerHTML = '<div class="empty">No history yet — every save creates a snapshot for undo.</div>'; return; }
+    var html = '<h4 style="margin-bottom:8px">Version History (click to restore)</h4>';
+    resp.history.forEach(function(h) {
+      html += '<div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid rgba(255,255,255,.05)">';
+      html += '<span class="meta">#' + h.id + ' — ' + esc(String(h.created_at).replace('T',' ').slice(0,16)) + '</span>';
+      html += '<button class="btn btn-outline btn-sm" onclick="cmsRestore(' + h.id + ')">Restore</button></div>';
+    });
+    box.innerHTML = html;
+  });
+}
+
+function cmsRestore(hid) {
+  var fd = new FormData(); fd.append('history_id', hid);
+  fetch('?action=cms_restore', {method:'POST', body: fd}).then(function(r){ return r.json(); }).then(function(resp) {
+    if (resp.ok) { toast('Restored ✔'); cmsCloseModal(); cmsLoadCollections(); } else toast(resp.error || 'Error');
+  });
+}
+
+function cmsDeleteCollection() {
+  if (!CMS_EDITING) return;
+  if (!confirm('Reset this collection to default site content? (the code fallback takes over)')) return;
+  var fd = new FormData(); fd.append('key', CMS_EDITING);
+  fetch('?action=cms_delete_collection', {method:'POST', body: fd}).then(function(r){ return r.json(); }).then(function(resp) {
+    if (resp.ok) { toast('Reset ✔'); cmsCloseModal(); cmsLoadCollections(); } else toast(resp.error || 'Error');
+  });
+}
+
+function cmsExportOne() {
+  var data = {key: CMS_EDITING, name: document.getElementById('cms-name').value, items: CMS_ITEMS};
+  cmsDownload(JSON.stringify(data, null, 2), CMS_EDITING + '.json');
+}
+
+function cmsExportAll() {
+  cmsDownload(JSON.stringify(CMS_COLS, null, 2), 'intsolcom-content-backup.json');
+}
+
+function cmsDownload(content, filename) {
+  var a = document.createElement('a');
+  a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(content);
+  a.download = filename; a.click();
+}
+
+function cmsImportAll(input) {
+  var f = input.files[0]; if (!f) return;
+  var reader = new FileReader();
+  reader.onload = function() {
+    try {
+      var data = JSON.parse(reader.result);
+      var list = Array.isArray(data) ? data : [data];
+      var done = 0;
+      list.forEach(function(col) {
+        if (!col || !col.collection_key) return;
+        var fd = new FormData();
+        fd.append('key', col.collection_key);
+        fd.append('name', col.name || col.collection_key);
+        fd.append('items', JSON.stringify(col.items || []));
+        fetch('?action=cms_save_collection', {method:'POST', body: fd}).then(function(){ done++; if (done === list.length) { toast('Imported ✔'); cmsLoadCollections(); } });
+      });
+      if (!list.length) toast('No valid collections in file');
+    } catch (e) { toast('Invalid JSON file'); }
+  };
+  reader.readAsText(f);
+}
+
+function cmsLoadActivity() {
+  var panel = document.getElementById('cmsActivityPanel');
+  panel.style.display = 'block';
+  fetch('?action=cms_activity').then(function(r){ return r.json(); }).then(function(resp) {
+    var box = document.getElementById('cmsActivityList');
+    if (!resp.ok || !resp.activity.length) { box.innerHTML = '<div class="empty">No activity yet</div>'; return; }
+    var html = '';
+    resp.activity.forEach(function(a) {
+      html += '<div style="padding:6px 0;border-top:1px solid rgba(255,255,255,.05);font-size:.8rem"><span class="meta">' + esc(String(a.created_at).replace('T',' ').slice(0,16)) + '</span> — <strong>' + esc(a.action) + '</strong> ' + esc(a.detail || '') + '</div>';
+    });
+    box.innerHTML = html;
+  });
+}
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+    var modal = document.getElementById('cms-modal');
+    if (modal && modal.style.display !== 'none') { e.preventDefault(); cmsSave(); }
+  }
+});
+
+// Auto-load collections when entering the Content tab
+document.querySelectorAll('.sidebar-nav a[data-tab="content"]').forEach(function(a) {
+  a.addEventListener('click', function() { setTimeout(cmsLoadCollections, 50); });
+});
+</script>
 
 </body>
 </html>
